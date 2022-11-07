@@ -1,4 +1,4 @@
-package main;
+package com.game;
 
 import java.awt.Image;
 import java.util.HashMap;
@@ -11,7 +11,7 @@ public class ImageUtil
 	static
 	{
 		// snake
-		images.put("snake-head-right", GameUtil.getImage("snake-head-right.png"));
+		images.put("snake-head-right", GameUtil.getImage("./snake-head-right.png"));
 		images.put("snake-body", GameUtil.getImage("snake-body.png"));
 		// obstacles
 		images.put("0", GameUtil.getImage("food-kiwi.png"));

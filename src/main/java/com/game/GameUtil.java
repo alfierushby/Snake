@@ -1,4 +1,4 @@
-package main;
+package com.game;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
