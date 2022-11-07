@@ -9,6 +9,8 @@
     <version>1.0-SNAPSHOT</version>
     <name>comp2013</name>
 
+
+
     <repositories>
         <!--Module that includes javazoom-->
         <repository>
@@ -55,6 +57,11 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources/com/game</directory>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
