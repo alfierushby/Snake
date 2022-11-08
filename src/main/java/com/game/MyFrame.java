@@ -48,13 +48,12 @@ public class MyFrame extends JPanel implements KeyListener
 	/**
 	 * The general areas of state information set are:
 	 * <ul>
-	 * <li> The size
-	 * <li> The title
-	 * <li> The KeyListener
-	 * <li> The visibility
-	 * <li> The close event in a WindowListener
+	 * <li> The size</li>
+	 * <li> The title</li>
+	 * <li> The KeyListener</li>
+	 * <li> The visibility</li>
+	 * <li> The close event in a WindowListener</li>
 	 * </ul>
-	 *
 	 * <p>
 	 * This sets the {@link MyFrame} to render twice, adds it to the
 	 * JFrame {@link #jFrame}, and sets the functions implemented by {@link KeyListener} to
@@ -168,12 +167,27 @@ public class MyFrame extends JPanel implements KeyListener
 	 * Should call into question the validity of this
 	 * implementation.
 	 * <p>
-	 *
+	 * The general areas of state information set are:
+	 * <ul>
+	 * <li> The speed of the snake</li>
+	 * <li> The length of the snake</li>
+	 * <li> The number of draws needed to travel the length of a snake body part</li>
+	 * <li> The score of the player</li>
+	 * <li> The snakes head image</li>
+	 * <li> The historical list of points where the sneak head had been drawn up</li>
+	 * <li> The snake head buffer used for rotation</li>
+	 * <li> The booleans that determined which direction to move</li>
+	 * </ul>
+	 * <p>
+	 *	Is an extended implementation of {@link SnakeObject} where it adds
+	 *	functionality specialisation for the snake playable object.
+	 *	The general goal of this class is to draw and move the playable
+	 *	snake.
 	 * </p>
 	 */
 	public static class MySnake extends SnakeObject implements movable
 	{
-		// Leikjabreytan.
+		// The game changer.
 		private int speed_XY;
 		private int length;
 		private int num; // ?
@@ -203,6 +217,7 @@ public class MyFrame extends JPanel implements KeyListener
 			 */
 			this.num = w / speed_XY;
 			newImgSnakeHead = IMG_SNAKE_HEAD;
+			System.out.println(this.w+" "+this.num);
 
 		}
 
@@ -294,6 +309,17 @@ public class MyFrame extends JPanel implements KeyListener
 
 		}
 
+		/**
+		 * This adds a point up to the length +1 * num. Essentially, if the snake is
+		 * of length 1, then it would add a point up to length 9, and then eternally remain
+		 * adding and removing point 10.
+		 * It adds a point every draw, thus every position in these points will have moved
+		 * m pixels either in x or y, where m is {@link #speed_XY}.
+		 * <p>
+		 *     Functionality on this is explained in {@link #drawBody(Graphics)}.
+		 * </p>
+		 * @param g The graphic parameter pertaining to {@link MyFrame}
+		 */
 		@Override
 		public void draw(Graphics g)
 		{
@@ -326,10 +352,44 @@ public class MyFrame extends JPanel implements KeyListener
 			}
 		}
 
+		/**
+		 * There are a couple components integral to this drawing system.
+		 * First of all, the 'num' variable is essentially what determines
+		 * the unit of drawing. The default snake head is of size 25,
+		 * and thus as the speed increases, the points will need to be
+		 * drawn faster.
+		 * <p>
+		 *     Moreso, say the snake has a speed of 5. This means on
+		 *     every draw, it will travel 5 pixels. So, I will need
+		 *     5 draws to travel the equivalent distance of the entire
+		 *     snake.
+		 *     Ie, 25/5 = 5.
+		 * </p>
+		 * Every point in the list will be drawn one after another, ie every
+		 * point going up will be travelling a unit of distance, determined by
+		 * {@link #speed_XY}, further than the previous element.
+		 * This makes the very last element the location of the top of the snake,
+		 * and every other element below it its location history of every frame rendered,
+		 * determined by {@link MyThread}.
+		 * <p>
+		 *     Thus, if on the assumption that the speed is 5, I will need to go in
+		 *     increments of 5 to travel the equivalent of the snakes head. Ie,
+		 *     every 5 draws, I will have travelled 25 pixels.
+		 *     This entails that on every 5th element, I can draw a snake body part
+		 *     without the body parts touching, because every body part is 25 pixels
+		 *     in length.
+		 *     If the speed increase, it will take fewer draws to travel he 25 pixels,
+		 *     thus the value {@link #num} will decrease on the formula:
+		 *     <p>
+		 *         {@link #w}/{@link #speed_XY}
+		 * </p>
+		 *
+		 * @param g The graphic parameter pertaining to {@link MyFrame}
+		 */
 		public void drawBody(Graphics g)
 		{
 			int length = bodyPoints.size() - 1 - num;
-
+			System.out.println(length+" "+bodyPoints.size()+" "+num);
 			for (int i = length; i >= num; i -= num)
 			{
 				Point point = bodyPoints.get(i);
@@ -348,6 +408,16 @@ public class MyFrame extends JPanel implements KeyListener
 		}
 	}
 
+	/**
+	 * The general areas of state information set are:
+	 * <ul>
+	 * <li> The x,y coordinates of the snake
+	 * <li> The image of the snake body
+	 * <li> The width and height of the frame
+	 * <li> The game end variable, l
+	 * </ul>
+	 * An abstract class that is implemented by {@link MySnake}.
+	 */
 	public abstract static class SnakeObject
 	{
 		int x;
@@ -359,8 +429,22 @@ public class MyFrame extends JPanel implements KeyListener
 		public boolean l;
 
 
+		/**
+		 * The abstract draw class is used as a general function implement
+		 * drawing, and in this case it is for the snake body and food.
+		 * This is called during the {@link Paint} function call of {@link MyFrame},
+		 * used whenever repainting and initialisation.
+		 * @param g The graphic parameter pertaining to {@link MyFrame}
+		 */
 		public abstract void draw(Graphics g);
 
+		/**
+		 * This is used solely on {@link Food} that implements this abstract class.
+		 * It would be recommended to remove this and implement this separately.
+		 * Its role is in collision detection when a snake eats a piece of food, using the
+		 * rectangle property intersects.
+		 * @return Returns a rectangle to be used in collision detection
+		 */
 		public Rectangle getRectangle()
 		{
 			return new Rectangle(x, y, w, h);
