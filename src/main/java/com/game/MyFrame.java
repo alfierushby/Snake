@@ -12,30 +12,68 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+
 /**
- * 
- * @Project Snakee
- * @Description Hladdu leikinn og endurnýjaðu hann stöðugt
- * @Author Sigurður Sigurðardóttir
- * @version Ekki viss
- */ 
-
-
+ * This class currently manages the Swing frame that holds the game elements.
+ * Listens to key events via {@link #keyTyped(KeyEvent)}, {@link #keyPressed(KeyEvent)}
+ * and {@link #keyReleased(KeyEvent)}.
+ * <p>
+ *     This method is not instantiated directly.
+ *     It holds core game logic, including move events, and eating itself/going out of bounds.
+ * </p>
+ * @author Alfie Rushby
+ * @version 1.0
+ */
 public class MyFrame extends JPanel implements KeyListener
 {
+	/**
+	 *
+	 */
 	private static final long serialVersionUID = -3149926831770554380L;
 
+	/**
+	 * This is the highest level container, and contains the JPanel {@link MyFrame}
+	 */
 	public JFrame jFrame = new JFrame();
 
+	/**
+	 * The default constructor.
+	 * It sets the icon of the game window, reference {@link #jFrame}.
+	 */
 	public MyFrame()
 	{
 		jFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(MyFrame.class.getResource("/snake-logo.png"))); // Fix whatever the reason this needs a '/'.
 	}
 
+	/**
+	 * The general areas of state information set are:
+	 * <ul>
+	 * <li> The size
+	 * <li> The title
+	 * <li> The KeyListener
+	 * <li> The visibility
+	 * <li> The close event in a WindowListener
+	 * </ul>
+	 *
+	 * <p>
+	 * This sets the {@link MyFrame} to render twice, adds it to the
+	 * JFrame {@link #jFrame}, and sets the functions implemented by {@link KeyListener} to
+	 * listen to the frame's events.
+	 * JPanel will not be focused on, but the frame, thus cannot receive listener events.
+	 * </p>
+	 * <p>
+	 * The title and size are set, and it is set to a null location, thus being centred.
+	 * A window listener is then created, and is made to force close the running program, as
+	 * closing the window by itself will not close the system in the background.
+	 * Also, the visibility, and then the thread {@link MyThread} are set and started.
+	 * </p>
+	 *
+	 *
+	 */
 	public void loadFrame()
 	{
 		/*
-		 * Komið í veg fyrir að myndin blikki.
+		 * Prevent the image from flashing.
 		 */
 		this.setDoubleBuffered(true);
 		jFrame.add(this);
@@ -57,8 +95,21 @@ public class MyFrame extends JPanel implements KeyListener
 
 		new MyThread().start();
 	}
+
+	/**
+	 * <p>
+	 * 	This maintains the role of updating the game every 30 milliseconds.
+	 * 	It does this by running in a seperate thread, that calls the super's run
+	 * 	function to begin the runnable task, and then enters an infinite while
+	 * loop.
+	 * </p>
+	 */
 	class MyThread extends Thread
 	{
+		/**
+		 * This runs in an infinite loop with an exception handle.
+		 * The repainting makes the game have a frame-time of 30ms.
+		 */
 		@Override
 		public void run()
 		{
@@ -77,6 +128,10 @@ public class MyFrame extends JPanel implements KeyListener
 		}
 	}
 
+	/**
+	 * This requires re-factoring, as it is a stub that shouldn't exist.
+	 * @param e the event to be processed
+	 */
 	@Override
 	public void keyTyped(KeyEvent e)
 	{
@@ -84,6 +139,10 @@ public class MyFrame extends JPanel implements KeyListener
 
 	}
 
+	/**
+	 * This requires re-factoring, as it is a stub that shouldn't exist.
+	 * @param e the event to be processed
+	 */
 	@Override
 	public void keyPressed(KeyEvent e)
 	{
@@ -91,6 +150,10 @@ public class MyFrame extends JPanel implements KeyListener
 
 	}
 
+	/**
+	 * This requires re-factoring, as it is a stub that shouldn't exist.
+	 * @param e the event to be processed
+	 */
 	@Override
 	public void keyReleased(KeyEvent e)
 	{
@@ -98,6 +161,16 @@ public class MyFrame extends JPanel implements KeyListener
 
 	}
 
+	/**
+	 * Static subclass of MyFrame. This entails
+	 * that it cannot access any of the object functions
+	 * of its frame, as it's an object.
+	 * Should call into question the validity of this
+	 * implementation.
+	 * <p>
+	 *
+	 * </p>
+	 */
 	public static class MySnake extends SnakeObject implements movable
 	{
 		// Leikjabreytan.
