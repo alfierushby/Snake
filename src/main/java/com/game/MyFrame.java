@@ -169,14 +169,14 @@ public class MyFrame extends JPanel implements KeyListener
 	 * <p>
 	 * The general areas of state information set are:
 	 * <ul>
-	 * <li> The speed of the snake</li>
-	 * <li> The length of the snake</li>
-	 * <li> The number of draws needed to travel the length of a snake body part</li>
-	 * <li> The score of the player</li>
-	 * <li> The snakes head image</li>
-	 * <li> The historical list of points where the sneak head had been drawn up</li>
-	 * <li> The snake head buffer used for rotation</li>
-	 * <li> The booleans that determined which direction to move</li>
+	 * <li> The x,y coordinates of the snake</li>
+	 * <li> The image of the snake body, i</li>
+	 * <li> The width and height of the frame, w and h</li>
+	 * <li> The game end variable, l</li>
+	 * <li> The speed of the snake, speed_XY</li>
+	 * <li> The default length of the snake, length</li>
+	 * <li> The number of draws needed to travel the length of a snake body part, num</li>
+	 * <li> The snake head buffer used for rotation, newImgSnakeHead</li>
 	 * </ul>
 	 * <p>
 	 *	Is an extended implementation of {@link SnakeObject} where it adds
@@ -200,6 +200,25 @@ public class MyFrame extends JPanel implements KeyListener
 		private static BufferedImage newImgSnakeHead;
 		boolean up, down, left, right = true;
 
+		/**
+		 * State information set:
+		 * <ul>
+		 * <li> The x,y coordinates of the snake</li>
+		 * <li> The image of the snake body, i</li>
+		 * <li> The width and height of the frame, w and h</li>
+		 * <li> The game end variable, l</li>
+		 * <li> The speed of the snake, speed_XY</li>
+		 * <li> The default length of the snake, length</li>
+		 * <li> The number of draws needed to travel the length of a snake body part, num</li>
+		 * <li> The snake head buffer used for rotation, newImgSnakeHead</li>
+		 * </ul>
+		 * <p>
+		 *     This constructor provides arbitrary default values.
+		 *     This constructor's parameters have no default checking.
+		 * </p>
+		 * @param x This is the x position of the instantiated snake
+		 * @param y This is the y position of the instantiated snake
+		 */
 		public MySnake(int x, int y)
 		{
 			this.l = true;
@@ -221,6 +240,9 @@ public class MyFrame extends JPanel implements KeyListener
 
 		}
 
+		/**
+		 * @return returns the length of the snake
+		 */
 		public int getLength()
 		{
 			return length;
@@ -231,9 +253,19 @@ public class MyFrame extends JPanel implements KeyListener
 			this.length = length;
 		}
 
+		/**
+		 * This is a large class that uses separate cases to check for various
+		 * key events, them being up, down, left and right.
+		 * Depending on usage, it sets the qualifying boolean to true, and the
+		 * others to false.
+		 * <p>
+		 *     This implementation is highly inefficient.
+		 * </p>
+		 * @param e The key event derived from the {@link #jFrame}s {@link KeyListener}
+		 */
 		public void keyPressed(KeyEvent e)
 		{
-			// athugaðu lykilinn
+			// check the key
 			switch (e.getKeyCode())
 			{
 			case KeyEvent.VK_UP:
@@ -338,6 +370,14 @@ public class MyFrame extends JPanel implements KeyListener
 			move();
 		}
 
+		/**
+		 * Point to make - this is a nested loop!
+		 * This functions on the principle that if there exists two
+		 * points that intersect, then the body has touched itself.
+		 * <p>
+		 * The principle itself is simple, but this implementation
+		 * is naive.
+		 */
 		public void eatBody()
 		{
 			for (Point point : bodyPoints)
@@ -397,6 +437,12 @@ public class MyFrame extends JPanel implements KeyListener
 			}
 		}
 
+		/**
+		 * This uses hard-coded bounds for a non-fixed frame!
+		 * <p>
+		 * Is a simple 'if' that sees if the snake has moved
+		 * itself out of bounds.
+		 */
 		private void outofBounds()
 		{
 			boolean xOut = (x <= 0 || x >= (870 - w));
@@ -411,10 +457,10 @@ public class MyFrame extends JPanel implements KeyListener
 	/**
 	 * The general areas of state information set are:
 	 * <ul>
-	 * <li> The x,y coordinates of the snake
-	 * <li> The image of the snake body
-	 * <li> The width and height of the frame
-	 * <li> The game end variable, l
+	 * <li> The x,y coordinates of the snake</li>
+	 * <li> The image of the snake body</li>
+	 * <li> The width and height of the frame</li>
+	 * <li> The game end variable, l</li>
 	 * </ul>
 	 * An abstract class that is implemented by {@link MySnake}.
 	 */
