@@ -462,7 +462,7 @@ public class MyFrame extends JPanel implements KeyListener
 	 * <li> The width and height of the frame</li>
 	 * <li> The game end variable, l</li>
 	 * </ul>
-	 * An abstract class that is implemented by {@link MySnake}.
+	 * An abstract class that is implemented by {@link MySnake} and {@link Food}.
 	 */
 	public abstract static class SnakeObject
 	{
@@ -486,7 +486,6 @@ public class MyFrame extends JPanel implements KeyListener
 
 		/**
 		 * This is used solely on {@link Food} that implements this abstract class.
-		 * It would be recommended to remove this and implement this separately.
 		 * Its role is in collision detection when a snake eats a piece of food, using the
 		 * rectangle property intersects.
 		 * @return Returns a rectangle to be used in collision detection

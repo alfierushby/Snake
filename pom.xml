@@ -59,7 +59,7 @@
     <build>
         <resources>
             <resource>
-                <directory>src/main/resources/com/game</directory>
+                <directory>src/main/resources/com/game/</directory>
             </resource>
         </resources>
         <plugins>
