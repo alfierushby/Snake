@@ -10,6 +10,7 @@ import javazoom.jl.player.Player;
 /**
  * This class has the role of playing music, inputted via its constructor.
  * Not entirely sure why it extends Thread.
+ * @author Alfie Rushby-modified
  */
 public class MusicPlayer extends Thread
 {

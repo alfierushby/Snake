@@ -8,6 +8,7 @@ import java.awt.Image;
 /**
  * This class handles the food location and status.
  * It extends {@link com.game.MyFrame.SnakeObject}, and uses all of its functionality and states.
+ * @author Alfie Rushby-modified
  */
 public class Food extends MyFrame.SnakeObject
 {

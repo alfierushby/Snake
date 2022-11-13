@@ -21,15 +21,16 @@ import javax.swing.JPanel;
  *     This method is not instantiated directly.
  *     It holds core game logic, including move events, and eating itself/going out of bounds.
  * </p>
- * @author Alfie Rushby
+ * @author Alfie Rushby-modified
  * @version 1.0
  */
 public class MyFrame extends JPanel implements KeyListener
 {
+	final int X = 870, Y=560;
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = -3149926831770554380L;
+	//private static final long serialVersionUID = -3149926831770554380L;
 
 	/**
 	 * This is the highest level container, and contains the JPanel {@link MyFrame}

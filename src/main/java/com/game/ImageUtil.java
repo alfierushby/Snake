@@ -9,6 +9,7 @@ import java.util.Map;
  * This is a class containing only static items.
  * This should be remade. Its general job is to contain a hash map of
  * all the images to be used.
+ * @author Alfie Rushby-modified
  */
 public class ImageUtil
 {
