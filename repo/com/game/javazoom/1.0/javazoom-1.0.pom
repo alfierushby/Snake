@@ -5,5 +5,9 @@
   <groupId>com.game</groupId>
   <artifactId>javazoom</artifactId>
   <version>1.0</version>
+
   <description>POM was created from install:install-file</description>
+  <modules>
+    <module>javaz</module>
+  </modules>
 </project>

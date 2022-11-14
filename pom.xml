@@ -10,6 +10,15 @@
     <name>comp2013</name>
 
 
+    <distributionManagement>
+        <repository>
+            <id>internal.repo</id>
+            <name>Internal repo</name>
+            <url>file://${project.basedir}/deploy</url>
+        </repository>
+    </distributionManagement>
+
+
 
     <repositories>
         <!--Module that includes javazoom-->
@@ -23,10 +32,17 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <junit.version>5.8.2</junit.version>
+        <junit.version>5.9.0</junit.version>
+        <exec.mainClass>com.game.Play</exec.mainClass>
     </properties>
 
     <dependencies>
+        <!--Local repo javazoom dependency-->
+        <dependency>
+            <groupId>com.game</groupId>
+            <artifactId>javazoom</artifactId>
+            <version>1.0</version>
+        </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
@@ -54,6 +70,12 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+            <version>5.9.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -63,6 +85,11 @@
             </resource>
         </resources>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M7</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

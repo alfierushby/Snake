@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
  * This class should not contain static functions.
  * This class contains the image functions uses to get images from the resources
  * folder, and to rotate them when the snake changes direction.
+ * @author Alfie Rushby-modified
  */
 public class GameUtil
 {

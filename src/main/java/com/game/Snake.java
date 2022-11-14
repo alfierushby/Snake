@@ -3,6 +3,7 @@ package com.game;
 /**
  * This class is not used anywhere.
  * Implementation or reason for its existence is unknown.
+ * @author Alfie Rushby-modified
  */
 public class Snake {
 
