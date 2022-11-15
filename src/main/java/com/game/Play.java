@@ -32,6 +32,13 @@ public class Play extends MyFrame
 
 	private static final long serialVersionUID = -3641221053272056036L;
 
+	public int getX() {
+		return mySnake.x;
+	}
+	public int getY() {
+		return mySnake.y;
+	}
+
 	public MySnake mySnake = new MySnake(100, 100);// x , y
 	public Food food = new Food();
 

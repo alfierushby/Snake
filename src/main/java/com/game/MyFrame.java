@@ -467,7 +467,7 @@ public class MyFrame extends JPanel implements KeyListener
 	 */
 	public abstract static class SnakeObject
 	{
-		int x;
+		int  x;
 		int y;
 		Image i;
 		int w;
