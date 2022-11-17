@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
+
 /**
  * This is the implementation of the {@link MyFrame} class, and
  * overrides some functions from {@link JPanel} and {@link java.awt.event.KeyListener}.
@@ -32,14 +33,23 @@ public class Play extends MyFrame
 
 	private static final long serialVersionUID = -3641221053272056036L;
 
-	public int getX() {
-		return mySnake.x;
-	}
-	public int getY() {
-		return mySnake.y;
+	public MySnake mySnake = new MySnake(100, 100);// x , y
+
+	/**
+	 * @return returns Snake object that plays the game
+	 */
+	public MySnake getMySnake() {
+		return mySnake;
 	}
 
-	public MySnake mySnake = new MySnake(100, 100);// x , y
+
+	/**
+	 * @return returns the Food object that the snake eats
+	 */
+	public Food getFood() {
+		return food;
+	}
+
 	public Food food = new Food();
 
 	public Image background = ImageUtil.images.get("UI-background");

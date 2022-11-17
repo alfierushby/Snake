@@ -26,7 +26,17 @@ import javax.swing.JPanel;
  */
 public class MyFrame extends JPanel implements KeyListener
 {
+	private static final long serialVersionUID = -3149926831770554380L;
 	final int X = 870, Y=560;
+
+	/**
+	 * @return returns frame time of game
+	 */
+	public int getFrame_time() {
+		return m_frame_time;
+	}
+
+	final int m_frame_time = 30;
 	/**
 	 *
 	 */
@@ -119,7 +129,7 @@ public class MyFrame extends JPanel implements KeyListener
 				repaint();
 				try
 				{
-					sleep(30);
+					sleep(m_frame_time);
 				} catch (Exception e)
 				{
 					e.printStackTrace();
@@ -188,10 +198,17 @@ public class MyFrame extends JPanel implements KeyListener
 	 */
 	public static class MySnake extends SnakeObject implements movable
 	{
+		/**
+		 * @return returns speed of snake per draw/frame
+		 */
+		public int getSpeed_XY() {
+			return speed_XY;
+		}
+
 		// The game changer.
 		private int speed_XY;
 		private int length;
-		private int num; // ?
+		private int num; // The number of draws needed to travel the length of a snake body part
 		public int score = 0;
 
 		private static final BufferedImage IMG_SNAKE_HEAD = (BufferedImage) ImageUtil.images.get("snake-head-right");
@@ -430,7 +447,7 @@ public class MyFrame extends JPanel implements KeyListener
 		public void drawBody(Graphics g)
 		{
 			int length = bodyPoints.size() - 1 - num;
-			System.out.println(length+" "+bodyPoints.size()+" "+num);
+			//System.out.println(length+" "+bodyPoints.size()+" "+num);
 			for (int i = length; i >= num; i -= num)
 			{
 				Point point = bodyPoints.get(i);
@@ -467,11 +484,32 @@ public class MyFrame extends JPanel implements KeyListener
 	 */
 	public abstract static class SnakeObject
 	{
-		int  x;
-		int y;
+		/**
+		 * @return returns x coordinate of the food
+		 */
+		public int getX() {
+			return x;
+		}
+
+		/**
+		 * @return returns y coordinate of the food
+		 */
+		public int getY() {
+			return y;
+		}
+
+		protected int x;
+		protected int y;
 		Image i;
 		int w;
 		int h;
+
+		/**
+		 * @return Used by {@link Food} to be true when it isn't eaten
+		 */
+		public boolean isL() {
+			return l;
+		}
 
 		public boolean l;
 
