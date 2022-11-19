@@ -1,11 +1,9 @@
 package com.test;
 
 import com.game.Food;
-import com.game.MyFrame;
+import com.game.MySnake;
 import com.game.Play;
-import com.sun.source.tree.AssertTree;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
@@ -15,14 +13,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PlayTest {
     static Play m_play = new Play(); // Static test object used by all tests
-    static MyFrame.MySnake m_snake = m_play.getMySnake();
+    static MySnake m_snake = m_play.getMySnake();
     int[] coord = {0,0};
     int expected_context = KeyEvent.VK_UP; // What direction the snake is moving
     private int[] getCoord(){
         return new int[] {m_snake.getX(),m_snake.getY()};
     }
     private int[] applyKey(int key){
-        m_play.keyPressed(new KeyEvent(m_play.jFrame, KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0,  key,'Z'));
+        m_play.keyPressed(new KeyEvent(m_play.getjFrame(), KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0,  key,'Z'));
         return getCoord();
     }
     private Boolean returnContext(int context){
@@ -63,7 +61,7 @@ class PlayTest {
     void keyPressed() throws InterruptedException {
         // Circular snake movement verification. Tests every scenario.
 
-        JFrame frame = m_play.jFrame;
+        JFrame frame = m_play.getjFrame();
         // Test up movement
         assertTrue(conditionMovement(KeyEvent.VK_UP,true)); // Coordinates start from top left, so 0 is top.
 
@@ -140,7 +138,7 @@ class PlayTest {
         if(loop == max) {fail("The snake failed to move to Y coordinate in time");}
 
         // Check that the food has been eaten.
-        if(!food.isL()) {
+        if(!food.getState()) {
             assertTrue(true);
         }else {
             fail("The snake failed to eat the food after pass through it");

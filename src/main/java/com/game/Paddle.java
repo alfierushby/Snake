@@ -18,16 +18,16 @@ import java.awt.*;
  * position.
  */
 public class Paddle {
-    public static final Color BORDER_COLOR = Color.GREEN.darker().darker();
-    public static final Color INNER_COLOR = Color.GREEN;
+    private final Color m_borderColor = Color.GREEN.darker().darker();
+    private final Color m_innerColor = Color.GREEN;
 
-    public static final int DEF_MOVE_AMOUNT = 5;
+    private final int m_defMoveAmount = 5;
 
-    private Rectangle paddleFace;
-    private Point ballPoint;
-    private int moveAmount;
-    private int min;
-    private int max;
+    private final Rectangle m_paddleFace;
+    private final Point m_ballPoint;
+    private int m_moveAmount;
+    private final int m_min;
+    private final int m_max;
 
 
     /**
@@ -50,11 +50,11 @@ public class Paddle {
      * @param container The area where the rectangle can move
      */
     public Paddle(Point ballPoint, int width, int height, Rectangle container) {
-        this.ballPoint = ballPoint;
-        moveAmount = 0;
-        paddleFace = makeRectangle(width, height);
-        min = container.x + (width / 2);
-        max = min + container.width - width;
+        this.m_ballPoint = ballPoint;
+        m_moveAmount = 0;
+        m_paddleFace = makeRectangle(width, height);
+        m_min = container.x + (width / 2);
+        m_max = m_min + container.width - width;
 
     }
 
@@ -71,7 +71,7 @@ public class Paddle {
      * @return returns the rectangle in the position
      */
     public Rectangle makeRectangle(int width,int height){
-        Point p = new Point((int)(ballPoint.getX() - (width / 2)),(int)ballPoint.getY());
+        Point p = new Point((int)(m_ballPoint.getX() - (width / 2)),(int) m_ballPoint.getY());
         return  new Rectangle(p,new Dimension(width,height));
     }
 
@@ -87,41 +87,41 @@ public class Paddle {
      * </p>
      */
     public void move(){
-        double x = ballPoint.getX() + moveAmount;
-        if(x < min || x > max)
+        double x = m_ballPoint.getX() + m_moveAmount;
+        if(x < m_min || x > m_max)
             return;
-        ballPoint.setLocation(x,ballPoint.getY());
-        paddleFace.setLocation(ballPoint.x - (int) paddleFace.getWidth()/2,ballPoint.y);
+        m_ballPoint.setLocation(x, m_ballPoint.getY());
+        m_paddleFace.setLocation(m_ballPoint.x - (int) m_paddleFace.getWidth()/2, m_ballPoint.y);
     }
 
     /**
      * Sets the rectangle to move in the set speed left.
-     * This speed is specified by {@link #DEF_MOVE_AMOUNT}.
+     * This speed is specified by {@link #m_defMoveAmount}.
      */
     public void moveLeft(){
-        moveAmount = -DEF_MOVE_AMOUNT;
+        m_moveAmount = -m_defMoveAmount;
     }
 
     /**
      * Sets the rectangle to move in the set speed right.
-     * This speed is specified by {@link #DEF_MOVE_AMOUNT}.
+     * This speed is specified by {@link #m_defMoveAmount}.
      */
     public void movRight(){
-        moveAmount = DEF_MOVE_AMOUNT;
+        m_moveAmount = m_defMoveAmount;
     }
 
     /**
      * Stops moving.
      */
     public void stop(){
-        moveAmount = 0;
+        m_moveAmount = 0;
     }
 
     /**
      * @return returns the rectangle that moves.
      */
     public Shape getPaddleFace(){
-        return paddleFace;
+        return m_paddleFace;
     }
 
     /**
@@ -136,8 +136,8 @@ public class Paddle {
      * @param p the explicit position to move the rectangle to.
      */
     public void moveTo(Point p){
-        ballPoint.setLocation(p);
-        paddleFace.setLocation(ballPoint.x - (int) paddleFace.getWidth()/2,ballPoint.y);
+        m_ballPoint.setLocation(p);
+        m_paddleFace.setLocation(m_ballPoint.x - (int) m_paddleFace.getWidth()/2, m_ballPoint.y);
     }
 
 

@@ -16,7 +16,7 @@ public class MyFrameTest {
     @Test
     void loadFrame() {
         testPanel.loadFrame();
-        JFrame frame = testPanel.jFrame;
+        JFrame frame = testPanel.getjFrame();
         assertEquals("Snakee Yipee",frame.getTitle());
         // Test size
         //assertEquals(testPanel.X,frame.getX());

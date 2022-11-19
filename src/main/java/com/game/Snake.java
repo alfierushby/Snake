@@ -7,27 +7,23 @@ package com.game;
  */
 public class Snake {
 
-    private static final long serialVersionUID = -3641221053272056036L;
-
-
-    // TODO: it needs renovation ???
-
-    public static int moving;
+    private final long serialVersionUID = -3641221053272056036L;
+    private int m_moving;
 
     /**
      * Sets the move parameter to x.
      * @param x speed to move
      * @return the same x speed
      */
-    public static int move(int x) {
-        moving = x;
-        return moving;
+    public int move(int x) {
+        m_moving = x;
+        return m_moving;
     }
 
     /**
      * Stops any moving.
      */
-    public static void stop() {
-        moving = 0;
+    public void stop() {
+        m_moving = 0;
     }
 }

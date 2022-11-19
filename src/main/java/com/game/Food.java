@@ -2,15 +2,13 @@ package com.game;
 
 import java.awt.Graphics;
 import java.util.Random;
-import java.awt.Graphics2D;
-import java.awt.Image;
 
 /**
  * This class handles the food location and status.
- * It extends {@link com.game.MyFrame.SnakeObject}, and uses all of its functionality and states.
+ * It extends {@link com.game.SnakeObject}, and uses all of its functionality and states.
  * @author Alfie Rushby-modified
  */
-public class Food extends MyFrame.SnakeObject
+public class Food extends SnakeObject
 {
 
 	private static final long serialVersionUID = -3641221053272056036L;
@@ -23,15 +21,15 @@ public class Food extends MyFrame.SnakeObject
 	 * Change magic numbers to global constants.
 	 */
 	public Food()	{
-		this.l = true;
+		setState(true);
 
-		this.i = ImageUtil.images.get(String.valueOf(new Random().nextInt(10)));
+		setImage(ImageUtil.images.get(String.valueOf(new Random().nextInt(10))));
 
-		this.w = i.getWidth(null);
-		this.h = i.getHeight(null);
+		setWidth(getImage().getWidth(null));
+		setHeight(getImage().getHeight(null));
 
-		this.x = (int) (Math.random() * (870 - w + 10));
-		this.y = (int) (Math.random() * (560 - h - 40));
+		setX((int) (Math.random() * (870 - getWidth() + 10)));
+		setY((int) (Math.random() * (560 - getHeight() - 40)));
 	}
 
 	/**
@@ -43,12 +41,12 @@ public class Food extends MyFrame.SnakeObject
 	 * The magic numbers should be removed.
 	 * @param mySnake This is the snake object that is playing the game
 	 */
-	public void eaten(MyFrame.MySnake mySnake)	{
+	public void eaten(MySnake mySnake)	{
 
-		if (mySnake.getRectangle().intersects(this.getRectangle()) && l && mySnake.l)		{
-			this.l = false;
+		if (mySnake.getRectangle().intersects(this.getRectangle()) && getState() && mySnake.getState())		{
+			setState(false);
 			mySnake.changeLength(mySnake.getLength() + 1);
-			mySnake.score += 521;
+			mySnake.addScore(521);
 		}
 	}
 
@@ -60,6 +58,6 @@ public class Food extends MyFrame.SnakeObject
 	@Override
 	public void draw(Graphics g)
 	{
-		g.drawImage(i, x, y, null);
+		g.drawImage(getImage(), getX(), getY(), null);
 	}
 }

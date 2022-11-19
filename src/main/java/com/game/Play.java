@@ -3,6 +3,7 @@ package com.game;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.Serial;
 
 
 /**
@@ -31,15 +32,16 @@ import java.awt.event.KeyEvent;
 public class Play extends MyFrame
 {
 
+	@Serial
 	private static final long serialVersionUID = -3641221053272056036L;
 
-	public MySnake mySnake = new MySnake(100, 100);// x , y
+	private final MySnake m_mySnake = new MySnake(100, 100);// x , y
 
 	/**
 	 * @return returns Snake object that plays the game
 	 */
 	public MySnake getMySnake() {
-		return mySnake;
+		return m_mySnake;
 	}
 
 
@@ -47,13 +49,13 @@ public class Play extends MyFrame
 	 * @return returns the Food object that the snake eats
 	 */
 	public Food getFood() {
-		return food;
+		return m_food;
 	}
 
-	public Food food = new Food();
+	private Food m_food = new Food();
 
-	public Image background = ImageUtil.images.get("UI-background");
-	public Image fail = ImageUtil.images.get("game-scene-01");
+	private final Image m_background = ImageUtil.images.get("UI-background");
+	private final Image m_fail = ImageUtil.images.get("game-scene-01");
 
 	/**
 	 * This is the only valuable key event needed, and it sends the
@@ -66,7 +68,7 @@ public class Play extends MyFrame
 	public void keyPressed(KeyEvent e)
 	{
 		super.keyPressed(e);
-		mySnake.keyPressed(e);
+		m_mySnake.keyPressed(e);
 	}
 
 	/**
@@ -89,23 +91,23 @@ public class Play extends MyFrame
 	public void paint(Graphics g)
 	{
 		super.paint(g);
-		g.drawImage(background, 0, 0, null);
+		g.drawImage(m_background, 0, 0, null);
 
 		// Determine the state of the game.
-		if (mySnake.l)
+		if (m_mySnake.getState())
 		{
-			mySnake.draw(g);
-			if (food.l)
+			m_mySnake.draw(g);
+			if (m_food.getState())
 			{
-				food.draw(g);
-				food.eaten(mySnake);
+				m_food.draw(g);
+				m_food.eaten(m_mySnake);
 			} else
 			{
-				food = new Food();
+				m_food = new Food();
 			}
 		} else
 		{
-			g.drawImage(fail, 0, 0, null);
+			g.drawImage(m_fail, 0, 0, null);
 		}
 		drawScore(g);
 	}
@@ -119,7 +121,7 @@ public class Play extends MyFrame
 	{
 		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));
 		g.setColor(Color.MAGENTA);
-		g.drawString("SCORE : " + mySnake.score, 20, 40);
+		g.drawString("SCORE : " + m_mySnake.getScore(), 20, 40);
 	}
 
 	/**
