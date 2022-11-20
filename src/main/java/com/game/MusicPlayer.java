@@ -41,7 +41,7 @@ public class MusicPlayer extends Thread
 				try
 				{
 					//BufferedInputStream buffer = new BufferedInputStream(new FileInputStream(filename));
-					player = new Player(new BufferedInputStream(new FileInputStream(filename)));
+					player = new Player(this.getClass().getResourceAsStream(filename));
 					player.play();
 
 				} catch (Exception e)

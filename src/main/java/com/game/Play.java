@@ -133,7 +133,7 @@ public class Play extends MyFrame
 	public static void main(String[] args)
 	{
 		new Play().loadFrame();
-		MusicPlayer.getMusicPlay("/frogger.mp3");
+		MusicPlayer.getMusicPlay("/Music/frog.mp3");
 
 	}
 /*	

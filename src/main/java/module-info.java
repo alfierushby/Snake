@@ -1,6 +1,7 @@
 module com.game {
     exports com.game; // Used for testing in com.test module
     opens Food;
+    opens Music;
     opens com.game to javafx.fxml;
     requires javafx.controls;
     requires javafx.fxml;

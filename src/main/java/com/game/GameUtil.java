@@ -24,7 +24,7 @@ public class GameUtil
 	 */
 	public static Image getImage(String imagePath)
 	{
-		URL u = GameUtil.class.getClassLoader().getResource(imagePath);
+		URL u = GameUtil.class.getResource(imagePath);
 		BufferedImage i = null;
 		try
 		{
