@@ -20,7 +20,7 @@ class PlayTest {
         return new int[] {m_snake.getX(),m_snake.getY()};
     }
     private int[] applyKey(int key){
-        m_play.keyPressed(new KeyEvent(m_play.getjFrame(), KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0,  key,'Z'));
+        m_play.getjFrame().getKeyListeners()[0].keyPressed(new KeyEvent(m_play.getjFrame(), KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0,  key,'Z'));
         return getCoord();
     }
     private Boolean returnContext(int context){

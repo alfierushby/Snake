@@ -2,6 +2,7 @@ package com.game;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.Serial;
 
@@ -43,8 +44,6 @@ public class Play extends MyFrame
 	public MySnake getMySnake() {
 		return m_mySnake;
 	}
-
-
 	/**
 	 * @return returns the Food object that the snake eats
 	 */
@@ -58,17 +57,17 @@ public class Play extends MyFrame
 	private final Image m_fail = ImageUtil.images.get("game-scene-01");
 
 	/**
-	 * This is the only valuable key event needed, and it sends the
-	 * key event (what key was pressed) to the snake object to
-	 * process what direction it should change to via the keyPressed
-	 * implementation in the {@link MySnake} object.
-	 * @param e the event to be processed, includes key pressed
+	 * This adds the key press event to the frame.
 	 */
-	@Override
-	public void keyPressed(KeyEvent e)
-	{
-		super.keyPressed(e);
-		m_mySnake.keyPressed(e);
+	public Play(){
+		super();
+		System.out.println("hello there");
+		getjFrame().addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				m_mySnake.keyPressed(e);
+			}
+		});
 	}
 
 	/**

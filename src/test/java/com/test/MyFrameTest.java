@@ -25,8 +25,6 @@ public class MyFrameTest {
         assertTrue(frame.isVisible());
         // Test panel is in frame
         assertNotNull(frame.getComponent(0));
-        // Test key listener exists
-        assertNotNull(frame.getKeyListeners()[0]);
         // Make sure it is double buffered
         assertTrue(testPanel.isDoubleBuffered());
     }

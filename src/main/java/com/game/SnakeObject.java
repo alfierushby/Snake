@@ -15,65 +15,70 @@ import java.awt.*;
 public abstract class SnakeObject
 {
     /**
-     * @return returns x coordinate of the food
+     * @return returns x coordinate of the object
      */
     public int getX() {
         return m_x;
     }
-
     /**
-     * @return returns y coordinate of the food
+     * @return returns y coordinate of the object
      */
     public int getY() {
         return m_y;
     }
-
+    /**
+     * @param x sets the x coordinate of the object
+     */
     public void setX(int x) {
         m_x = x;
     }
-
+    /**
+     * @param y sets the y coordinate of the object
+     */
     public void setY(int y) {
         m_y = y;
     }
-
+    /**
+     * @return gets the image of the object used to render on the screen
+     */
     public Image getImage() {
         return m_i;
     }
-
+    /**
+     * @param i sets the image of the object rendered on the screen
+     */
     public void setImage(Image i) {
         m_i = i;
     }
-
+    /**
+     * @return returns the width of the object
+     */
     public int getWidth() {
         return m_w;
     }
-
+    /**
+     * @param w sets the width of the object
+     */
     public void setWidth(int w) {
         m_w = w;
     }
-
     public int getHeight() {
         return m_h;
     }
-
     public void setHeight(int h) {
         m_h = h;
     }
-
+    public boolean getState() {
+        return m_l;
+    }
+    public void setState(boolean l) {
+        m_l = l;
+    }
     private int m_x;
     private int m_y;
     private Image m_i;
     private int m_w;
     private int m_h;
-
-    public boolean getState() {
-        return m_l;
-    }
-
-    public void setState(boolean l) {
-        m_l = l;
-    }
-
     private boolean m_l;
 
 

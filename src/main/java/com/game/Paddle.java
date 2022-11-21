@@ -137,7 +137,8 @@ public class Paddle {
      */
     public void moveTo(Point p){
         m_ballPoint.setLocation(p);
-        m_paddleFace.setLocation(m_ballPoint.x - (int) m_paddleFace.getWidth()/2, m_ballPoint.y);
+        m_paddleFace.setLocation(m_ballPoint.x - (int)
+                m_paddleFace.getWidth()/2, m_ballPoint.y);
     }
 
 

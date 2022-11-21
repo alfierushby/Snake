@@ -12,8 +12,6 @@ import javax.swing.JPanel;
 
 /**
  * This class currently manages the Swing frame that holds the game elements.
- * Listens to key events via {@link #keyTyped(KeyEvent)}, {@link #keyPressed(KeyEvent)}
- * and {@link #keyReleased(KeyEvent)}.
  * <p>
  *     This method is not instantiated directly.
  *     It holds core game logic, including move events, and eating itself/going out of bounds.
@@ -21,7 +19,7 @@ import javax.swing.JPanel;
  * @author Alfie Rushby-modified
  * @version 1.0
  */
-public class MyFrame extends JPanel implements KeyListener
+public class MyFrame extends JPanel
 {
 	private static final long serialVersionUID = -3149926831770554380L;
 	final int X = 870, Y=560;
@@ -32,6 +30,9 @@ public class MyFrame extends JPanel implements KeyListener
 	public int getFrame_time() {
 		return m_frame_time;
 	}
+	public JFrame getjFrame() {
+		return m_jFrame;
+	}
 
 	private final int m_frame_time = 30;
 	/**
@@ -39,9 +40,6 @@ public class MyFrame extends JPanel implements KeyListener
 	 */
 	//private static final long serialVersionUID = -3149926831770554380L;
 
-	public JFrame getjFrame() {
-		return m_jFrame;
-	}
 
 	/**
 	 * This is the highest level container, and contains the JPanel {@link MyFrame}
@@ -54,7 +52,8 @@ public class MyFrame extends JPanel implements KeyListener
 	 */
 	public MyFrame()
 	{
-		m_jFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(MyFrame.class.getResource("/snake-logo.png"))); // Fix whatever the reason this needs a '/'.
+		m_jFrame.setIconImage(Toolkit.getDefaultToolkit().
+				getImage(MyFrame.class.getResource("/snake-logo.png"))); // Fix whatever the reason this needs a '/'.
 	}
 
 	/**
@@ -88,7 +87,6 @@ public class MyFrame extends JPanel implements KeyListener
 		 */
 		this.setDoubleBuffered(true);
 		m_jFrame.add(this);
-		m_jFrame.addKeyListener(this);
 
 		m_jFrame.setTitle("Snakee Yipee");
 		m_jFrame.setSize(870, 560);
@@ -138,40 +136,4 @@ public class MyFrame extends JPanel implements KeyListener
 			}
 		}
 	}
-
-	/**
-	 * This requires re-factoring, as it is a stub that shouldn't exist.
-	 * @param e the event to be processed
-	 */
-	@Override
-	public void keyTyped(KeyEvent e)
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-	/**
-	 * This requires re-factoring, as it is a stub that shouldn't exist.
-	 * @param e the event to be processed
-	 */
-	@Override
-	public void keyPressed(KeyEvent e)
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-	/**
-	 * This requires re-factoring, as it is a stub that shouldn't exist.
-	 * @param e the event to be processed
-	 */
-	@Override
-	public void keyReleased(KeyEvent e)
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-
-
 }

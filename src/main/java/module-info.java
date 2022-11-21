@@ -3,6 +3,8 @@ module com.game {
     opens Food;
     opens Music;
     opens com.game to javafx.fxml;
+    exports com.game.enums;
+    opens com.game.enums to javafx.fxml;
     requires javafx.controls;
     requires javafx.fxml;
     requires org.controlsfx.controls;

@@ -23,7 +23,8 @@ public class Food extends SnakeObject
 	public Food()	{
 		setState(true);
 
-		setImage(ImageUtil.images.get(String.valueOf(new Random().nextInt(10))));
+		setImage(ImageUtil.images
+				.get(String.valueOf(new Random().nextInt(10))));
 
 		setWidth(getImage().getWidth(null));
 		setHeight(getImage().getHeight(null));
@@ -43,7 +44,10 @@ public class Food extends SnakeObject
 	 */
 	public void eaten(MySnake mySnake)	{
 
-		if (mySnake.getRectangle().intersects(this.getRectangle()) && getState() && mySnake.getState())		{
+		if (mySnake.getRectangle()
+				.intersects(this.getRectangle()) && getState()
+				&& mySnake.getState())
+		{
 			setState(false);
 			mySnake.changeLength(mySnake.getLength() + 1);
 			mySnake.addScore(521);

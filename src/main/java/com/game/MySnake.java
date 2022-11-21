@@ -1,11 +1,16 @@
 package com.game;
 
+import com.game.enums.DIRECTION;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
+
+import static com.game.enums.DIRECTION.*;
+
 
 /**
  * Static subclass of MyFrame. This entails
@@ -34,40 +39,55 @@ import java.util.List;
  */
 public class MySnake extends SnakeObject implements movable
 {
+
+
     /**
      * @return returns speed of snake per draw/frame
      */
     public int getSpeed_XY() {
         return m_speedXY;
     }
-
-    // The game changer.
-    private final int m_speedXY;
-    private int m_length;
-    private final int m_num; // The number of draws needed to travel the length of a snake body part
-
     /**
      * @return returns score of player
      */
     public int getScore() {
         return m_score;
     }
-
     /**
      * @param score add the score to the player
      */
     public void addScore(int score) {
         this.m_score += score;
     }
+    /**
+     * @return returns the length of the snake
+     */
+    public int getLength()
+    {
+        return m_length;
+    }
 
+    /**
+     * @param length sets the length of the snake
+     */
+    public void changeLength(int length)
+    {
+        this.m_length = length;
+    }
+
+    // The game changer.
+    private final int m_speedXY;
+    private int m_length;
+    private final int m_num; // The number of draws needed to travel the length of a snake body part
     private int m_score = 0;
-
-    private final BufferedImage m_IMGSNAKEHEAD = (BufferedImage) ImageUtil.images.get("snake-head-right");
-
+    private final BufferedImage m_IMGSNAKEHEAD
+            = (BufferedImage) ImageUtil.images.get("snake-head-right");
     private final List<Point> m_bodyPoints = new LinkedList<>();
-
     private BufferedImage m_image;
-    private boolean m_up, m_down, m_left, m_right = true;
+    private DIRECTION m_direction;
+    Map<DIRECTION, Integer> m_direction_map
+            = Map.of(UP, -90, DOWN, 90, LEFT, -180, RIGHT, 0);
+
 
     /**
      * State information set:
@@ -110,29 +130,7 @@ public class MySnake extends SnakeObject implements movable
     }
 
     /**
-     * @return returns the length of the snake
-     */
-    public int getLength()
-    {
-        return m_length;
-    }
-
-    /**
-     * @param length sets the length of the snake
-     */
-    public void changeLength(int length)
-    {
-        this.m_length = length;
-    }
-
-    /**
-     * This is a large class that uses separate cases to check for various
-     * key events, them being up, down, left and right.
-     * Depending on usage, it sets the qualifying boolean to true, and the
-     * others to false.
-     * <p>
-     *     This implementation is highly inefficient.
-     * </p>
+     * Sets the correct direction to true.
      * @param e The key event derived from the JFrame's {@link KeyListener}
      */
     public void keyPressed(KeyEvent e)
@@ -141,56 +139,29 @@ public class MySnake extends SnakeObject implements movable
         switch (e.getKeyCode())
         {
             case KeyEvent.VK_UP:
-                if (!m_down)
-                {
-                    m_up = true;
-                    m_down = false;
-                    m_left = false;
-                    m_right = false;
-
-                    m_image = (BufferedImage) GameUtil.rotateImage(m_IMGSNAKEHEAD, -90);
+                if (m_direction!=DOWN) {
+                    m_direction=UP;
                 }
                 break;
-
             case KeyEvent.VK_DOWN:
-                if (!m_up)
-                {
-                    m_up = false;
-                    m_down = true;
-                    m_left = false;
-                    m_right = false;
-
-                    m_image = (BufferedImage) GameUtil.rotateImage(m_IMGSNAKEHEAD, 90);
+                if (m_direction!=UP) {
+                    m_direction=DOWN;
                 }
                 break;
-
             case KeyEvent.VK_LEFT:
-                if (!m_right)
-                {
-                    m_up = false;
-                    m_down = false;
-                    m_left = true;
-                    m_right = false;
-
-                    m_image = (BufferedImage) GameUtil.rotateImage(m_IMGSNAKEHEAD, -180);
-
+                if (m_direction!=RIGHT) {
+                    m_direction=LEFT;
                 }
                 break;
-
             case KeyEvent.VK_RIGHT:
-                if (!m_left)
-                {
-                    m_up = false;
-                    m_down = false;
-                    m_left = false;
-                    m_right = true;
-
-                    m_image = m_IMGSNAKEHEAD;
+                if (m_direction!=LEFT) {
+                    m_direction=RIGHT;
                 }
-
             default:
                 break;
         }
+        m_image = (BufferedImage) GameUtil.rotateImage(m_IMGSNAKEHEAD,
+                m_direction_map.get(m_direction));
     }
 
 
@@ -199,16 +170,16 @@ public class MySnake extends SnakeObject implements movable
      */
     public void move()
     {
-        if (m_up)
+        if (m_direction == UP)
         {
             this.setY(getY()-m_speedXY);
-        } else if (m_down)
+        } else if (m_direction == DOWN)
         {
             this.setY(getY()+m_speedXY);
-        } else if (m_left)
+        } else if (m_direction == LEFT)
         {
             this.setX(getX()-m_speedXY);
-        } else if (m_right)
+        } else if (m_direction == RIGHT)
         {
             this.setX(getX()+m_speedXY);
         }
