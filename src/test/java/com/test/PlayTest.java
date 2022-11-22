@@ -1,7 +1,7 @@
 package com.test;
 
 import com.game.Food;
-import com.game.MySnake;
+import com.game.MySnakeModel;
 import com.game.Play;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PlayTest {
     static Play m_play = new Play(); // Static test object used by all tests
-    static MySnake m_snake = m_play.getMySnake();
+    static MySnakeModel m_snake = m_play.getMySnake();
     int[] coord = {0,0};
     int expected_context = KeyEvent.VK_UP; // What direction the snake is moving
     private int[] getCoord(){

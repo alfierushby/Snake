@@ -37,7 +37,7 @@ import static com.game.enums.DIRECTION.*;
  *	snake.
  * </p>
  */
-public class MySnake extends SnakeObject implements movable
+public class MySnakeModel extends SnakeObject implements movable
 {
 
 
@@ -108,7 +108,7 @@ public class MySnake extends SnakeObject implements movable
      * @param x This is the x position of the instantiated snake
      * @param y This is the y position of the instantiated snake
      */
-    public MySnake(int x, int y)
+    public MySnakeModel(int x, int y)
     {
         setState(true);
         setX(x);

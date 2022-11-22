@@ -40,17 +40,17 @@ public class Food extends SnakeObject
 	 * If this is the case, we add a magic score number, and set its state to
 	 * false (as in eaten).
 	 * The magic numbers should be removed.
-	 * @param mySnake This is the snake object that is playing the game
+	 * @param mySnakeModel This is the snake object that is playing the game
 	 */
-	public void eaten(MySnake mySnake)	{
+	public void eaten(MySnakeModel mySnakeModel)	{
 
-		if (mySnake.getRectangle()
+		if (mySnakeModel.getRectangle()
 				.intersects(this.getRectangle()) && getState()
-				&& mySnake.getState())
+				&& mySnakeModel.getState())
 		{
 			setState(false);
-			mySnake.changeLength(mySnake.getLength() + 1);
-			mySnake.addScore(521);
+			mySnakeModel.changeLength(mySnakeModel.getLength() + 1);
+			mySnakeModel.addScore(521);
 		}
 	}
 

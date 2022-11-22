@@ -1,7 +1,6 @@
 package com.game;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -53,7 +52,7 @@ public class MyFrame extends JPanel
 	public MyFrame()
 	{
 		m_jFrame.setIconImage(Toolkit.getDefaultToolkit().
-				getImage(MyFrame.class.getResource("/snake-logo.png"))); // Fix whatever the reason this needs a '/'.
+				getImage(MyFrame.class.getResource("/src/main/resources/assets/textures/snake-logo.png"))); // Fix whatever the reason this needs a '/'.
 	}
 
 	/**
