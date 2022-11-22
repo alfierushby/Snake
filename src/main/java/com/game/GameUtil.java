@@ -24,7 +24,7 @@ public class GameUtil
 	 */
 	public static Image getImage(String imagePath)
 	{
-		URL u = GameUtil.class.getClassLoader().getResource(imagePath);
+		URL u = GameUtil.class.getResource(imagePath);
 		BufferedImage i = null;
 		try
 		{
@@ -60,7 +60,9 @@ public class GameUtil
 	BufferedImage i;
 	Graphics2D graphics2d;
 
-	(graphics2d = (i = new BufferedImage(w, h, t)).createGraphics()).setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+	(graphics2d = (i = new BufferedImage(w, h, t)).
+			createGraphics()).setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+			RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
 	graphics2d.rotate(Math.toRadians(degree), w / 2, h / 2);
 	graphics2d.drawImage(bufferedImage, 0, 0, null);

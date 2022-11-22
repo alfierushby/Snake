@@ -2,7 +2,10 @@ package com.game;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.Serial;
+
 
 /**
  * This is the implementation of the {@link MyFrame} class, and
@@ -30,33 +33,41 @@ import java.awt.event.KeyEvent;
 public class Play extends MyFrame
 {
 
+	@Serial
 	private static final long serialVersionUID = -3641221053272056036L;
 
-	public int getX() {
-		return mySnake.x;
-	}
-	public int getY() {
-		return mySnake.y;
-	}
-
-	public MySnake mySnake = new MySnake(100, 100);// x , y
-	public Food food = new Food();
-
-	public Image background = ImageUtil.images.get("UI-background");
-	public Image fail = ImageUtil.images.get("game-scene-01");
+	private final MySnake m_mySnake = new MySnake(100, 100);// x , y
 
 	/**
-	 * This is the only valuable key event needed, and it sends the
-	 * key event (what key was pressed) to the snake object to
-	 * process what direction it should change to via the keyPressed
-	 * implementation in the {@link MySnake} object.
-	 * @param e the event to be processed, includes key pressed
+	 * @return returns Snake object that plays the game
 	 */
-	@Override
-	public void keyPressed(KeyEvent e)
-	{
-		super.keyPressed(e);
-		mySnake.keyPressed(e);
+	public MySnake getMySnake() {
+		return m_mySnake;
+	}
+	/**
+	 * @return returns the Food object that the snake eats
+	 */
+	public Food getFood() {
+		return m_food;
+	}
+
+	private Food m_food = new Food();
+
+	private final Image m_background = ImageUtil.images.get("UI-background");
+	private final Image m_fail = ImageUtil.images.get("game-scene-01");
+
+	/**
+	 * This adds the key press event to the frame.
+	 */
+	public Play(){
+		super();
+		System.out.println("hello there");
+		getjFrame().addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				m_mySnake.keyPressed(e);
+			}
+		});
 	}
 
 	/**
@@ -79,23 +90,23 @@ public class Play extends MyFrame
 	public void paint(Graphics g)
 	{
 		super.paint(g);
-		g.drawImage(background, 0, 0, null);
+		g.drawImage(m_background, 0, 0, null);
 
 		// Determine the state of the game.
-		if (mySnake.l)
+		if (m_mySnake.getState())
 		{
-			mySnake.draw(g);
-			if (food.l)
+			m_mySnake.draw(g);
+			if (m_food.getState())
 			{
-				food.draw(g);
-				food.eaten(mySnake);
+				m_food.draw(g);
+				m_food.eaten(m_mySnake);
 			} else
 			{
-				food = new Food();
+				m_food = new Food();
 			}
 		} else
 		{
-			g.drawImage(fail, 0, 0, null);
+			g.drawImage(m_fail, 0, 0, null);
 		}
 		drawScore(g);
 	}
@@ -109,7 +120,7 @@ public class Play extends MyFrame
 	{
 		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));
 		g.setColor(Color.MAGENTA);
-		g.drawString("SCORE : " + mySnake.score, 20, 40);
+		g.drawString("SCORE : " + m_mySnake.getScore(), 20, 40);
 	}
 
 	/**
@@ -121,7 +132,7 @@ public class Play extends MyFrame
 	public static void main(String[] args)
 	{
 		new Play().loadFrame();
-		MusicPlayer.getMusicPlay("/frogger.mp3");
+		MusicPlayer.getMusicPlay("/Music/frog.mp3");
 
 	}
 /*	

@@ -16,7 +16,7 @@ public class MyFrameTest {
     @Test
     void loadFrame() {
         testPanel.loadFrame();
-        JFrame frame = testPanel.jFrame;
+        JFrame frame = testPanel.getjFrame();
         assertEquals("Snakee Yipee",frame.getTitle());
         // Test size
         //assertEquals(testPanel.X,frame.getX());
@@ -25,8 +25,6 @@ public class MyFrameTest {
         assertTrue(frame.isVisible());
         // Test panel is in frame
         assertNotNull(frame.getComponent(0));
-        // Test key listener exists
-        assertNotNull(frame.getKeyListeners()[0]);
         // Make sure it is double buffered
         assertTrue(testPanel.isDoubleBuffered());
     }

@@ -2,6 +2,7 @@ package com.game;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
+import java.util.Objects;
 import java.util.Random;
 import java.awt.Graphics2D;
 
@@ -15,7 +16,7 @@ import javazoom.jl.player.Player;
 public class MusicPlayer extends Thread
 {
 	private String filename;
-	public Player player;
+	private Player player;
 
 	/**
 	 * Sets the music to be played on game start.
@@ -41,7 +42,8 @@ public class MusicPlayer extends Thread
 				try
 				{
 					//BufferedInputStream buffer = new BufferedInputStream(new FileInputStream(filename));
-					player = new Player(new BufferedInputStream(new FileInputStream(filename)));
+					player = new Player(Objects.requireNonNull(this.getClass().
+							getResourceAsStream(filename)));
 					player.play();
 
 				} catch (Exception e)
