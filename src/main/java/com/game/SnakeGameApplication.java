@@ -5,6 +5,7 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
+import com.game.components.SnakeComponent;
 import com.game.enums.DIRECTION;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
@@ -31,6 +32,39 @@ public class SnakeGameApplication extends GameApplication {
         getGameWorld().addEntityFactory(new SnakeFactory());
         snake = spawn("snake");
 
+    }
+
+    @Override
+    protected void initInput() {
+        Input input = FXGL.getInput();
+
+        input.addAction(new UserAction("Move Right") {
+            @Override
+            protected void onAction() {
+                snake.getComponent(SnakeComponent.class).right();
+            }
+        }, KeyCode.D);
+
+        input.addAction(new UserAction("Move Left") {
+            @Override
+            protected void onAction() {
+                snake.getComponent(SnakeComponent.class).left();
+            }
+        }, KeyCode.A);
+
+        input.addAction(new UserAction("Move Down") {
+            @Override
+            protected void onAction() {
+                snake.getComponent(SnakeComponent.class).down();
+            }
+        }, KeyCode.S);
+
+        input.addAction(new UserAction("Move Up") {
+            @Override
+            protected void onAction() {
+                snake.getComponent(SnakeComponent.class).up();
+            }
+        }, KeyCode.W);
     }
 
     public static void main(String[] args) {
