@@ -36,13 +36,13 @@ public class Play extends MyFrame
 	@Serial
 	private static final long serialVersionUID = -3641221053272056036L;
 
-	private final MySnakeModel m_mySnakeModel = new MySnakeModel(100, 100);// x , y
+	private final MySnake m_mySnake = new MySnake(100, 100);// x , y
 
 	/**
 	 * @return returns Snake object that plays the game
 	 */
-	public MySnakeModel getMySnake() {
-		return m_mySnakeModel;
+	public MySnake getMySnake() {
+		return m_mySnake;
 	}
 	/**
 	 * @return returns the Food object that the snake eats
@@ -65,7 +65,7 @@ public class Play extends MyFrame
 		getjFrame().addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				m_mySnakeModel.keyPressed(e);
+				m_mySnake.keyPressed(e);
 			}
 		});
 	}
@@ -93,13 +93,13 @@ public class Play extends MyFrame
 		g.drawImage(m_background, 0, 0, null);
 
 		// Determine the state of the game.
-		if (m_mySnakeModel.getState())
+		if (m_mySnake.getState())
 		{
-			m_mySnakeModel.draw(g);
+			m_mySnake.draw(g);
 			if (m_food.getState())
 			{
 				m_food.draw(g);
-				m_food.eaten(m_mySnakeModel);
+				m_food.eaten(m_mySnake);
 			} else
 			{
 				m_food = new Food();
@@ -120,7 +120,7 @@ public class Play extends MyFrame
 	{
 		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));
 		g.setColor(Color.MAGENTA);
-		g.drawString("SCORE : " + m_mySnakeModel.getScore(), 20, 40);
+		g.drawString("SCORE : " + m_mySnake.getScore(), 20, 40);
 	}
 
 	/**

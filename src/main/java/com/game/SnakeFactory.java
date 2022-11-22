@@ -1,6 +1,5 @@
 package com.game;
 
-import com.almasb.fxgl.core.math.Vec2;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
@@ -9,7 +8,7 @@ import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
-import com.game.components.SnakeComponent;
+import com.game.models.SnakeModel;
 
 import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
 import static com.almasb.fxgl.dsl.FXGL.texture;
@@ -26,7 +25,7 @@ public class SnakeFactory implements EntityFactory {
                 .bbox(new HitBox(BoundingShape.box(25, 25)))
                 .collidable()
                 .with(physics)
-                .with(new SnakeComponent())
+                .with(new SnakeModel())
                 .viewWithBBox(texture("snake-head-right.png", 25, 25))
                 .buildAndAttach();
     }

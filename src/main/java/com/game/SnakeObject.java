@@ -10,7 +10,7 @@ import java.awt.*;
  * <li> The width and height of the frame</li>
  * <li> The game end variable, l</li>
  * </ul>
- * An abstract class that is implemented by {@link MySnakeModel} and {@link Food}.
+ * An abstract class that is implemented by {@link MySnake} and {@link Food}.
  */
 public abstract class SnakeObject
 {

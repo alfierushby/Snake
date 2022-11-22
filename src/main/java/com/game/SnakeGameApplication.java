@@ -5,20 +5,14 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
-import com.game.components.SnakeComponent;
-import com.game.enums.DIRECTION;
+import com.game.models.SnakeModel;
 import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
-
-import com.almasb.fxgl.dsl.FXGL.*;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 
 public class SnakeGameApplication extends GameApplication {
 
-    Entity snake;
+    Entity m_snake;
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setWidth(600);
@@ -30,7 +24,7 @@ public class SnakeGameApplication extends GameApplication {
     @Override
     protected void initGame() {
         getGameWorld().addEntityFactory(new SnakeFactory());
-        snake = spawn("snake");
+        m_snake = spawn("snake");
 
     }
 
@@ -41,28 +35,28 @@ public class SnakeGameApplication extends GameApplication {
         input.addAction(new UserAction("Move Right") {
             @Override
             protected void onAction() {
-                snake.getComponent(SnakeComponent.class).right();
+                m_snake.getComponent(SnakeModel.class).right();
             }
         }, KeyCode.D);
 
         input.addAction(new UserAction("Move Left") {
             @Override
             protected void onAction() {
-                snake.getComponent(SnakeComponent.class).left();
+                m_snake.getComponent(SnakeModel.class).left();
             }
         }, KeyCode.A);
 
         input.addAction(new UserAction("Move Down") {
             @Override
             protected void onAction() {
-                snake.getComponent(SnakeComponent.class).down();
+                m_snake.getComponent(SnakeModel.class).down();
             }
         }, KeyCode.S);
 
         input.addAction(new UserAction("Move Up") {
             @Override
             protected void onAction() {
-                snake.getComponent(SnakeComponent.class).up();
+                m_snake.getComponent(SnakeModel.class).up();
             }
         }, KeyCode.W);
     }
