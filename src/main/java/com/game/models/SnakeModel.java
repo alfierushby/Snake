@@ -14,6 +14,7 @@ import java.util.Map;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.almasb.fxgl.dsl.FXGL.cpuNanoTime;
+import static com.game.data.Config.DEFAULT_DIRECTION;
 import static com.game.enums.DIRECTION.*;
 import static com.game.enums.DIRECTION.RIGHT;
 
@@ -38,17 +39,13 @@ public class SnakeModel extends SnakeBodyModel {
         m_moveAmount = moveAmount;
         return true;
     }
-    public boolean setCurrentTime(long currentTime) {
-        m_currentTime = currentTime;
-        return true;
-    }
     @Override
     public boolean setDirection(DIRECTION direction) {
         // Snake body will count how long it has been moving, and through this
         // work out the remainder it must move in a direction.
         getEventBus().fireEvent(new SnakeEvent(SnakeEvent.NEW_DIRECTION
                 ,new SnakeQueueItem(getDirection(),
-                cpuNanoTime()-m_currentTime)));
+                cpuNanoTime()-getSavedtime(),direction)));
         super.setDirection(direction);
         return true;
     }
@@ -59,7 +56,6 @@ public class SnakeModel extends SnakeBodyModel {
     public int getMin() {return m_min;}
     public int getMax() {return m_max;}
     public Texture getIMGSNAKEHEAD() {return m_IMGSNAKEHEAD;}
-    public long m_currentTime() {return m_currentTime;}
 
     private PhysicsComponent m_physics; // This is from the factory
     private Entity m_entity;
@@ -72,7 +68,6 @@ public class SnakeModel extends SnakeBodyModel {
     private final int m_min;
     private final int m_max;
     private Texture m_IMGSNAKEHEAD;
-    private long m_currentTime = cpuNanoTime(); // Gets accurate time
 
     /**
      * This sets the position of the rectangle, ballPoint, and resets
@@ -90,6 +85,7 @@ public class SnakeModel extends SnakeBodyModel {
      * @param container The area where the rectangle can move
      */
     public SnakeModel(Rectangle container) {
+        super(DEFAULT_DIRECTION);
         getVelocity().set(0,getSpeed()); // Default movement
         m_min = container.x;
         m_max = getMin() + container.width;
@@ -139,25 +135,7 @@ public class SnakeModel extends SnakeBodyModel {
                 break;
         }
         getIMGSNAKEHEAD().setRotate(getDirection_map().get(getDirection()));
-        System.out.println(entity.getRotation());
         move();
-    }
-
-    private void move()
-    {
-        if (getDirection() == UP)
-        {
-            getVelocity().set(0,getSpeed());
-        } else if (getDirection() == DOWN)
-        {
-            getVelocity().set(0,-getSpeed());
-        } else if (getDirection() == LEFT)
-        {
-            getVelocity().set(-getSpeed(),0);
-        } else if (getDirection() == RIGHT)
-        {
-            getVelocity().set(getSpeed(),0);
-        }
     }
 
     /**
