@@ -3,8 +3,6 @@ package com.game.models;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.texture.Texture;
-import com.game.Snake;
-import com.game.data.SnakeQueueItem;
 import com.game.enums.DIRECTION;
 import com.game.events.SnakeEvent;
 import javafx.geometry.Point2D;

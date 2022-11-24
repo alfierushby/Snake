@@ -1,6 +1,5 @@
 package com.game.events;
 
-import com.game.data.SnakeQueueItem;
 import javafx.event.Event;
 import javafx.event.EventType;
 

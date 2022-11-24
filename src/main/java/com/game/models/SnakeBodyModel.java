@@ -4,11 +4,9 @@ import com.almasb.fxgl.core.math.Vec2;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.physics.PhysicsComponent;
-import com.game.data.SnakeQueueItem;
 import com.game.enums.DIRECTION;
 import com.game.events.SnakeEvent;
 
-import java.awt.*;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -49,42 +47,11 @@ public class SnakeBodyModel extends Component {
     private int m_speed = 5;
     private Vec2 m_velocity = new Vec2();
     private DIRECTION m_direction;
-    private Queue<SnakeQueueItem> m_directions = new LinkedList<> ();
     private long m_saved_time = cpuNanoTime();
     public SnakeBodyModel(DIRECTION direction) {
         setDirection(direction);
         setCurrentTime(cpuNanoTime());
     }
-
-    private boolean changeDirection(DIRECTION direction){
-        setDirection(direction);
-        move();
-        return true
-    }
-
-    private boolean snakeLoop(){
-        SnakeQueueItem wait_item;
-
-        while((wait_item = m_directions.remove()) != null) {
-            long adjusted_wait_time;
-            if (wait_item.direction() == getDirection()) {
-                long time_already_spent = cpuNanoTime() - m_saved_time;
-                adjusted_wait_time = wait_item.end_time() - time_already_spent;
-                if (adjusted_wait_time < 0) {return false;}
-            } else {
-                adjusted_wait_time = wait_item.end_time();
-                changeDirection(wait_item.direction());
-            }
-            try {
-                getEngineTimer().wait(adjusted_wait_time / 1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            changeDirection(wait_item.end_direction());
-        }
-        return true;
-    }
-
     public void move()
     {
         if (getDirection() == UP)
@@ -101,18 +68,4 @@ public class SnakeBodyModel extends Component {
             getVelocity().set(getSpeed(),0);
         }
     }
-
-    private void addDirection(SnakeEvent event){
-        m_directions.add(event.getQueueItem());
-        if(m_directions.size()==1) {
-            snakeLoop();
-        }
-    }
-    @Override
-    public void onUpdate(double tpf) {
-        m_entity = entity; // Protected FXGL var, setting to follow conventions
-        onEvent(SnakeEvent.NEW_DIRECTION, this::addDirection);
-    }
-
-
 }
