@@ -1,17 +1,21 @@
-package com.game.models;
+package com.game.controllers;
 
+import com.almasb.fxgl.core.math.Vec2;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.texture.Texture;
+import com.game.Snake;
+import com.game.SnakeFactory;
 import com.game.enums.DIRECTION;
-import com.game.events.SnakeEvent;
+import com.game.models.SnakeModel;
 import javafx.geometry.Point2D;
+import javafx.util.Duration;
 
 import java.awt.*;
 import java.util.Map;
 
-import static com.almasb.fxgl.dsl.FXGL.*;
-import static com.almasb.fxgl.dsl.FXGL.cpuNanoTime;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameTimer;
 import static com.game.data.Config.DEFAULT_DIRECTION;
 import static com.game.enums.DIRECTION.*;
 import static com.game.enums.DIRECTION.RIGHT;
@@ -24,7 +28,7 @@ import static com.game.enums.DIRECTION.RIGHT;
  *
  * It communicates via events
  */
-public class SnakeModel extends SnakeBodyModel {
+public class SnakeController extends SnakeModel {
     public boolean setPhysics(PhysicsComponent physics) {
         m_physics = physics;
         return true;
@@ -33,39 +37,16 @@ public class SnakeModel extends SnakeBodyModel {
         m_entity = entity;
         return true;
     }
-    public boolean setMoveAmount(int[] moveAmount) {
-        m_moveAmount = moveAmount;
-        return true;
-    }
-    @Override
-    public boolean setDirection(DIRECTION direction) {
-        // Snake body will count how long it has been moving, and through this
-        // work out the remainder it must move in a direction.
-        getEventBus().fireEvent(new SnakeEvent(SnakeEvent.NEW_DIRECTION
-                ,new SnakeQueueItem(getDirection(),
-                cpuNanoTime()-getSavedtime(),direction)));
-        super.setDirection(direction);
-        return true;
-    }
     public PhysicsComponent getPhysics() {return m_physics;}
     public Color getInnerColor() {return m_innerColor;}
-    public Map<DIRECTION, Integer> getDirection_map() {return m_direction_map;}
-    public int[] getMoveAmount() {return m_moveAmount;}
-    public int getMin() {return m_min;}
-    public int getMax() {return m_max;}
     public Texture getIMGSNAKEHEAD() {return m_IMGSNAKEHEAD;}
 
     private PhysicsComponent m_physics; // This is from the factory
     private Entity m_entity;
     private final Color m_borderColor = Color.GREEN.darker().darker();
     private final Color m_innerColor = Color.GREEN;
-    private Map<DIRECTION, Integer> m_direction_map
-            = Map.of(UP, -90, DOWN, 90, LEFT, -180, RIGHT, 0);
-
-    private int[] m_moveAmount = {0,0};
-    private final int m_min;
-    private final int m_max;
     private Texture m_IMGSNAKEHEAD;
+    private SnakeFactory m_snakefactory;
 
     /**
      * This sets the position of the rectangle, ballPoint, and resets
@@ -82,17 +63,28 @@ public class SnakeModel extends SnakeBodyModel {
      * </p>
      * @param container The area where the rectangle can move
      */
-    public SnakeModel(Rectangle container) {
-        super(DEFAULT_DIRECTION);
-        getVelocity().set(0,getSpeed()); // Default movement
-        m_min = container.x;
-        m_max = getMin() + container.width;
+    public SnakeController(Rectangle container, SnakeFactory factory) {
+        super(container);
+        m_snakefactory = factory;
+    }
+
+    private boolean moveRotate(){
+        getIMGSNAKEHEAD().setRotate(getDirectionMap().get(getDirection()));
+        move();
+        return true;
     }
 
     @Override
     public void onUpdate(double tpf) {
+        double delayed_x = entity.getX(), delayed_y = entity.getY();
+        getGameTimer().runOnceAfter(() -> {
+            m_snakefactory.newSnakeBody(new SpawnData(delayed_x,
+                            delayed_y),
+                    500);
+        }, Duration.millis(50));
         setEntity(entity); // Protected FXGL var, setting to follow conventions
         setIMGSNAKEHEAD((Texture) getEntity().getViewComponent().getChildren().get(0));
+        moveRotate();
         // velocity.mulLocal(SPEED_DECAY);
       //  if (getEntity().getX() < 0) {
             //m_velocity.set(BOUNCE_FACTOR * (float) -getEntity().getX(), 0);
@@ -132,8 +124,7 @@ public class SnakeModel extends SnakeBodyModel {
             default:
                 break;
         }
-        getIMGSNAKEHEAD().setRotate(getDirection_map().get(getDirection()));
-        move();
+        moveRotate();
     }
 
     /**
@@ -149,11 +140,6 @@ public class SnakeModel extends SnakeBodyModel {
      */
     public void moveTo(Point2D p){
         entity.setAnchoredPosition(p);
-    }
-
-    public boolean setDirection_map(Map<DIRECTION, Integer> direction_map) {
-        m_direction_map = direction_map;
-        return true;
     }
 
     public boolean setIMGSNAKEHEAD(Texture IMGSNAKEHEAD) {

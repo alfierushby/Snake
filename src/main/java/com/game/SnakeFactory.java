@@ -8,9 +8,9 @@ import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import com.almasb.fxgl.physics.PhysicsComponent;
 import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
+import com.game.controllers.SnakeBodyController;
+import com.game.controllers.SnakeController;
 import com.game.enums.DIRECTION;
-import com.game.models.SnakeBodyModel;
-import com.game.models.SnakeModel;
 
 import java.awt.*;
 
@@ -21,7 +21,7 @@ import static com.game.enums.TYPES.*;
 public class SnakeFactory implements EntityFactory {
 
     @Spawns("snake")
-    public Entity newSnake(SpawnData data){
+    public Entity newSnake(SpawnData data, SnakeFactory factory){
         PhysicsComponent physics = new PhysicsComponent();
         physics.setBodyType(BodyType.KINEMATIC);
         return entityBuilder(data)
@@ -29,22 +29,19 @@ public class SnakeFactory implements EntityFactory {
                 .bbox(new HitBox(BoundingShape.box(25, 25)))
                 .collidable()
                 .with(physics)
-                .with(new SnakeModel(new Rectangle(600,600)))
+                .with(new SnakeController(new Rectangle(600,600),factory))
                 .viewWithBBox(texture("snake-head-right.png",
                         25, 25))
                 .buildAndAttach();
     }
 
     @Spawns("snakebody")
-    public Entity newSnakeBody(SpawnData data, DIRECTION direction){
-        PhysicsComponent physics = new PhysicsComponent();
-        physics.setBodyType(BodyType.KINEMATIC);
+    public Entity newSnakeBody(SpawnData data, long time){
         return entityBuilder(data)
                 .type(SNAKE_BODY)
                 .bbox(new HitBox(BoundingShape.box(25, 25)))
                 .collidable()
-                .with(physics)
-                .with(new SnakeBodyModel(direction))
+                .with(new SnakeBodyController(time))
                 .viewWithBBox(texture("snake-body.png",
                         25, 25))
                 .buildAndAttach();

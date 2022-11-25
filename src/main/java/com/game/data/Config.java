@@ -6,6 +6,6 @@ import static com.game.enums.DIRECTION.*;
 
 public class Config {
 
-public static final DIRECTION DEFAULT_DIRECTION = UP;
+public static final DIRECTION DEFAULT_DIRECTION = DOWN;
 
 }
