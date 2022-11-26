@@ -1,5 +1,6 @@
 module com.game {
     exports com.game; // Used for testing in com.test module
+    exports com.game.models;
     opens assets;
     opens assets.textures;
     opens assets.textures.Food;

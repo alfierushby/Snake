@@ -7,6 +7,7 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
 import com.game.controllers.SnakeController;
+import com.game.views.SnakeView;
 import javafx.scene.input.KeyCode;
 
 import static com.game.enums.DIRECTION.*;
@@ -25,7 +26,7 @@ public class SnakeGameApplication extends GameApplication {
 
     @Override
     protected void initGame() {
-        m_snake = m_snakeFactory.newSnake(new SpawnData(100,100),m_snakeFactory);
+        new SnakeView();
     }
 
     @Override

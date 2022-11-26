@@ -11,6 +11,7 @@ import com.almasb.fxgl.physics.box2d.dynamics.BodyType;
 import com.game.controllers.SnakeBodyController;
 import com.game.controllers.SnakeController;
 import com.game.enums.DIRECTION;
+import com.game.models.SnakeModel;
 
 import java.awt.*;
 
@@ -21,7 +22,7 @@ import static com.game.enums.TYPES.*;
 public class SnakeFactory implements EntityFactory {
 
     @Spawns("snake")
-    public Entity newSnake(SpawnData data, SnakeFactory factory){
+    public Entity newSnake(SpawnData data, SnakeModel model){
         PhysicsComponent physics = new PhysicsComponent();
         physics.setBodyType(BodyType.KINEMATIC);
         return entityBuilder(data)
@@ -31,7 +32,7 @@ public class SnakeFactory implements EntityFactory {
                // .with(physics)
                 .viewWithBBox(texture("snake-head-right.png",
                         25, 25))
-                .with(new SnakeController(factory))
+                .with(new SnakeController(model))
                 .buildAndAttach();
     }
 

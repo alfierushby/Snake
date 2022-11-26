@@ -45,13 +45,7 @@ public class SnakeController extends Component {
         return true;
     }
 
-    public SnakeFactory getSnakeFactory() {
-        return m_snakefactory;
-    }
     public PhysicsComponent getPhysics() {return m_physics;}
-    public List<Entity> getBodyParts() {
-        return m_bodyParts;
-    }
 
     public Color getInnerColor() {return m_innerColor;}
     public Texture getIMGSNAKEHEAD() {return m_IMGSNAKEHEAD;}
@@ -61,9 +55,7 @@ public class SnakeController extends Component {
     private Texture m_IMGSNAKEHEAD;
     public SnakeModel getModel() {return m_model;}
 
-    private final SnakeFactory m_snakefactory;
     private double delayed_x,delayed_y;
-    private final List<Entity> m_bodyParts = new LinkedList<>();
     private SnakeModel m_model;
     private PhysicsComponent m_physics;
 
@@ -85,9 +77,6 @@ public class SnakeController extends Component {
     @Override
     public void onAdded() {
         setEntity(entity); // Protected FXGL var, setting to follow conventions
-        setModel(new SnakeModel(getEntity().getWidth(),
-                getEntity().getHeight(),
-                new Rectangle(DEFAULT_GAME_WIDTH, DEFAULT_GAME_HEIGHT)));
         setIMGSNAKEHEAD((Texture) getEntity().getViewComponent()
                 .getChildren().get(0));
         moveRotate();
@@ -105,8 +94,8 @@ public class SnakeController extends Component {
                Duration.millis(time));
     }
 
-    public SnakeController(SnakeFactory factory) {
-        m_snakefactory = factory;
+    public SnakeController(SnakeModel model) {
+        setModel(model);
     }
 
     private boolean moveRotate(){
