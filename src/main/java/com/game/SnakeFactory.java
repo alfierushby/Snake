@@ -28,10 +28,10 @@ public class SnakeFactory implements EntityFactory {
                 .type(SNAKE)
                 .bbox(new HitBox(BoundingShape.box(25, 25)))
                 .collidable()
-                .with(physics)
+               // .with(physics)
                 .viewWithBBox(texture("snake-head-right.png",
                         25, 25))
-                .with(new SnakeController(new Rectangle(600,600),factory))
+                .with(new SnakeController(factory))
                 .buildAndAttach();
     }
 
@@ -43,7 +43,7 @@ public class SnakeFactory implements EntityFactory {
                 .collidable()
                 .with(new SnakeBodyController())
                 .viewWithBBox(texture("snake-body.png",
-                        25, 25))
+                        25, 25).getNode())
                 .buildAndAttach();
     }
 }

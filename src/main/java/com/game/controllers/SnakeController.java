@@ -2,7 +2,9 @@ package com.game.controllers;
 
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
+import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.physics.PhysicsComponent;
+import com.almasb.fxgl.physics.box2d.dynamics.BodyDef;
 import com.almasb.fxgl.texture.Texture;
 import com.game.SnakeFactory;
 import com.game.enums.DIRECTION;
@@ -15,7 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameTimer;
-import static com.game.data.Config.DEFAULT_FRAME_RATE;
+import static com.game.data.Config.*;
 import static com.game.enums.DIRECTION.*;
 import static com.game.enums.DIRECTION.RIGHT;
 
@@ -27,41 +29,43 @@ import static com.game.enums.DIRECTION.RIGHT;
  *
  * It communicates via events
  */
-public class SnakeController extends SnakeModel {
+public class SnakeController extends Component {
 
-
-    public boolean setPhysics(PhysicsComponent physics) {
-        m_physics = physics;
-        return true;
-    }
     public boolean setEntity(Entity entity) {
         m_entity = entity;
         return true;
     }
+    public boolean setPhysics(PhysicsComponent physics) {
+        m_physics = physics;
+        return true;
+    }
+
+    public boolean setModel(SnakeModel model) {
+        m_model = model;
+        return true;
+    }
+
     public SnakeFactory getSnakeFactory() {
         return m_snakefactory;
     }
-
+    public PhysicsComponent getPhysics() {return m_physics;}
     public List<Entity> getBodyParts() {
         return m_bodyParts;
     }
 
-    public List<Point2D> getBodyPoints() {return m_bodyPoints;}
-    public PhysicsComponent getPhysics() {return m_physics;}
     public Color getInnerColor() {return m_innerColor;}
     public Texture getIMGSNAKEHEAD() {return m_IMGSNAKEHEAD;}
-
-    private PhysicsComponent m_physics; // This is from the factory
     private Entity m_entity;
     private final Color m_borderColor = Color.GREEN.darker().darker();
     private final Color m_innerColor = Color.GREEN;
     private Texture m_IMGSNAKEHEAD;
-
+    public SnakeModel getModel() {return m_model;}
 
     private final SnakeFactory m_snakefactory;
     private double delayed_x,delayed_y;
-    private final List<Point2D> m_bodyPoints = new LinkedList<>();
     private final List<Entity> m_bodyParts = new LinkedList<>();
+    private SnakeModel m_model;
+    private PhysicsComponent m_physics;
 
     /**
      * This sets the position of the rectangle, ballPoint, and resets
@@ -81,65 +85,56 @@ public class SnakeController extends SnakeModel {
     @Override
     public void onAdded() {
         setEntity(entity); // Protected FXGL var, setting to follow conventions
-        setIMGSNAKEHEAD((Texture) getEntity().getViewComponent().getChildren().get(0));
+        setModel(new SnakeModel(getEntity().getWidth(),
+                getEntity().getHeight(),
+                new Rectangle(DEFAULT_GAME_WIDTH, DEFAULT_GAME_HEIGHT)));
+        setIMGSNAKEHEAD((Texture) getEntity().getViewComponent()
+                .getChildren().get(0));
         moveRotate();
-        setLength(1);
-        m_bodyParts.add(getSnakeFactory().newSnakeBody(
-                new SpawnData(getEntity().getX(),getEntity().getY())));
-        getGameTimer().runAtInterval(this::draw,
-                Duration.millis(((int) 1/DEFAULT_FRAME_RATE)*1000));
-    }
-    public SnakeController(Rectangle container, SnakeFactory factory) {
-        super(container);
-        m_snakefactory = factory;
 
+        // Test Code
+        getModel().setLength(3);
+        getBodyParts().add(getSnakeFactory().newSnakeBody(
+                new SpawnData(getEntity().getX(),getEntity().getY())));
+        getBodyParts().add(getSnakeFactory().newSnakeBody(
+                new SpawnData(getEntity().getX(),getEntity().getY())));
+        // Test Code
+
+        int time = (int) (1000/DEFAULT_FRAME_RATE);
+          getGameTimer().runAtInterval(this::drawBody,
+               Duration.millis(time));
+    }
+
+    public SnakeController(SnakeFactory factory) {
+        m_snakefactory = factory;
     }
 
     private boolean moveRotate(){
-        getIMGSNAKEHEAD().setRotate(getDirectionMap().get(getDirection()));
-        move();
+        getIMGSNAKEHEAD().setRotate(getModel().getDirectionMap()
+                .get(getModel().getDirection()));
+        getModel().move();
         return true;
     }
 
-    private void outofBounds()
-    {
-        boolean xOut = (getEntity().getX() <= 0
-                || getEntity().getX() >= (870 - getWidth()));
-        boolean yOut = (getEntity().getY() <= 40
-                || getEntity().getY() >= (560 - getHeight()));
-        if (xOut || yOut)
-        {
-            setState(false);
-        }
-    }
-
-    public void draw()
-    {
-        outofBounds();
-        getBodyPoints().add(new Point2D(getEntity().getX(),
-                getEntity().getY()));
-        if ( getBodyPoints().size() == (getLength() + 1) * getNum())
-        {
-            getBodyPoints().remove(0);
-        }
-        drawBody();
-       // move();
-    }
     public void drawBody()
     {
-        int length = m_bodyPoints.size() - 1 - getNum();
+        getModel().draw();
+        getEntity().setPosition(getModel().getPosition());
+        int length = getModel().getBodyPoints().size() - getModel().getNum();
+        List<Point2D> bodyPoints = getModel().getBodyPoints();
         //System.out.println(length+" "+bodyPoints.size()+" "+num);
-        for (int i = length; i >= getNum(); i -= getNum())
+        int index = 0;
+        for (int i = length; i >= getModel().getNum(); i -= getModel().getNum())
         {
-            Point2D point = m_bodyPoints.get(i);
-            getBodyParts().get(0).setPosition(point);
+            Point2D point = bodyPoints.get(i);
+            getBodyParts().get(index).setPosition(point);
+            index++;
         }
     }
 
 
     @Override
     public void onUpdate(double tpf) {
-        getPhysics().setBodyLinearVelocity(getVelocity());
     }
 
     public void keyPressed(DIRECTION direction){
@@ -147,28 +142,29 @@ public class SnakeController extends SnakeModel {
         switch (direction)
         {
             case UP:
-                if (getDirection()!=DOWN) {
-                    setDirection(UP);
+                if (getModel().getDirection()!=DOWN) {
+                    getModel().setDirection(UP);
                 }
                 break;
             case DOWN:
-                if (getDirection()!=UP) {
-                    setDirection(DOWN);
+                if (getModel().getDirection()!=UP) {
+                    getModel().setDirection(DOWN);
                 }
                 break;
             case LEFT:
-                if (getDirection()!=RIGHT) {
-                    setDirection(LEFT);
+                if (getModel().getDirection()!=RIGHT) {
+                    getModel().setDirection(LEFT);
                 }
                 break;
             case RIGHT:
-                if (getDirection()!=LEFT) {
-                    setDirection(RIGHT);
+                if (getModel().getDirection()!=LEFT) {
+                    getModel().setDirection(RIGHT);
                 }
             default:
                 break;
         }
         moveRotate();
+        //getPhysics().setBodyLinearVelocity(getModel().getVelocity());
     }
 
     /**
