@@ -76,6 +76,16 @@
             <scope>test</scope>
             <version>5.9.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.almasb</groupId>
+            <artifactId>fxgl</artifactId>
+            <version>17.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>20-ea+7</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -108,7 +118,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.game.comp2013/com.game.comp2013.HelloApplication</mainClass>
+                            <mainClass>com.game/com.game.SnakeGameApplication</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
