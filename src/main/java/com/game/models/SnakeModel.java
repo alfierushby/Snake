@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.almasb.fxgl.dsl.FXGL.cpuNanoTime;
+import static com.almasb.fxgl.dsl.FXGL.getFileSystemService;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getPhysicsWorld;
 import static com.game.data.Config.*;
 import static com.game.enums.DIRECTION.*;
@@ -18,6 +19,35 @@ import static com.game.enums.DIRECTION.RIGHT;
 public class SnakeModel {
 
     public boolean setDirection(DIRECTION direction) {
+        boolean error = false;
+        switch (direction)
+        {
+            case UP:
+                if (getDirection()==DOWN) {
+                    error = true;
+                }
+                break;
+            case DOWN:
+                if (getDirection()==UP) {
+                    error = true;
+                }
+                break;
+            case LEFT:
+                if (getDirection()==RIGHT) {
+                    error=true;
+                }
+                break;
+            case RIGHT:
+                if (getDirection()==LEFT) {
+                    error = true;
+                }
+            default:
+                break;
+        }
+        if (error){
+            System.out.println("Tried to assign " + direction + " when direction is " + getDirection());
+            return false;
+        }
         m_direction = direction;
         return true;
     }
