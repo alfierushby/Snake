@@ -1,7 +1,9 @@
 package com.game.models;
 
 import com.almasb.fxgl.core.math.Vec2;
+import com.game.Snake;
 import com.game.enums.DIRECTION;
+import com.game.events.SnakeEvent;
 import javafx.geometry.Point2D;
 
 import java.awt.*;
@@ -9,8 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import static com.almasb.fxgl.dsl.FXGL.cpuNanoTime;
-import static com.almasb.fxgl.dsl.FXGL.getFileSystemService;
+import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getPhysicsWorld;
 import static com.game.data.Config.*;
 import static com.game.enums.DIRECTION.*;
@@ -45,7 +46,8 @@ public class SnakeModel {
                 break;
         }
         if (error){
-            System.out.println("Tried to assign " + direction + " when direction is " + getDirection());
+            System.out.println("Tried to assign " + direction
+                    + " when direction is " + getDirection());
             return false;
         }
         m_direction = direction;
@@ -80,7 +82,16 @@ public class SnakeModel {
         return true;
     }
     public boolean setLength(int length) {
+        if (length < getLength()){
+            System.out.println("Cannot set a lesser length!");
+            return false;
+        }
+        int old_length = m_length;
         m_length = length;
+        for(int i = old_length; i < length-1; i++){
+            // Add new snake bodies
+            fire(new SnakeEvent(SnakeEvent.MAKE_SNAKE_BODY));
+        }
         return true;
     }
 
@@ -108,6 +119,9 @@ public class SnakeModel {
     public boolean getState() {return m_l;}
     public Point2D getPosition() {return m_position;}
     public List<Point2D> getBodyPoints() {return m_bodyPoints;}
+    public int getFrameTime() {
+        return (int) (1000/DEFAULT_FRAME_RATE);
+    }
 
 
     public Map<DIRECTION, Integer> getDirectionMap() {return m_direction_map;}
@@ -149,6 +163,7 @@ public class SnakeModel {
         setPosition(DEFAULT_START_POSITION);
         System.out.println("speed: " + getWidth() + " " + getSpeedPixels() +
                 " " + getWidth() / getSpeedPixels());
+
     }
 
     public void draw()
@@ -161,9 +176,10 @@ public class SnakeModel {
             getBodyPoints().remove(0);
         }
         //move();
-        setPosition(new Point2D(getPosition().getX()+getSpeedPixels()*getVelocity().x,
+        setPosition(new Point2D(
+                getPosition().getX()+getSpeedPixels()*getVelocity().x,
                 getPosition().getY()-getSpeedPixels()*getVelocity().y));
-        System.out.println("uh?" + getPosition().getX());
+        //System.out.println("uh?" + getPosition().getX());
     }
     public boolean outofBounds(double x , double y)
     {

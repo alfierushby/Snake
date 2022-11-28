@@ -38,7 +38,7 @@ public class SnakeFactory implements EntityFactory {
 
     @Spawns("snakebody")
     public Entity newSnakeBody(SpawnData data){
-        return entityBuilder(data)
+        Entity body = entityBuilder(data)
                 .type(SNAKE_BODY)
                 .bbox(new HitBox(BoundingShape.box(25, 25)))
                 .collidable()
@@ -46,5 +46,7 @@ public class SnakeFactory implements EntityFactory {
                 .viewWithBBox(texture("snake-body.png",
                         25, 25).getNode())
                 .buildAndAttach();
+        body.setPosition(-100,-100);
+        return body;
     }
 }

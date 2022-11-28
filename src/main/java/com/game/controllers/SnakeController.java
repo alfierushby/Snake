@@ -80,18 +80,6 @@ public class SnakeController extends Component {
         setIMGSNAKEHEAD((Texture) getEntity().getViewComponent()
                 .getChildren().get(0));
         moveRotate();
-
-        // Test Code
-        getModel().setLength(3);
-        getBodyParts().add(getSnakeFactory().newSnakeBody(
-                new SpawnData(getEntity().getX(),getEntity().getY())));
-        getBodyParts().add(getSnakeFactory().newSnakeBody(
-                new SpawnData(getEntity().getX(),getEntity().getY())));
-        // Test Code
-
-        int time = (int) (1000/DEFAULT_FRAME_RATE);
-          getGameTimer().runAtInterval(this::drawBody,
-               Duration.millis(time));
     }
 
     public SnakeController(SnakeModel model) {
@@ -104,23 +92,6 @@ public class SnakeController extends Component {
         getModel().move();
         return true;
     }
-
-    public void drawBody()
-    {
-        getModel().draw();
-        getEntity().setPosition(getModel().getPosition());
-        int length = getModel().getBodyPoints().size() - getModel().getNum();
-        List<Point2D> bodyPoints = getModel().getBodyPoints();
-        //System.out.println(length+" "+bodyPoints.size()+" "+num);
-        int index = 0;
-        for (int i = length; i >= getModel().getNum(); i -= getModel().getNum())
-        {
-            Point2D point = bodyPoints.get(i);
-            getBodyParts().get(index).setPosition(point);
-            index++;
-        }
-    }
-
 
     @Override
     public void onUpdate(double tpf) {

@@ -14,8 +14,22 @@ import static com.game.enums.DIRECTION.*;
 
 public class SnakeGameApplication extends GameApplication {
 
+    public SnakeFactory getSnakeFactory() {
+        return m_snakeFactory;
+    }
+    public SnakeView getSnakeView() {
+        return m_snakeview;
+    }
+    public boolean setSnakeView(SnakeView m_snakeview) {
+        this.m_snakeview = m_snakeview;
+        return true;
+    }
     Entity m_snake;
     SnakeFactory m_snakeFactory = new SnakeFactory();
+
+
+
+    SnakeView m_snakeview;
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setWidth(600);
@@ -26,7 +40,7 @@ public class SnakeGameApplication extends GameApplication {
 
     @Override
     protected void initGame() {
-        new SnakeView();
+        setSnakeView(new SnakeView(getSnakeFactory()));
     }
 
     @Override
@@ -36,28 +50,32 @@ public class SnakeGameApplication extends GameApplication {
         input.addAction(new UserAction("Move Right") {
             @Override
             protected void onAction() {
-                m_snake.getComponent(SnakeController.class).keyPressed(RIGHT);
+                getSnakeView().getSnake()
+                        .getComponent(SnakeController.class).keyPressed(RIGHT);
             }
         }, KeyCode.D);
 
         input.addAction(new UserAction("Move Left") {
             @Override
             protected void onAction() {
-                m_snake.getComponent(SnakeController.class).keyPressed(LEFT);
+                getSnakeView().getSnake()
+                        .getComponent(SnakeController.class).keyPressed(LEFT);
             }
         }, KeyCode.A);
 
         input.addAction(new UserAction("Move Down") {
             @Override
             protected void onAction() {
-                m_snake.getComponent(SnakeController.class).keyPressed(DOWN);;
+                getSnakeView().getSnake()
+                        .getComponent(SnakeController.class).keyPressed(DOWN);;
             }
         }, KeyCode.S);
 
         input.addAction(new UserAction("Move Up") {
             @Override
             protected void onAction() {
-                m_snake.getComponent(SnakeController.class).keyPressed(UP);
+                getSnakeView().getSnake()
+                        .getComponent(SnakeController.class).keyPressed(UP);
             }
         }, KeyCode.W);
     }
