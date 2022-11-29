@@ -8,6 +8,7 @@ module com.game {
     opens com.game to javafx.fxml;
     exports com.game.enums;
     exports com.game.views;
+    exports com.game.events;
     opens com.game.controllers;
     opens com.game.enums to javafx.fxml;
     requires javafx.controls;

@@ -1,7 +1,6 @@
 package com.game.models;
 
 import com.almasb.fxgl.core.math.Vec2;
-import com.game.Snake;
 import com.game.enums.DIRECTION;
 import com.game.events.SnakeEvent;
 import javafx.geometry.Point2D;
@@ -54,10 +53,18 @@ public class SnakeModel {
         return true;
     }
     public boolean setSpeed(int speed) {
+        if(speed < 0 || speed > 100){
+            System.out.println("Trying to set negative or absurd speed!");
+            return false;
+        }
         m_speed = speed;
         return true;
     }
     public boolean setVelocity(Vec2 velocity) {
+        if(velocity.x > 100 || velocity.y > 100){
+            System.out.println("Trying to set absurd velocity!");
+            return false;
+        }
         m_velocity = velocity;
         return true;
     }
@@ -65,20 +72,24 @@ public class SnakeModel {
         m_saved_time = currentTime;
         return true;
     }
-    public boolean setMoveAmount(int[] moveAmount) {
-        m_moveAmount = moveAmount;
-        return true;
-    }
     public boolean setDirectionMap(Map<DIRECTION, Integer> direction_map) {
         m_direction_map = direction_map;
         return true;
     }
-    public boolean setHeight(double h) {
-        m_h = h;
+    public boolean setSnakeHeight(double h) {
+        if(h < 0){
+            System.out.println("Trying to set negative snake height!");
+            return false;
+        }
+        m_s_h = h;
         return true;
     }
-    public boolean setWidth(double w) {
-        m_w = w;
+    public boolean setSnakeWidth(double w) {
+        if(w < 0){
+            System.out.println("Trying to set negative snake width!");
+            return false;
+        }
+        m_s_w = w;
         return true;
     }
     public boolean setLength(int length) {
@@ -86,12 +97,8 @@ public class SnakeModel {
             System.out.println("Cannot set a lesser length!");
             return false;
         }
-        int old_length = m_length;
         m_length = length;
-        for(int i = old_length; i < length-1; i++){
-            // Add new snake bodies
-            fire(new SnakeEvent(SnakeEvent.MAKE_SNAKE_BODY));
-        }
+        fire(new SnakeEvent(SnakeEvent.MAKE_SNAKE_BODY));
         return true;
     }
 
@@ -103,18 +110,34 @@ public class SnakeModel {
         m_position = pos;
         return true;
     }
-
+    public boolean setFoodCount(int food_count) {
+        if(food_count < 0){
+            System.out.println("Trying to set negative food count!");
+            return false;
+        }
+        m_food_count = food_count;
+        return true;
+    }
+    public boolean setScore(int score) {
+        if(score < 0){
+            System.out.println("Trying to set negative score!");
+            return false;
+        }
+        m_score = score;
+        return true;
+    }
+    public int getScore() {return m_score;}
+    public int getFoodCount() {return m_food_count;}
     public Vec2 getVelocity() {return m_velocity;}
     public DIRECTION getDirection() {return m_direction;}
     public float getSpeed() {return m_speed;}
     public long getSavedtime() {return m_saved_time;}
-    public int[] getMoveAmount() {return m_moveAmount;}
-    public double getMin() {return m_min;}
-    public double getMax() {return m_max;}
+    public double getHeight() {return m_h;}
+    public double getWidth() {return m_w;}
     public int getNum() {return m_num;}
     public double getSpeedPixels() {return m_speed_pixels;}
-    public double getWidth() {return m_w;}
-    public double getHeight() {return m_h;}
+    public double getSnakeWidth() {return m_s_w;}
+    public double getSnakeHeight() {return m_s_h;}
     public int getLength() {return m_length;}
     public boolean getState() {return m_l;}
     public Point2D getPosition() {return m_position;}
@@ -137,32 +160,39 @@ public class SnakeModel {
     private Vec2 m_velocity = new Vec2();
     private DIRECTION m_direction= DEFAULT_DIRECTION;
     private long m_saved_time = cpuNanoTime();
-    private int[] m_moveAmount = {0,0};
-    private final double m_min;
-    private final double m_max;
-    private double m_w;
-    private double m_h;
+    final private double m_w;
+    final private double m_h;
+    private double m_s_w;
+    private double m_s_h;
     private boolean m_l;
     private int m_length;
     private Point2D m_position;
     private final List<Point2D> m_bodyPoints = new LinkedList<>();
+    private int m_food_count = 0;
+    private int m_score = 0;
 
+    public boolean addScore(){
+        return setScore(getScore() + DEFAULT_SCORE_INCREMENT);
+    }
+    public boolean addLength(){
+        return setLength(getLength() + DEFAULT_LENGTH_INCREMENT);
+    }
 
     public SnakeModel(double width, double height,Rectangle container) {
         getVelocity().set(0,getSpeed()); // Default movement
-        m_min = container.x + (width / 2);
-        m_max = m_min + container.width - width;
-        setWidth(width);
-        setHeight(height);
+        m_w = container.getWidth();
+        m_h = container.getHeight();
+        setSnakeWidth(width);
+        setSnakeHeight(height);
         // Pixels per default frame
         m_speed_pixels =
                 getPhysicsWorld().toPixels(getSpeed())/DEFAULT_FRAME_RATE;
         // How many frames to move a width (it won't be exact)
         // But it will approach near-perfectness as frame rate increases
-        m_num = (int) Math.round(getWidth() / getSpeedPixels());
+        m_num = (int) Math.round(getSnakeWidth() / getSpeedPixels());
         setPosition(DEFAULT_START_POSITION);
-        System.out.println("speed: " + getWidth() + " " + getSpeedPixels() +
-                " " + getWidth() / getSpeedPixels());
+        System.out.println("speed: " + getSnakeWidth() + " " + getSpeedPixels() +
+                " " + getSnakeWidth() / getSpeedPixels());
 
     }
 

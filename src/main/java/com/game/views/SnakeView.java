@@ -17,7 +17,7 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getEventBus;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameTimer;
 import static com.game.data.Config.*;
 
-public class SnakeView {
+public class SnakeView extends View {
 
     public Entity getSnake() {
         return m_snake;
@@ -27,45 +27,23 @@ public class SnakeView {
         this.m_snake = m_snake;
         return true;
     }
-
-    public SnakeFactory getSnakeFactory() {
-        return m_snakeFactory;
-    }
-    private void setModel(SnakeModel snakeModel) {
-        m_model = snakeModel;
-    }
-
-    public boolean setSnakeFactory(SnakeFactory m_snakeFactory) {
-        this.m_snakeFactory = m_snakeFactory;
-        return true;
-    }
     public List<Entity> getBodyParts() {
         return m_bodyParts;
     }
 
-    public SnakeModel getModel() {
-        return m_model;
-    }
-
-
     Entity m_snake;
-    SnakeFactory m_snakeFactory;
-
-    SnakeModel m_model;
-
-
     private final List<Entity> m_bodyParts = new LinkedList<>();
 
-    public SnakeView(SnakeFactory factory){
-        setSnakeFactory(factory);
+    public SnakeView(SnakeFactory factory, SnakeModel model){
+        super(factory,model);
         setupSnakeHead();
 
-        onEvent(SnakeEvent.MAKE_SNAKE_BODY, this::createSnakeBody);
+        onEvent(SnakeEvent.MAKE_SNAKE_BODY, this::fillSnakeBodies);
 
         getGameTimer().runAtInterval(this::drawBody,
                 Duration.millis(getModel().getFrameTime()));
         // Test code
-        getModel().setLength(30);
+       // getModel().setLength(30);
         // Test code
     }
 
@@ -75,7 +53,6 @@ public class SnakeView {
         getSnake().setPosition(getModel().getPosition());
         int length = getModel().getBodyPoints().size() - getModel().getNum();
         List<Point2D> bodyPoints = getModel().getBodyPoints();
-        //System.out.println(length+" "+bodyPoints.size()+" "+num);
         int index = 0;
         for (int i = length; i >= getModel().getNum(); i -= getModel().getNum())
         {
@@ -88,16 +65,23 @@ public class SnakeView {
 
 
     public boolean setupSnakeHead(){
-        setModel(new SnakeModel(DEFAULT_SNAKE_WIDTH,
-                DEFAULT_SNAKE_HEIGHT,
-                new Rectangle(DEFAULT_GAME_WIDTH, DEFAULT_GAME_HEIGHT)));
-
-        setSnake(getSnakeFactory().newSnake(new SpawnData(100,100),getModel()));
+        setSnake(getSnakeFactory().newSnake(new SpawnData(100,100)
+                ,getModel()));
         return true;
     }
 
+    private boolean fillSnakeBodies(SnakeEvent event){
+        if (getBodyParts().size() == getModel().getLength()){
+            return false;
+        }
+        for(int i = getBodyParts().size(); i<getModel().getLength();i++){
+            createSnakeBody();
+        }
 
-    public boolean createSnakeBody(SnakeEvent event){
+        return true;
+    }
+
+    public boolean createSnakeBody(){
         if (getModel().getLength() <= getBodyParts().size()) {
             System.out.println("Tried to add a body part more than length!");
             return false;
