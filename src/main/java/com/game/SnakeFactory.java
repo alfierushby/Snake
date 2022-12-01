@@ -100,8 +100,7 @@ public class SnakeFactory implements EntityFactory {
                 .bbox(new HitBox(BoundingShape.box(25, 25)))
                 .collidable()
                 .with(new FoodController(model))
-                .viewWithBBox(texture(getFoodindex(rand),
-                        25, 25).getNode())
+                .viewWithBBox(texture(getFoodindex(rand)).getNode())
                 .buildAndAttach();
     }
 

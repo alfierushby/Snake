@@ -3,6 +3,8 @@ package com.game.models;
 import com.almasb.fxgl.core.math.Vec2;
 import com.game.enums.DIRECTION;
 import com.game.events.SnakeEvent;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Point2D;
 
 import java.awt.*;
@@ -16,8 +18,16 @@ import static com.game.data.Config.*;
 import static com.game.enums.DIRECTION.*;
 import static com.game.enums.DIRECTION.RIGHT;
 
+/**
+ * Snake Model is an all-in-one MVC model of the Snake's movement that handles
+ * The positions of its body  and head, direction, and velocity.
+ */
 public class SnakeModel {
 
+    /**
+     * @param direction Direction to change to
+     * @return True if the direction is plausible
+     */
     public boolean setDirection(DIRECTION direction) {
         boolean error = false;
         switch (direction)
@@ -52,30 +62,41 @@ public class SnakeModel {
         m_direction = direction;
         return true;
     }
+
+    /**
+     * Sets speed and re-calulates frame speeds.
+     * @param speed Speed of the snake in m/s
+     * @return True if speed is not absurd and frame speeds were
+     * calculated
+     */
     public boolean setSpeed(int speed) {
         if(speed < 0 || speed > 100){
             System.out.println("Trying to set negative or absurd speed!");
             return false;
         }
         m_speed = speed;
-        return true;
+        return calcFrameSpeed(); // New speed entails new frame speeds.
     }
+
+    /**
+     * @param velocity Unit Vector Velocity of Snake in form (0-1,0-1), where
+     * 1 is full-speed
+     * @return True if velocity isn't absurd
+     */
     public boolean setVelocity(Vec2 velocity) {
-        if(velocity.x > 100 || velocity.y > 100){
-            System.out.println("Trying to set absurd velocity!");
+        if(velocity.x > 1 || velocity.y > 1 || velocity.x < 0 || velocity.y < 0)
+        {
+            System.out.println("Trying to set non-binary velocity!");
             return false;
         }
         m_velocity = velocity;
         return true;
     }
-    public boolean setCurrentTime(long currentTime) {
-        m_saved_time = currentTime;
-        return true;
-    }
-    public boolean setDirectionMap(Map<DIRECTION, Integer> direction_map) {
-        m_direction_map = direction_map;
-        return true;
-    }
+
+    /**
+     * @param h Height of snake head
+     * @return True if the height isn't negative
+     */
     public boolean setSnakeHeight(double h) {
         if(h < 0){
             System.out.println("Trying to set negative snake height!");
@@ -84,6 +105,11 @@ public class SnakeModel {
         m_s_h = h;
         return true;
     }
+
+    /**
+     * @param w Width of snake head
+     * @return True if the width isn't negative
+     */
     public boolean setSnakeWidth(double w) {
         if(w < 0){
             System.out.println("Trying to set negative snake width!");
@@ -92,24 +118,46 @@ public class SnakeModel {
         m_s_w = w;
         return true;
     }
+
+    /**
+     * @param length Length of snake, each unit pertaining to 1 body part
+     * @return True if the length set was higher than the previous length
+     */
     public boolean setLength(int length) {
         if (length < getLength()){
             System.out.println("Cannot set a lesser length!");
             return false;
         }
-        m_length = length;
-        fire(new SnakeEvent(SnakeEvent.MAKE_SNAKE_BODY));
+        m_length.set(length);
         return true;
     }
 
+    /**
+     * @param l State of snake, false for game end
+     * @return True
+     */
     public boolean setState(boolean l) {
         m_l = l;
         return true;
     }
+
+    /**
+     * @param pos Point to set the Position of the Snake Head
+     * @return False if trying to move in a negative position
+     */
     public boolean setPosition(Point2D pos){
+        if(pos.getX() < 0 || pos.getY() < 0) {
+            System.out.println("Cannot set a negative position!");
+            return false;
+        }
         m_position = pos;
         return true;
     }
+
+    /**
+     * @param food_count Number of food items in game
+     * @return True if food_count isn't negative
+     */
     public boolean setFoodCount(int food_count) {
         if(food_count < 0){
             System.out.println("Trying to set negative food count!");
@@ -118,6 +166,11 @@ public class SnakeModel {
         m_food_count = food_count;
         return true;
     }
+
+    /**
+     * @param score Score of game
+     * @return True if score isn't negative
+     */
     public boolean setScore(int score) {
         if(score < 0){
             System.out.println("Trying to set negative score!");
@@ -126,79 +179,208 @@ public class SnakeModel {
         m_score = score;
         return true;
     }
+
+    /**
+     * @param s Speed of snake in pixels/s
+     * @return True if speed isn't negative
+     */
+    public boolean setSpeedPixels(double s) {
+        if(s < 0){
+            System.out.println("Trying to set negative speed!");
+            return false;
+        }
+        m_speed_pixels = s;
+        return true;
+    }
+
+    /**
+     * @param num How many pixels to travel per frame
+     * @return True if num isn't negative
+     */
+    public boolean setNum(int num) {
+        if(m_num < 0){
+            System.out.println("Trying to set negative num!");
+            return false;
+        }
+        m_num = num;
+        return true;
+    }
+
+    /**
+     * @return Score of game
+     */
     public int getScore() {return m_score;}
+
+    /**
+     * @return Food entities spawned
+     */
     public int getFoodCount() {return m_food_count;}
+
+    /**
+     * @return Unit vector of Velocity, in range 0 - 1, where 1 is its full
+     * speed. Set by {@link #getSpeed()}.
+     */
     public Vec2 getVelocity() {return m_velocity;}
+
+    /**
+     * @return Direction the snake is moving
+     */
     public DIRECTION getDirection() {return m_direction;}
+
+    /**
+     * @return Speed of snake in m/s
+     */
     public float getSpeed() {return m_speed;}
-    public long getSavedtime() {return m_saved_time;}
+
+    /**
+     * @return Height of game container in pixels
+     */
     public double getHeight() {return m_h;}
+
+    /**
+     * @return Width of game container in pixels
+     */
     public double getWidth() {return m_w;}
+
+    /**
+     * @return Numbers of pixels to travel per frame
+     */
     public int getNum() {return m_num;}
+
+    /**
+     * @return Number of pixels travelled per second
+     */
     public double getSpeedPixels() {return m_speed_pixels;}
+
+    /**
+     * @return Width of snake in pixels
+     */
     public double getSnakeWidth() {return m_s_w;}
+
+    /**
+     * @return Height of snake in pixels
+     */
     public double getSnakeHeight() {return m_s_h;}
-    public int getLength() {return m_length;}
+
+    /**
+     * @return Length of snake, with each unit being 1 new snake body part
+     */
+    public int getLength() {return m_length.get();}
+
+    /**
+     * @return Length property, for listening purposes
+     */
+    public IntegerProperty getLengthProp() {return m_length;}
+
+    /**
+     * @return State of game
+     */
     public boolean getState() {return m_l;}
+
+    /**
+     * @return Position of snake
+     */
     public Point2D getPosition() {return m_position;}
+
+    /**
+     * @return All body points used to position body parts in
+     * {@link com.game.views.SnakeView}
+     */
     public List<Point2D> getBodyPoints() {return m_bodyPoints;}
+
+    /**
+     * @return Gets the frame time according to the frame rate
+     */
     public int getFrameTime() {
         return (int) (1000/DEFAULT_FRAME_RATE);
     }
 
-
+    /**
+     * @return Gets the mapping of direction to degrees
+     */
     public Map<DIRECTION, Integer> getDirectionMap() {return m_direction_map;}
 
     //Custom Variables
-    private Map<DIRECTION, Integer> m_direction_map
+    private final Map<DIRECTION, Integer> m_direction_map
             = Map.of(UP, -90, DOWN, 90, LEFT, -180, RIGHT, 0);
     private int m_speed = DEFAULT_SPEED; // In metres/second, converted to pixels later
 
 
-    private final double m_speed_pixels;
-    private final int m_num;
+    private double m_speed_pixels;
+    private int m_num;
     private Vec2 m_velocity = new Vec2();
     private DIRECTION m_direction= DEFAULT_DIRECTION;
-    private long m_saved_time = cpuNanoTime();
     final private double m_w;
     final private double m_h;
     private double m_s_w;
     private double m_s_h;
     private boolean m_l;
-    private int m_length;
+    private final IntegerProperty m_length;
     private Point2D m_position;
-    private final List<Point2D> m_bodyPoints = new LinkedList<>();
+    private final List<Point2D> m_bodyPoints;
     private int m_food_count = 0;
     private int m_score = 0;
 
+    /**
+     * Adds the default score increment.
+     * @return True if score was added to successfully
+     */
     public boolean addScore(){
         return setScore(getScore() + DEFAULT_SCORE_INCREMENT);
     }
+
+    /**
+     * Adds the default length increment.
+     * @return True if length was added to successfully
+     */
     public boolean addLength(){
         return setLength(getLength() + DEFAULT_LENGTH_INCREMENT);
     }
 
+    /**
+     * Sets dimensions of the snake head and game, and then sets up the frame
+     * speed of the snake.
+     * @param width Width of the Snake Head
+     * @param height Height of the Snake Head
+     * @param container Container defining game bounds
+     */
     public SnakeModel(double width, double height,Rectangle container) {
-        getVelocity().set(0,getSpeed()); // Default movement
+        m_length= new SimpleIntegerProperty(0);
         m_w = container.getWidth();
         m_h = container.getHeight();
+        m_bodyPoints = new LinkedList<>();
+
+        getVelocity().set(0,getSpeed()); // Default movement
         setSnakeWidth(width);
         setSnakeHeight(height);
-        // Pixels per default frame
-        m_speed_pixels =
-                getPhysicsWorld().toPixels(getSpeed())/DEFAULT_FRAME_RATE;
-        // How many frames to move a width (it won't be exact)
-        // But it will approach near-perfectness as frame rate increases
-        m_num = (int) Math.round(getSnakeWidth() / getSpeedPixels());
+        calcFrameSpeed();
         setPosition(DEFAULT_START_POSITION);
-        System.out.println("speed: " + getSnakeWidth() + " " + getSpeedPixels() +
-                " " + getSnakeWidth() / getSpeedPixels());
-
     }
 
-    public void draw()
+    /**
+     * Calculates the frame speed according to the snakes Pixels/s metric and
+     * the Default Frame Rate.
+     * @return True if the frame speed was calculated
+     */
+    public boolean calcFrameSpeed(){
+        // Pixels per default frame
+        boolean case1 = setSpeedPixels(
+                getPhysicsWorld().toPixels(getSpeed())/DEFAULT_FRAME_RATE);
+        // How many frames to move a width (it won't be exact)
+        // But it will approach near-perfectness as frame rate increases
+        boolean case2 =
+                setNum((int) Math.round(getSnakeWidth() / getSpeedPixels()));
+        return case1 && case2;
+    }
+
+    /**
+     * Sets the BodyPoints array by adding the history of the Snake Head's
+     * positions every frame.
+     * @return True if not outofBounds, or snake head position not set.
+     */
+    public boolean draw()
     {
-        outofBounds(getPosition().getX(), getPosition().getY());
+        boolean cond0 = outofBounds();
         getBodyPoints().add(new Point2D(getPosition().getX(),
                 getPosition().getY()));
         if ( getBodyPoints().size() == (getLength() + 1) * getNum())
@@ -206,25 +388,47 @@ public class SnakeModel {
             getBodyPoints().remove(0);
         }
         //move();
-        setPosition(new Point2D(
+        boolean cond1 = setPosition(new Point2D(
                 getPosition().getX()+getSpeedPixels()*getVelocity().x,
                 getPosition().getY()-getSpeedPixels()*getVelocity().y));
-        //System.out.println("uh?" + getPosition().getX());
+        if (cond1 && cond0){
+            return true ;
+        }else{
+            System.out.println("ERROR: In draw() for SnakeModel: Cond0: "+ cond0
+                    + " Cond1: " + cond1);
+            return false;
+        }
     }
-    public boolean outofBounds(double x , double y)
+
+
+    /**
+     * Checks whether the snake is out of bounds.
+     * @return True if the snake isn't out of bounds
+     */
+    public boolean outofBounds()
     {
-        boolean xOut = (x <= 0 || y >= (870 - getWidth()));
-        boolean yOut = (y <= 40 || y >= (560 - getHeight()));
+        boolean xOut = (getPosition().getX() <= 0
+                || getPosition().getX() >= (getWidth() - getSnakeWidth()));
+        boolean yOut = (getPosition().getY() <= 0
+                || getPosition().getY() >= (getHeight() - getSnakeHeight()));
         if (xOut || yOut)
         {
             setState(false);
+            return false;
         }
         return true;
     }
 
 
-    public void move()
+    /**
+     * Sets the unit vector of the Velocity, conforming to the direction.
+     * @return True if velocity and direction are set up
+     */
+    public boolean move()
     {
+        if (getVelocity() == null || getDirection() == null){
+            return false;
+        }
         if (getDirection() == UP)
         {
             getVelocity().set(0,1);
@@ -238,6 +442,7 @@ public class SnakeModel {
         {
             getVelocity().set(1,0);
         }
+        return true;
     }
 
 

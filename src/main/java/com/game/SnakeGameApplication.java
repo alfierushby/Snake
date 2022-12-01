@@ -37,15 +37,8 @@ public class SnakeGameApplication extends GameApplication {
         m_foodview = foodview;
         return true;
     }
-
-
-
-
     Entity m_snake;
     SnakeFactory m_snakeFactory = new SnakeFactory();
-
-
-
     SnakeView m_snakeview;
     FoodView m_foodview;
     @Override
