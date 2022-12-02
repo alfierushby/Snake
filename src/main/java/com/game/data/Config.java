@@ -18,5 +18,6 @@ public static final int DEFAULT_SNAKE_WIDTH = 25;
 public static final int DEFAULT_SNAKE_HEIGHT = 25;
 public static final int DEFAULT_SCORE_INCREMENT = 1;
 public static final int DEFAULT_LENGTH_INCREMENT = 1;
-public static final Point2D DEFAULT_START_POSITION = new Point2D(0,0);
+public static final Point2D DEFAULT_START_POSITION = new Point2D(100,100);
+public static final String DEFAULT_GAME_UI = "snake_ui.fxml";
 }

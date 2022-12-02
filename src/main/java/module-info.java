@@ -1,9 +1,9 @@
 module com.game {
     exports com.game; // Used for testing in com.test module
     exports com.game.models;
-    opens assets;
     opens assets.textures;
     opens assets.textures.Food;
+    opens assets.ui;
    // opens Music;
     opens com.game to javafx.fxml;
     exports com.game.enums;

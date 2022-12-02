@@ -3,8 +3,7 @@ package com.game.models;
 import com.almasb.fxgl.core.math.Vec2;
 import com.game.enums.DIRECTION;
 import com.game.events.SnakeEvent;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.*;
 import javafx.geometry.Point2D;
 
 import java.awt.*;
@@ -133,11 +132,11 @@ public class SnakeModel {
     }
 
     /**
-     * @param l State of snake, false for game end
+     * @param l State of snake, True for game end
      * @return True
      */
     public boolean setState(boolean l) {
-        m_l = l;
+        m_l.set(l);
         return true;
     }
 
@@ -176,7 +175,7 @@ public class SnakeModel {
             System.out.println("Trying to set negative score!");
             return false;
         }
-        m_score = score;
+        m_score.set(score);
         return true;
     }
 
@@ -207,9 +206,14 @@ public class SnakeModel {
     }
 
     /**
-     * @return Score of game
+     * @return Score value of game
      */
-    public int getScore() {return m_score;}
+    public int getScore() {return m_score.get();}
+    /**
+     * @return Score Property of game
+     */
+    public IntegerProperty getScoreProp() {return m_score;}
+
 
     /**
      * @return Food entities spawned
@@ -275,7 +279,12 @@ public class SnakeModel {
     /**
      * @return State of game
      */
-    public boolean getState() {return m_l;}
+    public boolean getState() {return m_l.get();}
+
+    /**
+     * @return State of game Property
+     */
+    public BooleanProperty getStateProp() {return m_l;}
 
     /**
      * @return Position of snake
@@ -314,12 +323,12 @@ public class SnakeModel {
     final private double m_h;
     private double m_s_w;
     private double m_s_h;
-    private boolean m_l;
+    private final BooleanProperty m_l;
     private final IntegerProperty m_length;
     private Point2D m_position;
     private final List<Point2D> m_bodyPoints;
     private int m_food_count = 0;
-    private int m_score = 0;
+    private final IntegerProperty m_score;
 
     /**
      * Adds the default score increment.
@@ -346,9 +355,12 @@ public class SnakeModel {
      */
     public SnakeModel(double width, double height,Rectangle container) {
         m_length= new SimpleIntegerProperty(0);
+        m_score = new SimpleIntegerProperty(0);
+        m_l = new SimpleBooleanProperty(false);
         m_w = container.getWidth();
         m_h = container.getHeight();
         m_bodyPoints = new LinkedList<>();
+
 
         getVelocity().set(0,getSpeed()); // Default movement
         setSnakeWidth(width);
@@ -394,8 +406,9 @@ public class SnakeModel {
         if (cond1 && cond0){
             return true ;
         }else{
-            System.out.println("ERROR: In draw() for SnakeModel: Cond0: "+ cond0
-                    + " Cond1: " + cond1);
+            setState(true);
+            System.out.println("GAME OVER: In draw() for SnakeModel: Cond0: "
+                    + cond0 + " Cond1: " + cond1);
             return false;
         }
     }
@@ -413,7 +426,6 @@ public class SnakeModel {
                 || getPosition().getY() >= (getHeight() - getSnakeHeight()));
         if (xOut || yOut)
         {
-            setState(false);
             return false;
         }
         return true;

@@ -49,8 +49,11 @@ public class FoodController extends Component {
     @Override
     public void onAdded() {
         Random random = new Random();
-        Point2D pos = new Point2D(random.nextDouble(getModel().getWidth()),
-                random.nextDouble(getModel().getHeight()));
+        Point2D pos =
+                new Point2D(random.nextDouble(getModel().getWidth()
+                        - getModel().getSnakeWidth()),
+                random.nextDouble(getModel().getHeight()
+                        - getModel().getSnakeHeight()));
         getEntity().setPosition(pos);
 
 

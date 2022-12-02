@@ -91,7 +91,7 @@
     <build>
         <resources>
             <resource>
-                <directory>src/main/resources/com/game/</directory>
+                <directory>src/main/resources</directory>
             </resource>
         </resources>
         <plugins>
