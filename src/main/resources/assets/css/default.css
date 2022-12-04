@@ -1,0 +1,9 @@
+.Rectangle {
+    -fx-background-color: pink;
+}
+
+
+.button  {
+    -fx-background-color: none;
+    -fx-text-fill:white;
+}

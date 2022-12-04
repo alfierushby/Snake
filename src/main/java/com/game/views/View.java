@@ -1,6 +1,5 @@
 package com.game.views;
 
-import com.almasb.fxgl.entity.Entity;
 import com.game.SnakeFactory;
 import com.game.models.SnakeModel;
 

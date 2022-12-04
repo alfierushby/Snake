@@ -2,19 +2,14 @@ package com.game.controllers;
 
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
-import com.almasb.fxgl.physics.PhysicsComponent;
-import com.almasb.fxgl.texture.Texture;
+import com.game.SnakeFactory;
 import com.game.models.SnakeModel;
 import javafx.geometry.Point2D;
 
-import java.awt.*;
-
 import java.util.Random;
 
-import static com.game.data.Config.*;
-
 /**
- * Controls the Food Entity created in {@link com.game.SnakeFactory}.
+ * Controls the Food Entity created in {@link SnakeFactory}.
  * Created for each new Food Entity.
  */
 public class FoodController extends Component {

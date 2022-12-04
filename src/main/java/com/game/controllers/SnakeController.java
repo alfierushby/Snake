@@ -1,24 +1,12 @@
 package com.game.controllers;
 
-import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
-import com.almasb.fxgl.physics.PhysicsComponent;
-import com.almasb.fxgl.physics.box2d.dynamics.BodyDef;
 import com.almasb.fxgl.texture.Texture;
-import com.game.SnakeFactory;
 import com.game.enums.DIRECTION;
 import com.game.models.SnakeModel;
 import javafx.geometry.Point2D;
-import javafx.util.Duration;
 
-import java.awt.*;
-import java.util.LinkedList;
-import java.util.List;
-
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameTimer;
 import static com.almasb.fxgl.dsl.FXGL.texture;
-import static com.game.data.Config.*;
 import static com.game.enums.DIRECTION.*;
 import static com.game.enums.DIRECTION.RIGHT;
 

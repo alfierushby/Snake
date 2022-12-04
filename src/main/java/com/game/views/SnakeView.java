@@ -3,17 +3,13 @@ package com.game.views;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.game.SnakeFactory;
-import com.game.events.SnakeEvent;
 import com.game.models.SnakeModel;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
-import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.almasb.fxgl.dsl.FXGL.onEvent;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getEventBus;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameTimer;
 import static com.game.data.Config.*;
 import static com.game.enums.TYPES.SNAKE;

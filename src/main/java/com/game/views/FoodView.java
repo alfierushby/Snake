@@ -1,13 +1,11 @@
 package com.game.views;
 
-import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import com.game.SnakeFactory;
 import com.game.events.SnakeEvent;
 import com.game.models.SnakeModel;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
-import static com.game.data.Config.DEFAULT_SCORE_INCREMENT;
 
 /**
  * View for Food entities that handles updating the 'View' of the Food items,

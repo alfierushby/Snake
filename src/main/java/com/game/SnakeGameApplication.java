@@ -3,11 +3,9 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.ui.UI;
-import com.almasb.fxgl.ui.UIController;
 import com.game.collisions.FoodSnakeHandler;
 import com.game.controllers.SnakeController;
 import com.game.controllers.SnakeUIController;
@@ -20,10 +18,8 @@ import java.awt.*;
 
 import static com.almasb.fxgl.dsl.FXGL.getDialogService;
 import static com.almasb.fxgl.dsl.FXGL.getEventBus;
-import static com.almasb.fxgl.dsl.FXGL.getFileSystemService;
 import static com.almasb.fxgl.dsl.FXGL.getGameController;
 import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
-import static com.almasb.fxgl.dsl.FXGL.geti;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 import static com.game.data.Config.*;
 import static com.game.data.Config.DEFAULT_GAME_HEIGHT;
@@ -69,8 +65,11 @@ public class SnakeGameApplication extends GameApplication {
     protected void initSettings(GameSettings settings) {
         settings.setWidth(DEFAULT_GAME_WIDTH);
         settings.setHeight(DEFAULT_GAME_HEIGHT);
-        settings.setTitle("Basic Game App");
+        settings.setTitle("The Snake Game");
         settings.setVersion("0.1");
+        settings.setMainMenuEnabled(true);
+        settings.setNative(false);
+        settings.setSceneFactory(new MenuFactory());
     }
     @Override
     protected void onPreInit() {
