@@ -9,37 +9,44 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="holder" prefHeight="400.0" prefWidth="600.0" stylesheets="/assets/css/default.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="/assets/css/default.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ImageView fitHeight="607.0" fitWidth="813.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="/assets/textures/UI-background.png" />
-         </image>
-      </ImageView>
-      <VBox fx:id="vbox" alignment="TOP_CENTER" nodeOrientation="RIGHT_TO_LEFT" prefHeight="607.0" prefWidth="813.0" AnchorPane.leftAnchor="0.0">
+      <Pane fx:id="holder" prefHeight="542.0" prefWidth="813.0">
          <children>
-            <Pane prefHeight="120.0" prefWidth="802.0">
+            <ImageView fitHeight="607.0" fitWidth="813.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="/assets/textures/UI-background.png" />
+               </image>
+            </ImageView>
+            <VBox fx:id="vbox" alignment="TOP_CENTER" nodeOrientation="RIGHT_TO_LEFT" prefHeight="607.0" prefWidth="813.0">
                <children>
-                  <Text id="title" fx:id="title" fill="WHITE" layoutX="329.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The Snake Game" wrappingWidth="487.0">
+                  <Pane prefHeight="120.0" prefWidth="802.0">
+                     <children>
+                        <Text id="title" fx:id="title" fill="WHITE" layoutX="176.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The Snake Game" wrappingWidth="475.6666259765625">
+                           <font>
+                              <Font size="64.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </Pane>
+                  <Button fx:id="newgame_btn" mnemonicParsing="false" onMouseClicked="#startGame" text="New Game">
                      <font>
-                        <Font size="64.0" />
+                        <Font name="System Bold" size="32.0" />
                      </font>
-                  </Text>
+                  </Button>
+                  <Button fx:id="highscores_btn" mnemonicParsing="false" text="High Scores">
+                     <font>
+                        <Font name="Calibri" size="32.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="options_btn" mnemonicParsing="false" text="Options">
+                     <font>
+                        <Font size="32.0" />
+                     </font>
+                  </Button>
                </children>
-            </Pane>
-            <Button fx:id="newgame_btn" mnemonicParsing="false" text="New Game">
-               <font>
-                  <Font size="32.0" />
-               </font></Button>
-            <Button fx:id="highscores_btn" mnemonicParsing="false" text="High Score">
-               <font>
-                  <Font size="32.0" />
-               </font></Button>
-            <Button fx:id="options_btn" mnemonicParsing="false" text="Options">
-               <font>
-                  <Font size="32.0" />
-               </font></Button>
+            </VBox>
          </children>
-      </VBox>
+      </Pane>
    </children>
 </AnchorPane>

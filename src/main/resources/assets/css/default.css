@@ -3,7 +3,14 @@
 }
 
 
-.button  {
-    -fx-background-color: none;
-    -fx-text-fill:white;
+.button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ffffff;
+
+}
+
+.gradient_animate {
+    -gradient-base: gold;
+    -gradient-bottom: #e3cc6c;
+    -fx-text-fill: linear-gradient(to right, -gradient-base, -gradient-bottom);
 }

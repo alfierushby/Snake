@@ -10,19 +10,30 @@ import com.almasb.fxgl.particle.ParticleSystem;
 import com.almasb.fxgl.texture.Texture;
 import com.almasb.fxgl.ui.UI;
 import com.game.controllers.MainMenuController;
+import com.game.data.ColorSet;
 import com.game.data.FoodImages;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.effect.BlendMode;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static com.almasb.fxgl.dsl.FXGL.texture;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 import static com.game.data.Config.*;
+import static javafx.animation.Animation.INDEFINITE;
 
 
 public class MainMenuView extends FXGLMenu {
@@ -67,9 +78,32 @@ public class MainMenuView extends FXGLMenu {
     MainMenuController m_controller;
     private final List<Animation<?>> m_animations = new LinkedList<>();
     private final FoodImages food = new FoodImages();
+
+    public MainMenuView(@NotNull MenuType type) {
+        super(MenuType.MAIN_MENU);
+
+        setController(new MainMenuController(this));
+
+
+        UI root = getAssetLoader().loadUI(DEFAULT_MAIN_UI,getMainMenuController());
+        getContentRoot().getChildren().add(root.getRoot());
+
+        m_system = new ParticleSystem();
+
+        initParticles();
+        getMainMenuController().getHolder().getChildren()
+                .add(1,m_system.getPane());
+        double i =0;
+        for (Node node : getMainMenuController().getVbox().getChildren()){
+            setAnimation(node,i);
+            i=i+0.07;
+        }
+        animateNode(getMainMenuController().getHighscores_btn(), Color.ORANGERED,
+                Color.MEDIUMVIOLETRED);
+        setInfiniteBobble(getMainMenuController().getTitle(),1);
+    }
+
     private boolean initParticles(){
-
-
         Texture t =
                 texture(food.getFoodindex(0), 25.0, 25);
 
@@ -98,52 +132,87 @@ public class MainMenuView extends FXGLMenu {
     }
 
 
+    private Timeline createColorTimeLine(ObjectProperty<Color> baseColor,
+                                       Color c1, Color c2){
+        KeyValue keyValue1 = new KeyValue(baseColor, c1
+                , Interpolator.LINEAR);
+        KeyValue keyValue2 = new KeyValue(baseColor, c2
+                , Interpolator.LINEAR);
+        KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
+        KeyFrame keyFrame2 = new KeyFrame(Duration.seconds(2), keyValue2);
+        Timeline timeline = new Timeline(keyFrame1, keyFrame2);
+        timeline.setAutoReverse(true);
+        timeline.setCycleCount(INDEFINITE);
+        return timeline;
+    }
+
+    private ColorSet doubleGradientListener(Node node){
+        ObjectProperty<Color> baseColour = new SimpleObjectProperty<>();
+        ObjectProperty<Color> baseColour1 = new SimpleObjectProperty<>();
+        AtomicReference<String> grad_base = new AtomicReference<>("");
+
+        baseColour.addListener((obs, oldColor, newColor) -> {
+            grad_base.set(String.format("-gradient-base: #%02x%02x%02x; ",
+                    (int) (newColor.getRed() * 255),
+                    (int) (newColor.getGreen() * 255),
+                    (int) (newColor.getBlue() * 255)));
+        });
+
+        baseColour1.addListener((obs, oldColor, newColor) -> {
+            node.setStyle(String.format("-gradient-bottom: #%02x%02x%02x;"
+                            + grad_base.get(),
+                    (int)(newColor.getRed()*255),
+                    (int)(newColor.getGreen()*255),
+                    (int)(newColor.getBlue()*255)));
+        });
+       return new ColorSet(baseColour, baseColour1);
+    }
+
+    public boolean animateNode(Node node, Color base, Color end){
+        ColorSet colours = doubleGradientListener(node);
+
+        node.getStyleClass().add("gradient_animate");
+        Timeline timeline = createColorTimeLine(colours.baseColor(),
+                base, end);
+
+        Timeline timeline1 = createColorTimeLine(colours.endColor(),
+                end,base);
+
+        timeline1.play();
+        timeline.play();
+        return true;
+    }
+
+    public Animation<?> setInfiniteBobble(Node node, double speed){
+            Animation<?> animation_scale =  animationBuilder()
+                    .interpolator(Interpolators.QUADRATIC.EASE_IN_OUT())
+                    .duration(Duration.seconds(speed))
+                    .autoReverse(true)
+                    .repeatInfinitely()
+                    .scale(node)
+                    .from(new Point2D(1,1))
+                    .to(new Point2D(1.1, 1.1))
+                    .build();
+            animation_scale.start();
+            getAnimations().add(animation_scale);
+            return animation_scale;
+    }
+
     private boolean setAnimation(Node node, double i){
         Animation<?> animation =  animationBuilder()
                 .delay(Duration.seconds(.07 + i))
                 .interpolator(Interpolators.EXPONENTIAL.EASE_OUT())
                 .duration(Duration.seconds(0.66))
                 .translate(node)
-                .from(new Point2D(600,600))
+                .from(new Point2D(0,600))
                 .to(new Point2D(0.0, 0.0))
                 .build();
-
-        Animation<?> animation_scale =  animationBuilder()
-                .delay(Duration.seconds(.07 + i))
-                .interpolator(Interpolators.EXPONENTIAL.EASE_OUT())
-                .duration(Duration.seconds(0.66))
-                .scale(node)
-                .from(new Point2D(0,0))
-                .to(new Point2D(1, 1))
-                .build();
-
         animation.start();
-        animation_scale.start();
         getAnimations().add(animation);
-        getAnimations().add(animation_scale);
+
         return true;
     }
 
-    public MainMenuView(@NotNull MenuType type) {
-        super(MenuType.MAIN_MENU);
-
-        setController(new MainMenuController());
-
-
-        UI root = getAssetLoader().loadUI(DEFAULT_MAIN_UI,getMainMenuController());
-        getContentRoot().getChildren().add(root.getRoot());
-
-        m_system = new ParticleSystem();
-
-        initParticles();
-        getContentRoot().getChildren().add(m_system.getPane());
-        double i =0;
-        for (Node node : getMainMenuController().getVbox().getChildren()){
-            setAnimation(node,i);
-            i=i+0.07;
-        }
-
-    }
     @Override
     protected void onUpdate(double tpf) {
         Texture t = texture(
