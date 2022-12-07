@@ -4,16 +4,13 @@ import com.almasb.fxgl.core.math.Vec2;
 import com.almasb.fxgl.core.serialization.Bundle;
 import com.game.data.Score;
 import com.game.enums.DIRECTION;
-import com.game.events.SnakeEvent;
 import javafx.beans.property.*;
 import javafx.geometry.Point2D;
 
 import java.awt.*;
-import java.io.Serializable;
 import java.util.*;
 import java.util.List;
 
-import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getPhysicsWorld;
 import static com.game.data.Config.*;
 import static com.game.enums.DIRECTION.*;
@@ -212,11 +209,12 @@ public class SnakeModel {
      * @return True if the bundle is for high scores.
      */
     public boolean setHighScores(Bundle m_high_scores) {
-        if(m_high_scores.getName().equals("highScores")){
+        if(m_high_scores.getName().equals(DEFAULT_SAVE_BUNDLE_NAME)){
             this.m_high_scores = m_high_scores;
             // Set it to an empty list
             if(getHighScores().getData().isEmpty()){
-                getHighScores().put("scores",new LinkedList<Score>());
+                getHighScores().put(DEFAULT_SAVE_BUNDLE_LIST,
+                        new LinkedList<Score>());
             }
             return true;
         }
@@ -389,11 +387,10 @@ public class SnakeModel {
         m_h = container.getHeight();
         m_bodyPoints = new LinkedList<>();
 
-
+        setHighScores(new Bundle(DEFAULT_SAVE_BUNDLE_NAME));
         getVelocity().set(0,getSpeed()); // Default movement
         setSnakeWidth(width);
         setSnakeHeight(height);
-        calcFrameSpeed();
         setPosition(DEFAULT_START_POSITION);
     }
 
@@ -404,7 +401,8 @@ public class SnakeModel {
      */
     public boolean addHighScore(String name){
 
-        LinkedList<Score> scores = getHighScores().get("scores");
+        LinkedList<Score> scores =
+                getHighScores().get(DEFAULT_SAVE_BUNDLE_LIST);
         if(scores.size()>=10){
             int to_check = scores.get(9).score();
             if(to_check>getScore()){

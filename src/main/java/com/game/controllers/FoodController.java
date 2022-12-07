@@ -3,6 +3,7 @@ package com.game.controllers;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
 import com.game.SnakeFactory;
+import com.game.data.Modeled;
 import com.game.models.SnakeModel;
 import javafx.geometry.Point2D;
 
@@ -12,7 +13,7 @@ import java.util.Random;
  * Controls the Food Entity created in {@link SnakeFactory}.
  * Created for each new Food Entity.
  */
-public class FoodController extends Component {
+public class FoodController extends Component implements Modeled {
     /**
      * @param model SnakeModel used by {@link com.game.SnakeGameApplication}
      * @return True if the model was set

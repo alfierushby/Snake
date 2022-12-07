@@ -13,7 +13,7 @@ import com.game.collisions.FoodSnakeHandler;
 import com.game.collisions.SnakeBodyHandler;
 import com.game.controllers.SnakeController;
 import com.game.controllers.SnakeUIController;
-import com.game.data.Score;
+import com.game.data.Modeled;
 import com.game.models.SnakeModel;
 import com.game.views.FoodView;
 import com.game.views.SnakeView;
@@ -21,7 +21,6 @@ import javafx.scene.input.KeyCode;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
-import java.util.Collections;
 import java.util.function.Consumer;
 
 import static com.almasb.fxgl.dsl.FXGL.getDialogService;
@@ -33,7 +32,7 @@ import static com.game.data.Config.*;
 import static com.game.data.Config.DEFAULT_GAME_HEIGHT;
 import static com.game.enums.DIRECTION.*;
 
-public class SnakeGameApplication extends GameApplication {
+public class SnakeGameApplication extends GameApplication implements Modeled {
 
     public SnakeFactory getSnakeFactory() {
         return m_snakeFactory;
@@ -61,16 +60,35 @@ public class SnakeGameApplication extends GameApplication {
         boolean cond0 = setModel(new SnakeModel(DEFAULT_SNAKE_WIDTH,
                 DEFAULT_SNAKE_HEIGHT,
                 new Rectangle(DEFAULT_GAME_WIDTH, DEFAULT_GAME_HEIGHT)));
-        if(getSaveLoadService().saveFileExists("scores.sav")){
-            getSaveLoadService().readAndLoadTask("scores.sav").run();
-        }
         return cond0;
+    }
+
+    private boolean loadData(){
+        if(getSaveLoadService().saveFileExists(DEFAULT_SAVE_BUNDLE_FILE_NAME)){
+            getSaveLoadService().readAndLoadTask(DEFAULT_SAVE_BUNDLE_FILE_NAME)
+                    .run();
+            return true;
+        }
+        return false;
     }
 
     private boolean resetGame(){
         getGameWorld().getEntitiesCopy().forEach(Entity::removeFromWorld);
         getEventBus().removeAllEventHandlers();
-        return resetModel();
+        return resetModel() && initModel();
+    }
+
+    /**
+     * Intialises the semi-complete model with FXGL specific framework. Needed
+     * whenever a game is reset.
+     * @return true if the model was intialised
+     */
+    private boolean initModel(){
+        if (getModel()==null){
+            System.out.println("Tried to init an un-reset model!");
+            return false;
+        }
+        return getModel().calcFrameSpeed() && loadData();
     }
 
     Entity m_snake;
@@ -83,18 +101,19 @@ public class SnakeGameApplication extends GameApplication {
 
      @Override
     protected void initSettings(GameSettings settings) {
+         resetModel();
         settings.setWidth(DEFAULT_GAME_WIDTH);
         settings.setHeight(DEFAULT_GAME_HEIGHT);
         settings.setTitle("The Snake Game");
         settings.setVersion("0.1");
         settings.setMainMenuEnabled(true);
         settings.setNative(false);
-        settings.setSceneFactory(new MenuFactory());
+        settings.setSceneFactory(new MenuFactory(getModel()));
     }
     @Override
     protected void onPreInit() {
-         resetModel();
-         getModel().setHighScores(new Bundle("highScores"));
+         getModel().calcFrameSpeed();
+         loadData();
 
          // Save and load the data:
 
@@ -113,7 +132,7 @@ public class SnakeGameApplication extends GameApplication {
             @Override
             public void onLoad(@NotNull DataFile data) {
                 // Get the high_scores
-                Bundle bundle = data.getBundle("highScores");
+                Bundle bundle = data.getBundle(DEFAULT_SAVE_BUNDLE_NAME);
                 // Set it in the model
                 getModel().setHighScores(bundle);
 
@@ -124,7 +143,6 @@ public class SnakeGameApplication extends GameApplication {
     protected void initUI(){
 
         SnakeUIController uiController = new SnakeUIController(getGameScene());
-
         UI ui = getAssetLoader().loadUI(DEFAULT_GAME_UI,uiController);
 
         uiController.getLabelScore().textProperty().bind(getModel()
@@ -151,8 +169,8 @@ public class SnakeGameApplication extends GameApplication {
             @Override
             public void accept(String name) {
                 getModel().addHighScore(name);
-                getSaveLoadService().saveAndWriteTask("scores" +
-                        ".sav").run();
+                getSaveLoadService().saveAndWriteTask(
+                        DEFAULT_SAVE_BUNDLE_FILE_NAME).run();
 
                 showPlayAgain();
             }

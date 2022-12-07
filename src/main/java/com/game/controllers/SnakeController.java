@@ -2,6 +2,7 @@ package com.game.controllers;
 
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.texture.Texture;
+import com.game.data.Modeled;
 import com.game.enums.DIRECTION;
 import com.game.models.SnakeModel;
 import javafx.geometry.Point2D;
@@ -14,7 +15,7 @@ import static com.game.enums.DIRECTION.RIGHT;
  * Controller for the Snake Head element the player moves.
  * Communicates with {@link SnakeModel}, and takes in user input.
  */
-public class SnakeController extends Component {
+public class SnakeController extends Component implements Modeled {
 
     /**
      * @param model SnakeModel used by {@link com.game.SnakeGameApplication}

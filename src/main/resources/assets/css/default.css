@@ -12,5 +12,7 @@
 .gradient_animate {
     -gradient-base: gold;
     -gradient-bottom: #e3cc6c;
-    -fx-text-fill: linear-gradient(to right, -gradient-base, white,-gradient-bottom);
+    -gradient-middle: white;
+    -fx-text-fill: linear-gradient(to right, -gradient-base, -gradient-middle,-gradient-bottom);
+    -fx-fill: linear-gradient(to right, -gradient-base, -gradient-middle,-gradient-bottom);
 }

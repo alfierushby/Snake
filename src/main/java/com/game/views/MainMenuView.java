@@ -12,6 +12,7 @@ import com.almasb.fxgl.ui.UI;
 import com.game.controllers.MainMenuController;
 import com.game.data.ColorSet;
 import com.game.data.FoodImages;
+import com.game.models.SnakeModel;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -20,7 +21,6 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -79,10 +79,10 @@ public class MainMenuView extends FXGLMenu {
     private final List<Animation<?>> m_animations = new LinkedList<>();
     private final FoodImages food = new FoodImages();
 
-    public MainMenuView(@NotNull MenuType type) {
+    public MainMenuView(@NotNull MenuType type, SnakeModel model) {
         super(MenuType.MAIN_MENU);
 
-        setController(new MainMenuController(this));
+        setController(new MainMenuController(this,model));
 
 
         UI root = getAssetLoader().loadUI(DEFAULT_MAIN_UI,getMainMenuController());
@@ -98,7 +98,7 @@ public class MainMenuView extends FXGLMenu {
             setAnimation(node,i);
             i=i+0.07;
         }
-        animateNode(getMainMenuController().getHighscores_btn(), Color.WHITE,
+        animateGradient(getMainMenuController().getHighscores_btn(), Color.WHITE,
                 Color.MEDIUMVIOLETRED);
         setInfiniteBobble(getMainMenuController().getTitle(),1);
     }
@@ -168,7 +168,7 @@ public class MainMenuView extends FXGLMenu {
        return new ColorSet(baseColour, baseColour1);
     }
 
-    public boolean animateNode(Node node, Color base, Color end){
+    public boolean animateGradient(Node node, Color base, Color end){
         ColorSet colours = doubleGradientListener(node);
 
         node.getStyleClass().add("gradient_animate");

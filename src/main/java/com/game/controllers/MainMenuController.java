@@ -1,32 +1,24 @@
 package com.game.controllers;
-import com.almasb.fxgl.animation.Animation;
-import com.almasb.fxgl.animation.Interpolators;
-import com.almasb.fxgl.app.scene.FXGLMenu;
-import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.particle.ParticleSystem;
-import com.almasb.fxgl.ui.UIController;
+import com.almasb.fxgl.ui.UI;
+import com.game.data.Modeled;
+import com.game.models.SnakeModel;
 import com.game.views.MainMenuView;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Point2D;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
+import static com.game.data.Config.DEFAULT_HIGH_SCORES_UI;
 
-public class MainMenuController implements UIController {
+public class MainMenuController extends Menu {
+
+    public boolean setHighScoreMenu(UI m_high_score_menu) {
+        this.m_high_score_menu = m_high_score_menu;
+        return true;
+    }
 
     public VBox getVbox() {
         return vbox;
@@ -44,16 +36,19 @@ public class MainMenuController implements UIController {
         return title;
     }
 
-    public MainMenuView getView() {
-        return m_view;
+    @Override
+    public Pane getRoot() {
+        return getVbox();
     }
 
     public Pane getHolder() {
         return holder;
     }
 
+    public UI getHighScoreMenu() {
+        return m_high_score_menu;
+    }
 
-    private final MainMenuView  m_view;
     @FXML
     private Button highscores_btn;
 
@@ -69,28 +64,32 @@ public class MainMenuController implements UIController {
     private Text title;
     @FXML
     private VBox vbox;
+    private UI m_high_score_menu;
 
     @FXML
     void startGame(MouseEvent event) {
         getGameController().startNewGame();
     }
 
-    public MainMenuController(MainMenuView view){
-        m_view = view;
+    @FXML
+    void startHighScore(MouseEvent event){
+        getHighScoreMenu().getRoot().setViewOrder(1);
+    }
+
+    public MainMenuController(MainMenuView view, SnakeModel model){
+        super(view,model);
     }
 
     @Override
     public void init() {
+        super.init();
+        System.out.println("My ass: " + getModel().getState());
+        HighScoreController uiController = new HighScoreController(getView(),
+                getModel());
+        UI ui = getAssetLoader().loadUI(DEFAULT_HIGH_SCORES_UI,uiController);
+        getHolder().setOpacity(0);
+        getView().getContentRoot().getChildren().add(0,ui.getRoot());
 
-        for (Node node : getVbox().getChildren()){
-            Animation<?> bobble = getView().setInfiniteBobble(node,0.25);
-            bobble.pause();
-            node.setOnMouseEntered(e->{
-                bobble.resume();
-            });
-            node.setOnMouseExited(e->{
-                bobble.pause();
-            });
-        }
+        setHighScoreMenu(ui);
     }
 }

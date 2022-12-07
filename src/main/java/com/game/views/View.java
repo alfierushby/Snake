@@ -1,12 +1,13 @@
 package com.game.views;
 
 import com.game.SnakeFactory;
+import com.game.data.Modeled;
 import com.game.models.SnakeModel;
 
 /**
  * Base View to be used by every View class.
  */
-public abstract class View {
+public abstract class View implements Modeled {
     /**
      * @param snakeModel Game's Snake Model
      * @return true
