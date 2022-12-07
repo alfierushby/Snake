@@ -76,7 +76,8 @@ public class SnakeView extends View {
     }
 
     /**
-     *
+     * Draws the snake body by using Num as the interval in the history of
+     * positions in the BodyPoints array.
      * @return True
      */
     public boolean drawBody()

@@ -1,15 +1,17 @@
 package com.game.models;
 
 import com.almasb.fxgl.core.math.Vec2;
+import com.almasb.fxgl.core.serialization.Bundle;
+import com.game.data.Score;
 import com.game.enums.DIRECTION;
 import com.game.events.SnakeEvent;
 import javafx.beans.property.*;
 import javafx.geometry.Point2D;
 
 import java.awt.*;
-import java.util.LinkedList;
+import java.io.Serializable;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getPhysicsWorld;
@@ -206,6 +208,24 @@ public class SnakeModel {
     }
 
     /**
+     * @param m_high_scores The bundle to set the high_score data to
+     * @return True if the bundle is for high scores.
+     */
+    public boolean setHighScores(Bundle m_high_scores) {
+        if(m_high_scores.getName().equals("highScores")){
+            this.m_high_scores = m_high_scores;
+            // Set it to an empty list
+            if(getHighScores().getData().isEmpty()){
+                getHighScores().put("scores",new LinkedList<Score>());
+            }
+            return true;
+        }
+        System.out.println("Trying to set wrong data bundle!");
+        return false;
+
+    }
+
+    /**
      * @return Score value of game
      */
     public int getScore() {return m_score.get();}
@@ -309,6 +329,12 @@ public class SnakeModel {
      */
     public Map<DIRECTION, Integer> getDirectionMap() {return m_direction_map;}
 
+    /**
+     * @return High Scores bundle from save
+     */
+    public Bundle getHighScores() {return m_high_scores;}
+
+
     //Custom Variables
     private final Map<DIRECTION, Integer> m_direction_map
             = Map.of(UP, -90, DOWN, 90, LEFT, -180, RIGHT, 0);
@@ -329,6 +355,8 @@ public class SnakeModel {
     private final List<Point2D> m_bodyPoints;
     private int m_food_count = 0;
     private final IntegerProperty m_score;
+    private Bundle m_high_scores;
+
 
     /**
      * Adds the default score increment.
@@ -368,6 +396,31 @@ public class SnakeModel {
         calcFrameSpeed();
         setPosition(DEFAULT_START_POSITION);
     }
+
+    /**
+     * Adds the player's score to the linked list of scores if it's within the
+     * top 10.
+     * @return true if the score was within the top 10
+     */
+    public boolean addHighScore(String name){
+
+        LinkedList<Score> scores = getHighScores().get("scores");
+        if(scores.size()>=10){
+            int to_check = scores.get(9).score();
+            if(to_check>getScore()){
+                System.out.println("Score too small to add to high score " +
+                        "board!");
+                return false;
+            }
+        }
+        scores.add(new Score(name,getScore()));
+        scores.sort(null);
+        for (Score score : scores){
+            System.out.println("Name : " + score.name() + " Score : " + score.score());
+        }
+        return true;
+    }
+
 
     /**
      * Calculates the frame speed according to the snakes Pixels/s metric and

@@ -5,6 +5,7 @@ logs/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+.sav
 
 ### IntelliJ IDEA ###
 .idea/
@@ -15,3 +16,4 @@ logs/
 *.iws
 *.iml
 *.ipr
+

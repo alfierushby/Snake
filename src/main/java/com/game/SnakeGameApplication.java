@@ -1,20 +1,28 @@
 package com.game;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
+import com.almasb.fxgl.profile.DataFile;
+import com.almasb.fxgl.profile.SaveLoadHandler;
 import com.almasb.fxgl.ui.UI;
 import com.game.collisions.FoodSnakeHandler;
+import com.game.collisions.SnakeBodyHandler;
 import com.game.controllers.SnakeController;
 import com.game.controllers.SnakeUIController;
+import com.game.data.Score;
 import com.game.models.SnakeModel;
 import com.game.views.FoodView;
 import com.game.views.SnakeView;
 import javafx.scene.input.KeyCode;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.util.Collections;
+import java.util.function.Consumer;
 
 import static com.almasb.fxgl.dsl.FXGL.getDialogService;
 import static com.almasb.fxgl.dsl.FXGL.getEventBus;
@@ -50,9 +58,19 @@ public class SnakeGameApplication extends GameApplication {
     }
 
     private boolean resetModel(){
-        return setModel(new SnakeModel(DEFAULT_SNAKE_WIDTH,
+        boolean cond0 = setModel(new SnakeModel(DEFAULT_SNAKE_WIDTH,
                 DEFAULT_SNAKE_HEIGHT,
                 new Rectangle(DEFAULT_GAME_WIDTH, DEFAULT_GAME_HEIGHT)));
+        if(getSaveLoadService().saveFileExists("scores.sav")){
+            getSaveLoadService().readAndLoadTask("scores.sav").run();
+        }
+        return cond0;
+    }
+
+    private boolean resetGame(){
+        getGameWorld().getEntitiesCopy().forEach(Entity::removeFromWorld);
+        getEventBus().removeAllEventHandlers();
+        return resetModel();
     }
 
     Entity m_snake;
@@ -60,6 +78,8 @@ public class SnakeGameApplication extends GameApplication {
     SnakeView m_snakeview;
     FoodView m_foodview;
     SnakeModel m_model;
+    Bundle saved_data;
+
 
      @Override
     protected void initSettings(GameSettings settings) {
@@ -73,7 +93,32 @@ public class SnakeGameApplication extends GameApplication {
     }
     @Override
     protected void onPreInit() {
-        resetModel();
+         resetModel();
+         getModel().setHighScores(new Bundle("highScores"));
+
+         // Save and load the data:
+
+        getSaveLoadService().addHandler(new SaveLoadHandler() {
+            @Override
+            public void onSave(@NotNull DataFile data) {
+                System.out.println("lol???");
+                // Get bundle from model
+                Bundle bundle = getModel().getHighScores();
+
+                // Save the bundle
+                data.putBundle(bundle);
+                System.out.println("uh...");
+            }
+
+            @Override
+            public void onLoad(@NotNull DataFile data) {
+                // Get the high_scores
+                Bundle bundle = data.getBundle("highScores");
+                // Set it in the model
+                getModel().setHighScores(bundle);
+
+            }
+        });
     }
     @Override
     protected void initUI(){
@@ -82,14 +127,40 @@ public class SnakeGameApplication extends GameApplication {
 
         UI ui = getAssetLoader().loadUI(DEFAULT_GAME_UI,uiController);
 
-        System.out.println("Yes + " + uiController.getLabelScore());
-
         uiController.getLabelScore().textProperty().bind(getModel()
                 .getScoreProp().asString("Score: %d"));
 
         getGameScene().addUI(ui);
     }
 
+
+    private void showPlayAgain(){
+        getDialogService().showConfirmationBox("Play " +
+                "Again?", yes -> {
+            if (yes) {
+                resetGame();
+                getGameController().startNewGame();
+            } else{
+                resetGame();
+                getGameController().gotoMainMenu();
+            }
+        });
+}
+    private void endGame(){
+         Consumer<String> result = new Consumer<String>() {
+            @Override
+            public void accept(String name) {
+                getModel().addHighScore(name);
+                getSaveLoadService().saveAndWriteTask("scores" +
+                        ".sav").run();
+
+                showPlayAgain();
+            }
+        };
+
+        getDialogService().showInputBox("Please enter your" +
+                " name to save your score to the leaderboard!",result);
+    }
     @Override
     protected void initGame() {
         setSnakeView(new SnakeView(getSnakeFactory(),getModel()));
@@ -97,25 +168,15 @@ public class SnakeGameApplication extends GameApplication {
 
          getModel().getStateProp().addListener(e ->{
              if(getModel().getState()){
-                 System.out.println("It changed bastards");
-                 getDialogService().showConfirmationBox("Snake Died. Play " +
-                         "Again?", yes -> {
-                     if (yes) {
-                         getGameWorld().getEntitiesCopy().forEach(Entity::removeFromWorld);
-                         getEventBus().removeAllEventHandlers();
-                         getGameController().startNewGame();
-                         resetModel();
-                     } else{
-                         getGameController().exit();
-                     }
-                 });
-             }
-         });
+                 getDialogService().showMessageBox("You scored : "
+                         + getModel().getScore() + "!",this::endGame);
+         }});
     }
 
     @Override
     protected void initPhysics(){
         getPhysicsWorld().addCollisionHandler(new FoodSnakeHandler());
+        getPhysicsWorld().addCollisionHandler(new SnakeBodyHandler(getModel()));
     }
 
     @Override

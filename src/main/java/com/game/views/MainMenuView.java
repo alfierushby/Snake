@@ -98,7 +98,7 @@ public class MainMenuView extends FXGLMenu {
             setAnimation(node,i);
             i=i+0.07;
         }
-        animateNode(getMainMenuController().getHighscores_btn(), Color.ORANGERED,
+        animateNode(getMainMenuController().getHighscores_btn(), Color.WHITE,
                 Color.MEDIUMVIOLETRED);
         setInfiniteBobble(getMainMenuController().getTitle(),1);
     }
@@ -135,9 +135,9 @@ public class MainMenuView extends FXGLMenu {
     private Timeline createColorTimeLine(ObjectProperty<Color> baseColor,
                                        Color c1, Color c2){
         KeyValue keyValue1 = new KeyValue(baseColor, c1
-                , Interpolator.LINEAR);
+                , Interpolator.EASE_BOTH);
         KeyValue keyValue2 = new KeyValue(baseColor, c2
-                , Interpolator.LINEAR);
+                , Interpolator.EASE_BOTH);
         KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
         KeyFrame keyFrame2 = new KeyFrame(Duration.seconds(2), keyValue2);
         Timeline timeline = new Timeline(keyFrame1, keyFrame2);

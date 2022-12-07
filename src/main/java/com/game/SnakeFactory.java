@@ -37,11 +37,10 @@ public class SnakeFactory implements EntityFactory {
         physics.setBodyType(BodyType.KINEMATIC);
         return entityBuilder(data)
                 .type(SNAKE)
-                .bbox(new HitBox(BoundingShape.box(25, 25)))
                 .collidable()
                // .with(physics)
-                .viewWithBBox(texture("snake-head-right.png",
-                        25, 25))
+                .bbox(new HitBox(BoundingShape.box(10, 10)))
+                .view(texture("snake-head-right.png"))
                 .with(new SnakeController(model))
                 .buildAndAttach();
     }
@@ -50,11 +49,10 @@ public class SnakeFactory implements EntityFactory {
     public Entity newSnakeBody(SpawnData data){
         Entity body = entityBuilder(data)
                 .type(SNAKE_BODY)
-                .bbox(new HitBox(BoundingShape.box(25, 25)))
                 .collidable()
                 .with(new SnakeBodyController())
-                .viewWithBBox(texture("snake-body.png",
-                        25, 25).getNode())
+                .bbox(new HitBox(BoundingShape.box(10, 10)))
+                .view(texture("snake-body.png").getNode())
                 .buildAndAttach();
         body.setPosition(-100,-100);
         return body;

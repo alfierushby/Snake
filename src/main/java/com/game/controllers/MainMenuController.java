@@ -52,6 +52,7 @@ public class MainMenuController implements UIController {
         return holder;
     }
 
+
     private final MainMenuView  m_view;
     @FXML
     private Button highscores_btn;
