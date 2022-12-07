@@ -5,7 +5,7 @@ logs/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-.sav
+*.sav
 
 ### IntelliJ IDEA ###
 .idea/
