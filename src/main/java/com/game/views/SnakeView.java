@@ -75,6 +75,12 @@ public class SnakeView extends View {
         // Test code
     }
 
+    public boolean resetGame(){
+        boolean cond = getModel().reset();
+        getBodyParts().clear();
+        return cond;
+    }
+
     /**
      * Draws the snake body by using Num as the interval in the history of
      * positions in the BodyPoints array.

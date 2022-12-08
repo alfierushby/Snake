@@ -31,6 +31,8 @@ public class SnakeFactory implements EntityFactory {
     private final FoodImages food = new FoodImages();
 
 
+
+
     @Spawns("snake")
     public Entity newSnake(SpawnData data, SnakeModel model){
         PhysicsComponent physics = new PhysicsComponent();
