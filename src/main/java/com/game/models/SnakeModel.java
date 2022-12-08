@@ -534,6 +534,7 @@ public class SnakeModel {
 
         LinkedList<Score> scores =
                 getHighScores().get(DEFAULT_SAVE_BUNDLE_LIST);
+
         if(scores.size()>=DEFAULT_MAX_SAVED_SCORES){
             int to_check = scores.get(DEFAULT_MAX_SAVED_SCORES-1).score();
             if(to_check>getScore()){
@@ -542,12 +543,18 @@ public class SnakeModel {
                 return false;
             }
         }
-        scores.add(new Score(name,getScore()));
-        scores.sort(null);
         for (Score score : scores){
+            if(Objects.equals(score.name(), name) && getScore()>score.score()){
+                scores.remove(score);
+            } else if(score.score() > getScore()){
+                System.out.println("Score too small to replace current score!");
+                return false;
+            }
             System.out.println("Name : " + score.name() + " Score : "
                     + score.score());
         }
+        scores.add(new Score(name,getScore()));
+        scores.sort(null);
         return true;
     }
 
