@@ -17,15 +17,17 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 import static com.game.enums.DIRECTION.*;
 import static com.game.enums.DIRECTION.RIGHT;
 
+/**
+ * Controller for the Body elements that follow the snake
+ */
 public class SnakeBodyController extends Component {
 
+    /**
+     * @param point The point it will spawn at
+     * @return True if set to point
+     */
     public boolean setPosition(Point2D point){
         getEntity().setPosition(point);
-        return true;
-    }
-
-    @Override
-    public void onUpdate(double tpf){
-
+        return getEntity().getPosition().equals(point);
     }
 }
