@@ -113,7 +113,6 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
     @Override
     protected void onPreInit() {
          getModel().calcFrameSpeed();
-         loadData();
 
          // Save and load the data:
 
@@ -138,6 +137,7 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
 
             }
         });
+        loadData();
     }
     @Override
     protected void initUI(){

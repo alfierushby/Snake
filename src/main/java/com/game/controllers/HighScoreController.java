@@ -1,11 +1,14 @@
 package com.game.controllers;
 
 import com.almasb.fxgl.ui.FXGLScrollPane;
+import com.almasb.fxgl.ui.UIController;
+import com.almasb.fxgl.ui.UIFactoryService;
 import com.game.data.Score;
 import com.game.models.SnakeModel;
 import com.game.views.MainMenuView;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -14,21 +17,21 @@ import javafx.scene.text.Text;
 
 import java.util.LinkedList;
 
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getUIFactoryService;
 import static com.game.data.Config.DEFAULT_SAVE_BUNDLE_LIST;
+import static com.game.data.Config.DEFAULT_TRANSITION_LENGTH;
 
 /**
  * Controller for the high-score menu.
  * It doesn't contain a separate View class, instead uses effects from
  * MainMenuView.
  */
-public class HighScoreController extends Menu {
-    public VBox getVbox() {
-        return vbox;
-    }
+public class HighScoreController extends MenuController {
     @Override
-    public Pane getRoot() {
-        return getVbox();
-    }
+    public Pane getRoot() {return vbox;}
+
+    @Override
+    public Pane getTopRoot() {return holder;}
 
     public Button getBack_btn() {
         return back_btn;
@@ -38,7 +41,7 @@ public class HighScoreController extends Menu {
         return title;
     }
 
-    public FXGLScrollPane getScrollpane() {return scrollpane;}
+    public VBox getScrollPaneHolder() {return scrollpane_hold;}
 
     @FXML
     private Button back_btn;
@@ -47,16 +50,21 @@ public class HighScoreController extends Menu {
     private Pane holder;
 
     @FXML
-    private FXGLScrollPane scrollpane;
+    private VBox scrollpane_hold;
 
     @FXML
     private Text title;
-
     @FXML
     private VBox vbox;
 
     @FXML
     private AnchorPane root;
+
+    @FXML
+    void backMainMenu(MouseEvent event) {
+        getView().switchScreen(getView().getScreens().getMainMenu(),
+                DEFAULT_TRANSITION_LENGTH);
+    }
 
     public HighScoreController(MainMenuView view, SnakeModel model) {
         super(view,model);
@@ -66,15 +74,6 @@ public class HighScoreController extends Menu {
     public void init() {
         super.init();
         getBack_btn().setStyle("-fx-text-fill: #2a353d;");
-        getView().animateGradient(getTitle(), Color.WHITE,
-                Color.MEDIUMVIOLETRED);
         getView().setInfiniteBobble(getTitle(),1);
-
-        LinkedList<Score> scores =
-                getModel().getHighScores().get(DEFAULT_SAVE_BUNDLE_LIST);
-
-        for ( Score score : scores){
-
-        }
     }
 }

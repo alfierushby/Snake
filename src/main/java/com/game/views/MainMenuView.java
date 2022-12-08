@@ -9,9 +9,12 @@ import com.almasb.fxgl.particle.ParticleEmitters;
 import com.almasb.fxgl.particle.ParticleSystem;
 import com.almasb.fxgl.texture.Texture;
 import com.almasb.fxgl.ui.UI;
+import com.game.controllers.HighScoreController;
 import com.game.controllers.MainMenuController;
+import com.game.controllers.MenuController;
 import com.game.data.ColorSet;
 import com.game.data.FoodImages;
+import com.game.data.ScreenSet;
 import com.game.models.SnakeModel;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -22,6 +25,9 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.effect.BlendMode;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import org.jetbrains.annotations.NotNull;
@@ -38,26 +44,6 @@ import static javafx.animation.Animation.INDEFINITE;
 
 public class MainMenuView extends FXGLMenu {
 
-    public ParticleSystem getSystem() {
-        return m_system;
-    }
-
-    public ParticleEmitter getEmitter() {
-        return m_emitter;
-    }
-
-    public MainMenuController getMainMenuController() {
-        return m_controller;
-    }
-
-    public List<Animation<?>> getAnimations() {
-        return m_animations;
-    }
-
-    public FoodImages food() {
-        return food;
-    }
-
     public boolean setSystem(ParticleSystem m_system) {
         this.m_system = m_system;
         return true;
@@ -67,45 +53,98 @@ public class MainMenuView extends FXGLMenu {
         this.m_emitter = m_emitter;
         return true;
     }
+    public boolean setScreens(ScreenSet m_screens) {
+        if(getScreens()==null){
+            this.m_screens = m_screens;
+            return true;
+        }
+        System.out.println("Screens already assigned!");
+        return false;
+    }
 
-    public boolean setController(MainMenuController m_controller) {
-        this.m_controller = m_controller;
-        return true;
+    public ScreenSet getScreens() {return m_screens;}
+    public ParticleSystem getSystem() {
+        return m_system;
+    }
+
+    public ParticleEmitter getEmitter() {
+        return m_emitter;
+    }
+
+    public List<Animation<?>> getAnimations() {
+        return m_animations;
+    }
+
+    public FoodImages food() {
+        return m_food;
     }
 
     ParticleSystem m_system;
     ParticleEmitter m_emitter;
-    MainMenuController m_controller;
+    private ScreenSet m_screens;
     private final List<Animation<?>> m_animations = new LinkedList<>();
-    private final FoodImages food = new FoodImages();
+    private final FoodImages m_food = new FoodImages();
 
     public MainMenuView(@NotNull MenuType type, SnakeModel model) {
         super(MenuType.MAIN_MENU);
 
-        setController(new MainMenuController(this,model));
-
-
-        UI root = getAssetLoader().loadUI(DEFAULT_MAIN_UI,getMainMenuController());
-        getContentRoot().getChildren().add(root.getRoot());
-
+        // Setup menus in Main Menu
+        HighScoreController high_scores = createHighScoreMenu(model);
+        MainMenuController main_menu = createMainMenu(model);
+        // Store controllers for use
+        setScreens(new ScreenSet(main_menu, high_scores,getContentRoot()));
+        switchScreen(main_menu,DEFAULT_TRANSITION_LENGTH);
         m_system = new ParticleSystem();
-
         initParticles();
-        getMainMenuController().getHolder().getChildren()
-                .add(1,m_system.getPane());
+
+        main_menu.getTopRoot().getChildren().add(1,m_system.getPane());
         double i =0;
-        for (Node node : getMainMenuController().getVbox().getChildren()){
+        for (Node node : main_menu.getRoot().getChildren()){
             setAnimation(node,i);
             i=i+0.07;
         }
-        animateGradient(getMainMenuController().getHighscores_btn(), Color.WHITE,
+        animateGradient(main_menu.getHighscores_btn(), Color.WHITE,
                 Color.MEDIUMVIOLETRED);
-        setInfiniteBobble(getMainMenuController().getTitle(),1);
+        setInfiniteBobble(main_menu.getTitle(),1);
+    }
+
+    public boolean switchScreen(MenuController screen, double time){
+        getScreens().hideAll();
+        Pane top = screen.getTopRoot();
+        top.setMouseTransparent(false);
+        top.setOpacity(1);
+        Animation<?> animation =  animationBuilder()
+                .interpolator(Interpolators.EXPONENTIAL.EASE_OUT())
+                .duration(Duration.seconds(time))
+                .scale(screen.getRoot())
+                .from(new Point2D(2,2))
+                .to(new Point2D(1,1))
+                .build();
+        animation.start();
+        getAnimations().add(animation);
+        return animation.isAnimating();
+    }
+    private boolean loadUI(String url, MenuController controller){
+        UI ui = getAssetLoader().loadUI(url,controller);
+        getContentRoot().getChildren().add(ui.getRoot());
+        controller.getTopRoot().setOpacity(0);
+        return true;
+    }
+    private MainMenuController createMainMenu(SnakeModel model){
+        MainMenuController controller= new MainMenuController(this,model);
+        loadUI(DEFAULT_MAIN_UI,controller);
+        return controller;
+    }
+    private HighScoreController createHighScoreMenu(SnakeModel model){
+        HighScoreController controller = new HighScoreController(this,
+                model);
+        loadUI(DEFAULT_HIGH_SCORES_UI,controller);
+        return controller;
     }
 
     private boolean initParticles(){
         Texture t =
-                texture(food.getFoodindex(0), 25.0, 25);
+                texture(m_food.getFoodindex(0), 25.0, 25);
 
         m_emitter = ParticleEmitters.newFireEmitter(DEFAULT_GAME_WIDTH);
         m_emitter.setBlendMode(BlendMode.SRC_OVER);
@@ -216,7 +255,7 @@ public class MainMenuView extends FXGLMenu {
     @Override
     protected void onUpdate(double tpf) {
         Texture t = texture(
-                food.getFoodindex(random(0,13)), 25.0, 25).brighter();
+                m_food.getFoodindex(random(0,13)), 25.0, 25).brighter();
         m_emitter.setSourceImage(t);
         m_system.onUpdate(tpf);
         for(Animation<?> animation: getAnimations()){

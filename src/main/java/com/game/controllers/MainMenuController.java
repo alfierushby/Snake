@@ -1,6 +1,7 @@
 package com.game.controllers;
+import com.almasb.fxgl.ui.FontType;
 import com.almasb.fxgl.ui.UI;
-import com.game.data.Modeled;
+import com.game.data.Score;
 import com.game.models.SnakeModel;
 import com.game.views.MainMenuView;
 import javafx.fxml.FXML;
@@ -8,21 +9,18 @@ import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
+import java.util.LinkedList;
+
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
-import static com.game.data.Config.DEFAULT_HIGH_SCORES_UI;
+import static com.game.data.Config.DEFAULT_SAVE_BUNDLE_LIST;
+import static com.game.data.Config.DEFAULT_TRANSITION_LENGTH;
 
-public class MainMenuController extends Menu {
-
-    public boolean setHighScoreMenu(UI m_high_score_menu) {
-        this.m_high_score_menu = m_high_score_menu;
-        return true;
-    }
-
-    public VBox getVbox() {
-        return vbox;
-    }
+public class MainMenuController extends MenuController {
 
     public Button getNewgame_btn() {
         return newgame_btn;
@@ -37,16 +35,10 @@ public class MainMenuController extends Menu {
     }
 
     @Override
-    public Pane getRoot() {
-        return getVbox();
-    }
+    public Pane getRoot() {return vbox;}
 
-    public Pane getHolder() {
+    public Pane getTopRoot() {
         return holder;
-    }
-
-    public UI getHighScoreMenu() {
-        return m_high_score_menu;
     }
 
     @FXML
@@ -64,7 +56,6 @@ public class MainMenuController extends Menu {
     private Text title;
     @FXML
     private VBox vbox;
-    private UI m_high_score_menu;
 
     @FXML
     void startGame(MouseEvent event) {
@@ -73,7 +64,37 @@ public class MainMenuController extends Menu {
 
     @FXML
     void startHighScore(MouseEvent event){
-        getHighScoreMenu().getRoot().setViewOrder(1);
+        HighScoreController controller = getView().getScreens().getHighScores();
+        LinkedList<Score> scores =
+                getModel().getHighScores().get(DEFAULT_SAVE_BUNDLE_LIST);
+        int i = 0;
+        controller.getScrollPaneHolder().getChildren().clear();
+
+        for ( Score score : scores){
+            i++;
+            Text txt = new Text();
+            txt.setFill(Color.BLACK);
+            txt.setText(String.format("%d | %s : %05d", i,score.name()
+                    ,score.score()));
+            txt.setFont(Font.font("System", FontWeight.BOLD,28));
+            switch (i) {
+                case 1 -> {
+                    getView().animateGradient(txt,Color.rgb(183, 134, 40),
+                            Color.rgb(252, 194, 1));
+                    getView().setInfiniteBobble(txt, 2);
+                }
+                case 2 -> {
+                    getView().animateGradient(txt,Color.rgb(168, 169, 173),
+                            Color.rgb(227, 227, 227));
+                }
+                case 3 -> {
+                    getView().animateGradient(txt,Color.rgb(128, 74, 0),
+                            Color.rgb(176, 141, 87));
+                }
+            }
+            controller.getScrollPaneHolder().getChildren().add(txt);
+        }
+        getView().switchScreen(controller, DEFAULT_TRANSITION_LENGTH);
     }
 
     public MainMenuController(MainMenuView view, SnakeModel model){
@@ -83,13 +104,5 @@ public class MainMenuController extends Menu {
     @Override
     public void init() {
         super.init();
-        System.out.println("My ass: " + getModel().getState());
-        HighScoreController uiController = new HighScoreController(getView(),
-                getModel());
-        UI ui = getAssetLoader().loadUI(DEFAULT_HIGH_SCORES_UI,uiController);
-        getHolder().setOpacity(0);
-        getView().getContentRoot().getChildren().add(0,ui.getRoot());
-
-        setHighScoreMenu(ui);
     }
 }

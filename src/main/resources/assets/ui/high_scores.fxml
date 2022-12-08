@@ -11,18 +11,18 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="root" prefHeight="400.0" prefWidth="600.0" stylesheets="/assets/css/default.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="root" pickOnBounds="false" prefHeight="400.0" prefWidth="600.0" stylesheets="/assets/css/default.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Pane fx:id="holder" prefHeight="604.0" prefWidth="813.0">
+      <Pane fx:id="holder" pickOnBounds="false" prefHeight="604.0" prefWidth="813.0">
          <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="604.0" stroke="BLACK" strokeType="INSIDE" width="813.0" />
-            <ImageView fitHeight="607.0" fitWidth="813.0" pickOnBounds="true" preserveRatio="true">
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="604.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="813.0" />
+            <ImageView fitHeight="607.0" fitWidth="813.0" preserveRatio="true">
                <image>
                   <Image url="/assets/textures/UI-background.png" />
                </image></ImageView>
-            <VBox fx:id="vbox" alignment="TOP_CENTER" nodeOrientation="RIGHT_TO_LEFT" prefHeight="607.0" prefWidth="813.0">
+            <VBox fx:id="vbox" alignment="TOP_CENTER" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="false" prefHeight="607.0" prefWidth="813.0">
                <children>
-                  <Pane prefHeight="120.0" prefWidth="802.0">
+                  <Pane pickOnBounds="false" prefHeight="120.0" prefWidth="802.0">
                      <children>
                         <Text id="title" fx:id="title" fill="WHITE" layoutX="241.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="High Scores" wrappingWidth="336.6666259765625">
                            <font>
@@ -31,12 +31,17 @@
                         </Text>
                      </children>
                   </Pane>
-                  <Pane prefHeight="404.0" prefWidth="817.0">
+                  <Pane pickOnBounds="false" prefHeight="404.0" prefWidth="817.0">
                      <children>
-                        <FXGLScrollPane fx:id="scrollpane" layoutX="228.0" layoutY="28.0" prefHeight="299.0" prefWidth="362.0" />
+                        <Rectangle arcHeight="25.0" arcWidth="25.0" fill="WHITE" height="345.0" layoutX="184.0" layoutY="37.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" width="441.0" />
+                        <FXGLScrollPane hbarPolicy="NEVER" layoutX="185.0" layoutY="53.0" pannable="true" pickOnBounds="false" prefHeight="329.0" prefWidth="441.0">
+                           <content>
+                              <VBox fx:id="scrollpane_hold" alignment="TOP_CENTER" nodeOrientation="LEFT_TO_RIGHT" pickOnBounds="false" prefHeight="296.0" prefWidth="441.0" spacing="5.0" />
+                           </content>
+                        </FXGLScrollPane>
                      </children>
                   </Pane>
-                  <Button fx:id="back_btn" mnemonicParsing="false" text="Main Menu">
+                  <Button fx:id="back_btn" mnemonicParsing="false" onMouseClicked="#backMainMenu" pickOnBounds="false" text="Main Menu">
                      <font>
                         <Font size="32.0" />
                      </font>

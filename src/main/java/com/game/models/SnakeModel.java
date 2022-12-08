@@ -403,8 +403,8 @@ public class SnakeModel {
 
         LinkedList<Score> scores =
                 getHighScores().get(DEFAULT_SAVE_BUNDLE_LIST);
-        if(scores.size()>=10){
-            int to_check = scores.get(9).score();
+        if(scores.size()>=DEFAULT_MAX_SAVED_SCORES){
+            int to_check = scores.get(DEFAULT_MAX_SAVED_SCORES-1).score();
             if(to_check>getScore()){
                 System.out.println("Score too small to add to high score " +
                         "board!");

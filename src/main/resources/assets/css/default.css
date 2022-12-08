@@ -14,5 +14,5 @@
     -gradient-bottom: #e3cc6c;
     -gradient-middle: white;
     -fx-text-fill: linear-gradient(to right, -gradient-base, -gradient-middle,-gradient-bottom);
-    -fx-fill: linear-gradient(to right, -gradient-base, -gradient-middle,-gradient-bottom);
+    -fx-fill: linear-gradient(to right, -gradient-base,-gradient-bottom);
 }

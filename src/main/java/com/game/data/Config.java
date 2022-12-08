@@ -25,5 +25,6 @@ public static final String DEFAULT_HIGH_SCORES_UI = "high_scores.fxml";
 public static final String DEFAULT_SAVE_BUNDLE_LIST = "scores";
 public static final String DEFAULT_SAVE_BUNDLE_NAME = "highscores";
 public static final String DEFAULT_SAVE_BUNDLE_FILE_NAME = "scores.sav";
-
+public static final double DEFAULT_TRANSITION_LENGTH = .5;
+public static final int DEFAULT_MAX_SAVED_SCORES = 100;
 }
