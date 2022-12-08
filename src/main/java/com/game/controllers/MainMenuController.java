@@ -16,7 +16,10 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 import java.util.LinkedList;
+import java.util.Objects;
+import java.util.function.Consumer;
 
+import static com.almasb.fxgl.dsl.FXGL.getDialogService;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 import static com.game.data.Config.DEFAULT_SAVE_BUNDLE_LIST;
 import static com.game.data.Config.DEFAULT_TRANSITION_LENGTH;
@@ -62,7 +65,13 @@ public class MainMenuController extends MenuController {
 
     @FXML
     void startGame(MouseEvent event) {
-        getGameController().startNewGame();
+        // Ask for name if they haven't given one.
+        if (Objects.equals(getModel().getPlayerName(), "")) {
+            System.out.println("Name is????");
+            getView().playerNameInput(true);
+        } else{
+            getGameController().startNewGame();
+        }
     }
     @FXML
     void startOptions(MouseEvent event) {

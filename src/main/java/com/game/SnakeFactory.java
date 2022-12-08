@@ -42,8 +42,7 @@ public class SnakeFactory implements EntityFactory {
                // .with(physics)
                 .bbox(new HitBox(BoundingShape.box(10, 10)))
                 .view(texture(model.getSnakeHeadPath()).getNode())
-                .with(new SnakeController(model))
-                .buildAndAttach();
+                .with(new SnakeController(model))                .buildAndAttach();
     }
 
     @Spawns("snakebody")

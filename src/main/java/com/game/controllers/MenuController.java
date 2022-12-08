@@ -41,21 +41,28 @@ public abstract class MenuController implements UIController, Modeled {
         m_view = view;
     }
 
+    public boolean setBobble(Node node, double speed){
+        if(speed<0){
+            System.out.println("Trying to set negative speed in Bobble!");
+            return false;
+        }
+        Animation<?> bobble = getView().setInfiniteBobble(node,speed);
+        bobble.pause();
+        node.setOnMouseEntered(e->{
+            bobble.resume();
+        });
+        node.setOnMouseExited(e->{
+            bobble.pause();
+        });
+        return true;
+    }
+
     @Override
-    public void init(){
-        for (Node node : getRoot().getChildren()){
-            if(node instanceof Button){
-                Animation<?> bobble = getView().setInfiniteBobble(node,0.25);
-                bobble.pause();
-                node.setOnMouseEntered(e->{
-                    bobble.resume();
-                });
-                node.setOnMouseExited(e->{
-                    bobble.pause();
-                });
+    public void init() {
+        for (Node node : getRoot().getChildren()) {
+            if (node instanceof Button) {
+                setBobble(node, 0.25);
             }
         }
     }
-
-
 }

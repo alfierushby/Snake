@@ -267,6 +267,11 @@ public class SnakeModel {
         return true;
     }
 
+    public boolean setPlayerName(String player_name) {
+        m_player_name.set(player_name);
+        return true;
+    }
+
     /**
      * @return String property of snake head path map
      */
@@ -420,6 +425,12 @@ public class SnakeModel {
         return m_snake_body_path.get();
     }
 
+    /**
+     * @return Player name specified by user
+     */
+    public String getPlayerName() {
+        return m_player_name.get();
+    }
 
     /**
      * Note that the path it always calculates from  /assets/textures.
@@ -443,6 +454,10 @@ public class SnakeModel {
      */
     public String getSnakeBodyPath() {
         return DEFAULT_SNAKE_BODY_OPTIONS.get(m_snake_body_path.get());
+    }
+
+    public StringProperty getPlayerNameProp() {
+        return m_player_name;
     }
 
     //Custom Variables
@@ -469,6 +484,7 @@ public class SnakeModel {
     private final StringProperty m_background_path;
     private final StringProperty m_snake_head_path;
     private final StringProperty m_snake_body_path;
+    private final StringProperty m_player_name;
 
 
     /**
@@ -502,6 +518,7 @@ public class SnakeModel {
         m_background_path = new SimpleStringProperty("");
         m_snake_head_path = new SimpleStringProperty("");
         m_snake_body_path = new SimpleStringProperty("");
+        m_player_name = new SimpleStringProperty("");
         m_w = container.getWidth();
         m_h = container.getHeight();
         m_bodyPoints = new LinkedList<>();

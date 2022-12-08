@@ -15,6 +15,7 @@ import com.game.controllers.MenuController;
 import com.game.controllers.OptionsController;
 import com.game.data.ColorSet;
 import com.game.data.FoodImages;
+import com.game.data.Modeled;
 import com.game.data.ScreenSet;
 import com.game.models.SnakeModel;
 import javafx.animation.Interpolator;
@@ -36,14 +37,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 
+import static com.almasb.fxgl.dsl.FXGL.getDialogService;
 import static com.almasb.fxgl.dsl.FXGL.texture;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 import static com.game.data.Config.*;
 import static javafx.animation.Animation.INDEFINITE;
 
 
-public class MainMenuView extends FXGLMenu {
+public class MainMenuView extends FXGLMenu implements Modeled {
 
     public boolean setSystem(ParticleSystem m_system) {
         this.m_system = m_system;
@@ -63,6 +66,14 @@ public class MainMenuView extends FXGLMenu {
         return false;
     }
 
+    /**
+     * @return Central Snake Model
+     */
+    @Override
+    public SnakeModel getModel() {
+        return m_model;
+    }
+
     public ScreenSet getScreens() {return m_screens;}
     public ParticleSystem getSystem() {
         return m_system;
@@ -80,14 +91,16 @@ public class MainMenuView extends FXGLMenu {
         return m_food;
     }
 
-    ParticleSystem m_system;
-    ParticleEmitter m_emitter;
+    private ParticleSystem m_system;
+    private ParticleEmitter m_emitter;
     private ScreenSet m_screens;
+    private final SnakeModel m_model;
     private final List<Animation<?>> m_animations = new LinkedList<>();
     private final FoodImages m_food = new FoodImages();
 
     public MainMenuView(@NotNull MenuType type, SnakeModel model) {
         super(MenuType.MAIN_MENU);
+        m_model = model;
 
         // Setup menus in Main Menu
         HighScoreController high_scores = createHighScoreMenu(model);
@@ -194,6 +207,21 @@ public class MainMenuView extends FXGLMenu {
         return timeline;
     }
 
+    public void playerNameInput(boolean start_new_game){
+        Consumer<String> result = new Consumer<String>() {
+            @Override
+            public void accept(String name) {
+                getModel().setPlayerName(name);
+                if(start_new_game){
+                    getGameController().startNewGame();
+                }
+            }
+        };
+        getDialogService().showInputBox("Please enter your name to save"
+                        + " on the leaderboard." ,
+                result);
+    }
+
     private ColorSet doubleGradientListener(Node node){
         ObjectProperty<Color> baseColour = new SimpleObjectProperty<>();
         ObjectProperty<Color> baseColour1 = new SimpleObjectProperty<>();
@@ -271,4 +299,5 @@ public class MainMenuView extends FXGLMenu {
             animation.onUpdate(tpf);
         }
     }
+
 }

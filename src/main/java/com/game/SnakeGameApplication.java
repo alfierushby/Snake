@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import static com.almasb.fxgl.dsl.FXGL.getDialogService;
@@ -124,6 +125,7 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
                 images.add(getModel().getSnakeHead());
                 images.add(getModel().getSnakeBody());
                 bundle.put("images",images);
+                bundle.put("name",getModel().getPlayerName());
 
                 // Save the bundle
                 data.putBundle(bundle);
@@ -134,6 +136,12 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
                 // Get the high_scores
                 Bundle bundle = data.getBundle(DEFAULT_SAVE_BUNDLE_NAME);
                 getModel().setHighScores(bundle);
+
+                //Set Name
+                String name = bundle.get("name");
+                getModel().setPlayerName(name);
+
+                // Set Theme
                 LinkedList<String> paths = bundle.get("images");
                 if(paths == null){
                     return;
@@ -144,8 +152,6 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
                     getModel().setSnakeHead(paths.get(1));
                     getModel().setSnakeBody(paths.get(2));
                 }
-
-
             }
         });
         loadData();
@@ -157,7 +163,8 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
         UI ui = getAssetLoader().loadUI(DEFAULT_GAME_UI,uiController);
 
         uiController.getLabelScore().textProperty().bind(getModel()
-                .getScoreProp().asString("Score: %d"));
+                .getScoreProp().asString(getModel().getPlayerName() +
+                        "'s Score: %d"));
         getGameScene().addUI(ui);
     }
 
@@ -194,21 +201,15 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
             }
         });
 }
+
     private void endGame(){
-         Consumer<String> result = new Consumer<String>() {
-            @Override
-            public void accept(String name) {
-                getModel().addHighScore(name);
-                getSaveLoadService().saveAndWriteTask(
-                        DEFAULT_SAVE_BUNDLE_FILE_NAME).run();
+        getModel().addHighScore(getModel().getPlayerName());
+        getSaveLoadService().saveAndWriteTask(
+                DEFAULT_SAVE_BUNDLE_FILE_NAME).run();
 
-                showPlayAgain();
-            }
-        };
-
-        getDialogService().showInputBox("Please enter your" +
-                " name to save your score to the leaderboard!",result);
+        showPlayAgain();
     }
+
     @Override
     protected void initGame() {
 

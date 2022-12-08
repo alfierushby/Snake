@@ -7,12 +7,14 @@ import com.game.SnakeFactory;
 import com.game.models.SnakeModel;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import static com.almasb.fxgl.dsl.FXGL.getGameScene;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 import static com.game.data.Config.*;
 import static com.game.enums.TYPES.SNAKE;
@@ -78,8 +80,13 @@ public class SnakeView extends View {
         // Test code
        // getModel().setLength(30);
         // Test code
+        createBackdrop();
     }
 
+    private boolean createBackdrop(){
+        getGameScene().setBackgroundRepeat(texture(getModel().getBackgroundPath()).getImage());
+        return true;
+    }
 
     public boolean resetGame(){
         boolean cond = getModel().reset();

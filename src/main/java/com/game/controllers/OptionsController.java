@@ -11,6 +11,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import java.util.Map;
@@ -23,6 +24,7 @@ public class OptionsController extends MenuController {
     public Button getBack_btn() {
         return back_btn;
     }
+    public Button getReset_btn() { return reset_btn;}
     public Text getTitle() {
         return title;
     }
@@ -44,6 +46,9 @@ public class OptionsController extends MenuController {
 
     @FXML
     private Button back_btn;
+
+    @FXML
+    private Button reset_btn;
 
     @FXML
     private FXGLChoiceBox<String> background_choices;
@@ -87,6 +92,12 @@ public class OptionsController extends MenuController {
     }
 
     @FXML
+    void resetName(MouseEvent event) {
+        getView().playerNameInput(false);
+    }
+
+
+    @FXML
     void backMainMenu(MouseEvent event) {
         getView().switchScreen(getView().getScreens().getMainMenu(),
                 DEFAULT_TRANSITION_LENGTH);
@@ -128,7 +139,10 @@ public class OptionsController extends MenuController {
     public void init() {
         super.init();
         getBack_btn().setStyle("-fx-text-fill: #2a353d;");
+        getView().animateGradient(getReset_btn(), Color.VIOLET,Color.DARKRED);
         getView().setInfiniteBobble(getTitle(), 1);
+        setBobble(getReset_btn(),.25);
+
         // Setup background option
         for(String key : DEFAULT_BACKGROUND_OPTIONS.keySet()){
             getBackgroundChoices().getItems().add(key);
