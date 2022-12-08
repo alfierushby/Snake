@@ -22,13 +22,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.function.Consumer;
 
 import static com.almasb.fxgl.dsl.FXGL.getDialogService;
 import static com.almasb.fxgl.dsl.FXGL.getEventBus;
 import static com.almasb.fxgl.dsl.FXGL.getGameController;
-import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 import static com.game.data.Config.*;
 import static com.game.data.Config.DEFAULT_GAME_HEIGHT;
@@ -113,7 +111,7 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
     @Override
     protected void onPreInit() {
          getModel().calcFrameSpeed();
-
+         setupAutoSaving();
          // Save and load the data:
 
         getSaveLoadService().addHandler(new SaveLoadHandler() {
@@ -122,27 +120,29 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
                 // Get bundle from model
                 Bundle bundle = getModel().getHighScores();
                 LinkedList<String> images = new LinkedList<>();
-                images.add(getModel().getBackgroundPath());
-                images.add(getModel().getSnakeHeadPath());
-                images.add(getModel().getSnakeBodyPath());
+                images.add(getModel().getBackground());
+                images.add(getModel().getSnakeHead());
+                images.add(getModel().getSnakeBody());
                 bundle.put("images",images);
 
                 // Save the bundle
                 data.putBundle(bundle);
-                System.out.println("uh...");
             }
 
             @Override
             public void onLoad(@NotNull DataFile data) {
                 // Get the high_scores
                 Bundle bundle = data.getBundle(DEFAULT_SAVE_BUNDLE_NAME);
-                LinkedList<String> paths = bundle.get("images");
-                // Set it in the model
                 getModel().setHighScores(bundle);
-                if(paths.size()==3){
-                    getModel().setBackgroundPath(paths.get(0));
-                    getModel().setSnakeHeadPath(paths.get(1));
-                    getModel().setSnakeBodyPath(paths.get(2));
+                LinkedList<String> paths = bundle.get("images");
+                if(paths == null){
+                    return;
+                }
+                // Set it in the model
+                if( paths.size()==3){
+                    getModel().setBackground(paths.get(0));
+                    getModel().setSnakeHead(paths.get(1));
+                    getModel().setSnakeBody(paths.get(2));
                 }
 
 
@@ -158,10 +158,30 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
 
         uiController.getLabelScore().textProperty().bind(getModel()
                 .getScoreProp().asString("Score: %d"));
-
         getGameScene().addUI(ui);
     }
 
+    private boolean setupAutoSaving(){
+         if(getModel()==null){
+             System.out.println("Model not initialized for auto saving!");
+             return false;
+         }
+        getModel().getSnakeBodyPathProp().addListener(e->{
+            getSaveLoadService().saveAndWriteTask(
+                    DEFAULT_SAVE_BUNDLE_FILE_NAME).run();
+        });
+
+        getModel().getSnakeHeadPathProp().addListener(e->{
+            getSaveLoadService().saveAndWriteTask(
+                    DEFAULT_SAVE_BUNDLE_FILE_NAME).run();
+        });
+
+        getModel().getBackgroundPathProp().addListener(e->{
+            getSaveLoadService().saveAndWriteTask(
+                    DEFAULT_SAVE_BUNDLE_FILE_NAME).run();
+        });
+        return true;
+    }
     private void showPlayAgain(){
         getDialogService().showConfirmationBox("Play " +
                 "Again?", yes -> {

@@ -238,44 +238,54 @@ public class SnakeModel {
     }
 
     /**
-     * @param background_path Background Path relative from /assets/textures
+     * @param background_path Background Path key, used in conjunction with a
+         map, that maps to a path relative to /Assets/Textures.
      * @return true
      */
-    public boolean setBackgroundPath(String background_path) {
+    public boolean setBackground(String background_path) {
         m_background_path.set(background_path);
         return true;
     }
 
     /**
-     * @param snake_head_path Snake Head Path relative from /assets/textures
+     * @param snake_head_path Background Path key, used in conjunction with a
+        map, that maps to a path relative to /Assets/Textures.
      * @return true
      */
-    public boolean setSnakeHeadPath(String snake_head_path) {
+    public boolean setSnakeHead(String snake_head_path) {
         m_snake_head_path.set(snake_head_path);
         return true;
     }
 
     /**
-     * @param snake_body_path Snake BodyPath relative from /assets/textures
+     * @param snake_body_path Background Path key, used in conjunction with a
+         map, that maps to a path relative to /Assets/Textures.
      * @return true
      */
-    public boolean setSnakeBodyPath(String snake_body_path) {
+    public boolean setSnakeBody(String snake_body_path) {
         m_snake_body_path.set(snake_body_path);
         return true;
     }
 
     /**
-     * @return String property of snake head path
+     * @return String property of snake head path map
      */
     public StringProperty getSnakeHeadPathProp() {
         return m_snake_head_path;
     }
 
     /**
-     * @return String property of snake body path
+     * @return String property of snake body path map
      */
     public StringProperty getSnakeBodyPathProp() {
         return m_snake_body_path;
+    }
+
+    /**
+     * @return String property of background path map
+     */
+    public StringProperty getBackgroundPathProp() {
+        return m_background_path;
     }
 
     /**
@@ -388,11 +398,35 @@ public class SnakeModel {
     public Bundle getHighScores() {return m_high_scores;}
 
     /**
+     * @return Non-translated Background Key value for mapping in
+     * DEFAULT_BACKGROUND_OPTIONS
+     */
+    public String getBackground() {
+        return m_background_path.get();
+    }
+    /**
+     * @return Non-translated Key value for mapping in
+     * DEFAULT_SNAKE_HEAD_OPTIONS
+     */
+    public String getSnakeHead() {
+        return m_snake_head_path.get();
+    }
+
+    /**
+     * @return Non-translated Key value for mapping in
+     * DEFAULT_SNAKE_BODY_OPTIONS
+     */
+    public String getSnakeBody() {
+        return m_snake_body_path.get();
+    }
+
+
+    /**
      * Note that the path it always calculates from  /assets/textures.
      * @return Background image path
      */
     public String getBackgroundPath() {
-        return m_background_path.get();
+        return DEFAULT_BACKGROUND_OPTIONS.get(m_background_path.get());
     }
 
     /**
@@ -400,7 +434,7 @@ public class SnakeModel {
      * @return  Snake head image path
      */
     public String getSnakeHeadPath() {
-        return m_snake_head_path.get();
+        return DEFAULT_SNAKE_HEAD_OPTIONS.get(m_snake_head_path.get());
     }
 
     /**
@@ -408,7 +442,7 @@ public class SnakeModel {
      * @return Snake body image path
      */
     public String getSnakeBodyPath() {
-        return m_snake_body_path.get();
+        return DEFAULT_SNAKE_BODY_OPTIONS.get(m_snake_body_path.get());
     }
 
     //Custom Variables
@@ -472,8 +506,8 @@ public class SnakeModel {
         m_h = container.getHeight();
         m_bodyPoints = new LinkedList<>();
 
-        setSnakeHeadPath(DEFAULT_SNAKE_HEAD_OPTIONS.get("Level Headed"));
-        setSnakeBodyPath(DEFAULT_SNAKE_BODY_OPTIONS.get("Ball"));
+        setSnakeHead("Level Headed");
+        setSnakeBody("Ball");
         setHighScores(new Bundle(DEFAULT_SAVE_BUNDLE_NAME));
         getVelocity().set(0,getSpeed()); // Default movement
         setSnakeWidth(width);

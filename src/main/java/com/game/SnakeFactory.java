@@ -19,6 +19,7 @@ import java.util.Random;
 
 import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
 import static com.almasb.fxgl.dsl.FXGL.texture;
+import static com.game.data.Config.*;
 import static com.game.enums.TYPES.*;
 import static java.util.Map.entry;
 
@@ -31,8 +32,6 @@ public class SnakeFactory implements EntityFactory {
     private final FoodImages food = new FoodImages();
 
 
-
-
     @Spawns("snake")
     public Entity newSnake(SpawnData data, SnakeModel model){
         PhysicsComponent physics = new PhysicsComponent();
@@ -42,13 +41,14 @@ public class SnakeFactory implements EntityFactory {
                 .collidable()
                // .with(physics)
                 .bbox(new HitBox(BoundingShape.box(10, 10)))
-                .view(texture(model.getSnakeHeadPath()))
+                .view(texture(model.getSnakeHeadPath()).getNode())
                 .with(new SnakeController(model))
                 .buildAndAttach();
     }
 
     @Spawns("snakebody")
     public Entity newSnakeBody(SpawnData data, SnakeModel model){
+        System.out.println(model.getSnakeBodyPath());
         Entity body = entityBuilder(data)
                 .type(SNAKE_BODY)
                 .collidable()

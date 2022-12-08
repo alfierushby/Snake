@@ -11,6 +11,7 @@ import javafx.util.Duration;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 import static com.game.data.Config.*;
@@ -53,6 +54,7 @@ public class SnakeView extends View {
     private final List<Entity> m_bodyParts = new LinkedList<>();
 
 
+
     /**
      * Sets the Snake head, and runs the drawBody function at the FrameTime
      * interval calculated by the game's Model.
@@ -73,19 +75,11 @@ public class SnakeView extends View {
         getModel().getLengthProp().addListener(e->{
             fillSnakeBodies();
         });
-
-        getModel().getSnakeHeadPathProp().addListener(e->{
-            System.out.println("I got it");
-            setSnakeHeadImage(texture(getModel().getSnakeHeadPath()).getImage());
-        });
-
-        getModel().getSnakeBodyPathProp().addListener(e->{
-            setBodyPartImages(texture(getModel().getSnakeHeadPath()).getImage());
-        });
         // Test code
        // getModel().setLength(30);
         // Test code
     }
+
 
     public boolean resetGame(){
         boolean cond = getModel().reset();
