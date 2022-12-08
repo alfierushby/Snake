@@ -96,7 +96,7 @@ public class MainMenuView extends FXGLMenu {
         // Store controllers for use
         setScreens(new ScreenSet(main_menu, high_scores,options,
                 getContentRoot()));
-        switchScreen(options,DEFAULT_TRANSITION_LENGTH);
+        switchScreen(main_menu,DEFAULT_TRANSITION_LENGTH);
         m_system = new ParticleSystem();
         initParticles();
 
