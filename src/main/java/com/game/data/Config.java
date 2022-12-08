@@ -3,6 +3,10 @@ package com.game.data;
 import com.game.enums.DIRECTION;
 import javafx.geometry.Point2D;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import static com.game.enums.DIRECTION.*;
 
 /**
@@ -22,9 +26,20 @@ public static final Point2D DEFAULT_START_POSITION = new Point2D(100,100);
 public static final String DEFAULT_GAME_UI = "snake_ui.fxml";
 public static final String DEFAULT_MAIN_UI = "main_menu.fxml";
 public static final String DEFAULT_HIGH_SCORES_UI = "high_scores.fxml";
+public static final String DEFAULT_OPTIONS_UI = "options.fxml";
 public static final String DEFAULT_SAVE_BUNDLE_LIST = "scores";
 public static final String DEFAULT_SAVE_BUNDLE_NAME = "highscores";
 public static final String DEFAULT_SAVE_BUNDLE_FILE_NAME = "scores.sav";
 public static final double DEFAULT_TRANSITION_LENGTH = .5;
 public static final int DEFAULT_MAX_SAVED_SCORES = 100;
+    public static final Map<String, String> DEFAULT_BACKGROUND_OPTIONS
+            = Map.of("Jovial","UI-background.png",
+            "Snake's Happiness", "back3.jpg",
+            "Green Hell","wp3906260.jpg",
+            "Clouds and Sunshine", "UI-background2.png");
+    public static final Map<String, String> DEFAULT_SNAKE_HEAD_OPTIONS
+            = Map.of("Level Headed","snake-head-right.png",
+            "Angry", "angry-snake-head.png");
+    public static final Map<String, String> DEFAULT_SNAKE_BODY_OPTIONS
+            = Map.of("Ball","snake-body.png");
 }

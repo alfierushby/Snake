@@ -21,6 +21,8 @@ import javafx.scene.input.KeyCode;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Consumer;
 
 import static com.almasb.fxgl.dsl.FXGL.getDialogService;
@@ -76,8 +78,7 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
     }
 
     /**
-     * Initialises the semi-complete model with FXGL specific framework. Needed
-     * whenever a game is reset.
+     * Initialises the model. Should only ever be called once.
      * @return true if the model was initialized
      */
     private boolean initModel(){
@@ -121,6 +122,11 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
                 System.out.println("lol???");
                 // Get bundle from model
                 Bundle bundle = getModel().getHighScores();
+                LinkedList<String> images = new LinkedList<>();
+                images.add(getModel().getBackgroundPath());
+                images.add(getModel().getSnakeHeadPath());
+                images.add(getModel().getSnakeBodyPath());
+                bundle.put("images",images);
 
                 // Save the bundle
                 data.putBundle(bundle);
@@ -131,8 +137,12 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
             public void onLoad(@NotNull DataFile data) {
                 // Get the high_scores
                 Bundle bundle = data.getBundle(DEFAULT_SAVE_BUNDLE_NAME);
+                LinkedList<String> paths = bundle.get("images");
                 // Set it in the model
                 getModel().setHighScores(bundle);
+                getModel().setBackgroundPath(paths.get(0));
+                getModel().setSnakeHeadPath(paths.get(1));
+                getModel().setSnakeBodyPath(paths.get(2));
 
             }
         });

@@ -13,7 +13,7 @@
    <children>
       <Pane fx:id="holder" pickOnBounds="false" prefHeight="542.0" prefWidth="813.0">
          <children>
-            <ImageView disable="true" fitHeight="607.0" fitWidth="813.0" preserveRatio="true">
+            <ImageView disable="true" fitHeight="607.0" fitWidth="813.0" preserveRatio="true" fx:id="background">
                <image>
                   <Image url="/assets/textures/UI-background.png" />
                </image>
@@ -39,7 +39,7 @@
                         <Font name="Calibri" size="32.0" />
                      </font>
                   </Button>
-                  <Button fx:id="options_btn" mnemonicParsing="false" pickOnBounds="false" text="Options">
+                  <Button fx:id="options_btn" mnemonicParsing="false" onMouseClicked="#startOptions" pickOnBounds="false" text="Options">
                      <font>
                         <Font size="32.0" />
                      </font>

@@ -12,6 +12,7 @@ import com.almasb.fxgl.ui.UI;
 import com.game.controllers.HighScoreController;
 import com.game.controllers.MainMenuController;
 import com.game.controllers.MenuController;
+import com.game.controllers.OptionsController;
 import com.game.data.ColorSet;
 import com.game.data.FoodImages;
 import com.game.data.ScreenSet;
@@ -91,9 +92,11 @@ public class MainMenuView extends FXGLMenu {
         // Setup menus in Main Menu
         HighScoreController high_scores = createHighScoreMenu(model);
         MainMenuController main_menu = createMainMenu(model);
+        OptionsController options = createOptionsMenu(model);
         // Store controllers for use
-        setScreens(new ScreenSet(main_menu, high_scores,getContentRoot()));
-        switchScreen(main_menu,DEFAULT_TRANSITION_LENGTH);
+        setScreens(new ScreenSet(main_menu, high_scores,options,
+                getContentRoot()));
+        switchScreen(options,DEFAULT_TRANSITION_LENGTH);
         m_system = new ParticleSystem();
         initParticles();
 
@@ -135,6 +138,12 @@ public class MainMenuView extends FXGLMenu {
         loadUI(DEFAULT_MAIN_UI,controller);
         return controller;
     }
+    private OptionsController createOptionsMenu(SnakeModel model){
+        OptionsController controller= new OptionsController(this,model);
+        loadUI(DEFAULT_OPTIONS_UI,controller);
+        return controller;
+    }
+
     private HighScoreController createHighScoreMenu(SnakeModel model){
         HighScoreController controller = new HighScoreController(this,
                 model);

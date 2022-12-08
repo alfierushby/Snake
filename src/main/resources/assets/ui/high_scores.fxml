@@ -16,7 +16,7 @@
       <Pane fx:id="holder" pickOnBounds="false" prefHeight="604.0" prefWidth="813.0">
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="604.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="813.0" />
-            <ImageView fitHeight="607.0" fitWidth="813.0" preserveRatio="true">
+            <ImageView fitHeight="607.0" fitWidth="813.0" preserveRatio="true" fx:id="background">
                <image>
                   <Image url="/assets/textures/UI-background.png" />
                </image></ImageView>

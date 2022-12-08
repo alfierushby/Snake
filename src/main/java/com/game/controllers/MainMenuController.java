@@ -6,6 +6,7 @@ import com.game.models.SnakeModel;
 import com.game.views.MainMenuView;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -43,7 +44,8 @@ public class MainMenuController extends MenuController {
 
     @FXML
     private Button highscores_btn;
-
+    @FXML
+    private ImageView background;
     @FXML
     private Button options_btn;
     @FXML
@@ -60,6 +62,11 @@ public class MainMenuController extends MenuController {
     @FXML
     void startGame(MouseEvent event) {
         getGameController().startNewGame();
+    }
+    @FXML
+    void startOptions(MouseEvent event) {
+        OptionsController controller = getView().getScreens().getOptions();
+        getView().switchScreen(controller, DEFAULT_TRANSITION_LENGTH);
     }
 
     @FXML

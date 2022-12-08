@@ -50,6 +50,7 @@ public class SnakeView extends View {
     Entity m_snake;
     private final List<Entity> m_bodyParts = new LinkedList<>();
 
+
     /**
      * Sets the Snake head, and runs the drawBody function at the FrameTime
      * interval calculated by the game's Model.

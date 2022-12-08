@@ -8,6 +8,7 @@ import com.game.models.SnakeModel;
 import com.game.views.MainMenuView;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -45,7 +46,8 @@ public class HighScoreController extends MenuController {
 
     @FXML
     private Button back_btn;
-
+    @FXML
+    private ImageView background;
     @FXML
     private Pane holder;
 
