@@ -238,30 +238,44 @@ public class SnakeModel {
     }
 
     /**
-     * @param m_background_path Background Path relative from /assets/textures
+     * @param background_path Background Path relative from /assets/textures
      * @return true
      */
-    public boolean setBackgroundPath(String m_background_path) {
-        this.m_background_path = m_background_path;
+    public boolean setBackgroundPath(String background_path) {
+        m_background_path.set(background_path);
         return true;
     }
 
     /**
-     * @param m_snake_head_path Snake Head Path relative from /assets/textures
+     * @param snake_head_path Snake Head Path relative from /assets/textures
      * @return true
      */
-    public boolean setSnakeHeadPath(String m_snake_head_path) {
-        this.m_snake_head_path = m_snake_head_path;
+    public boolean setSnakeHeadPath(String snake_head_path) {
+        m_snake_head_path.set(snake_head_path);
         return true;
     }
 
     /**
-     * @param m_snake_body_path Snake BodyPath relative from /assets/textures
+     * @param snake_body_path Snake BodyPath relative from /assets/textures
      * @return true
      */
-    public boolean setSnakeBodyPath(String m_snake_body_path) {
-        this.m_snake_body_path = m_snake_body_path;
+    public boolean setSnakeBodyPath(String snake_body_path) {
+        m_snake_body_path.set(snake_body_path);
         return true;
+    }
+
+    /**
+     * @return String property of snake head path
+     */
+    public StringProperty getSnakeHeadPathProp() {
+        return m_snake_head_path;
+    }
+
+    /**
+     * @return String property of snake body path
+     */
+    public StringProperty getSnakeBodyPathProp() {
+        return m_snake_body_path;
     }
 
     /**
@@ -374,27 +388,27 @@ public class SnakeModel {
     public Bundle getHighScores() {return m_high_scores;}
 
     /**
-     * Note that the path is always calculate from /assets/textures.
-     * @return Background image
+     * Note that the path it always calculates from  /assets/textures.
+     * @return Background image path
      */
     public String getBackgroundPath() {
-        return m_background_path;
+        return m_background_path.get();
     }
 
     /**
-     * Note that the path is always calculate from /assets/textures.
-     * @return  Snake head image
+     * Note that the path it always calculates from is /assets/textures.
+     * @return  Snake head image path
      */
     public String getSnakeHeadPath() {
-        return m_snake_head_path;
+        return m_snake_head_path.get();
     }
 
     /**
-     * Note that the path is always calculate from /assets/textures.
-     * @return Snake body image
+     * Note that the path it always calculates from  /assets/textures.
+     * @return Snake body image path
      */
     public String getSnakeBodyPath() {
-        return m_snake_body_path;
+        return m_snake_body_path.get();
     }
 
     //Custom Variables
@@ -418,9 +432,9 @@ public class SnakeModel {
     private int m_food_count = 0;
     private final IntegerProperty m_score;
     private Bundle m_high_scores;
-    private String m_background_path;
-    private String m_snake_head_path;
-    private String m_snake_body_path;
+    private final StringProperty m_background_path;
+    private final StringProperty m_snake_head_path;
+    private final StringProperty m_snake_body_path;
 
 
     /**
@@ -451,11 +465,15 @@ public class SnakeModel {
         m_length= new SimpleIntegerProperty(0);
         m_score = new SimpleIntegerProperty(0);
         m_l = new SimpleBooleanProperty(false);
+        m_background_path = new SimpleStringProperty("");
+        m_snake_head_path = new SimpleStringProperty("");
+        m_snake_body_path = new SimpleStringProperty("");
         m_w = container.getWidth();
         m_h = container.getHeight();
         m_bodyPoints = new LinkedList<>();
 
-
+        setSnakeHeadPath(DEFAULT_SNAKE_HEAD_OPTIONS.get("Level Headed"));
+        setSnakeBodyPath(DEFAULT_SNAKE_BODY_OPTIONS.get("Ball"));
         setHighScores(new Bundle(DEFAULT_SAVE_BUNDLE_NAME));
         getVelocity().set(0,getSpeed()); // Default movement
         setSnakeWidth(width);

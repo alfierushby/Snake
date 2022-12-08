@@ -9,16 +9,16 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane pickOnBounds="false" prefHeight="400.0" prefWidth="600.0" stylesheets="/assets/css/default.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane pickOnBounds="false" prefHeight="600.0" stylesheets="/assets/css/default.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Pane fx:id="holder" pickOnBounds="false" prefHeight="542.0" prefWidth="813.0">
+      <Pane fx:id="holder" pickOnBounds="false" prefWidth="800.0">
          <children>
-            <ImageView disable="true" fitHeight="607.0" fitWidth="813.0" preserveRatio="true" fx:id="background">
+            <ImageView fx:id="background" disable="true" fitHeight="600.0" fitWidth="800.0">
                <image>
                   <Image url="/assets/textures/UI-background.png" />
                </image>
             </ImageView>
-            <VBox fx:id="vbox" alignment="TOP_CENTER" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="false" prefHeight="607.0" prefWidth="813.0">
+            <VBox fx:id="vbox" alignment="TOP_CENTER" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="false" prefHeight="600.0" prefWidth="800.0">
                <children>
                   <Pane pickOnBounds="false" prefHeight="120.0" prefWidth="802.0">
                      <children>

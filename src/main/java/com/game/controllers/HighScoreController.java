@@ -43,7 +43,7 @@ public class HighScoreController extends MenuController {
     }
 
     public VBox getScrollPaneHolder() {return scrollpane_hold;}
-
+    public ImageView getBackground() {return background;}
     @FXML
     private Button back_btn;
     @FXML

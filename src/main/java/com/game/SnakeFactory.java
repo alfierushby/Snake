@@ -42,19 +42,19 @@ public class SnakeFactory implements EntityFactory {
                 .collidable()
                // .with(physics)
                 .bbox(new HitBox(BoundingShape.box(10, 10)))
-                .view(texture("snake-head-right.png"))
+                .view(texture(model.getSnakeHeadPath()))
                 .with(new SnakeController(model))
                 .buildAndAttach();
     }
 
     @Spawns("snakebody")
-    public Entity newSnakeBody(SpawnData data){
+    public Entity newSnakeBody(SpawnData data, SnakeModel model){
         Entity body = entityBuilder(data)
                 .type(SNAKE_BODY)
                 .collidable()
                 .with(new SnakeBodyController())
                 .bbox(new HitBox(BoundingShape.box(10, 10)))
-                .view(texture("snake-body.png").getNode())
+                .view(texture(model.getSnakeBodyPath()).getNode())
                 .buildAndAttach();
         body.setPosition(-100,-100);
         return body;

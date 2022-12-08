@@ -1,12 +1,15 @@
 package com.game.controllers;
 
+import com.almasb.fxgl.texture.Texture;
 import com.almasb.fxgl.ui.FXGLChoiceBox;
+import com.game.GameUtil;
 import com.game.models.SnakeModel;
 import com.game.views.MainMenuView;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -15,7 +18,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.util.List;
+import java.util.Map;
 
+import static com.almasb.fxgl.dsl.FXGLForKtKt.texture;
 import static com.game.data.Config.*;
 
 public class OptionsController extends MenuController {
@@ -37,6 +42,9 @@ public class OptionsController extends MenuController {
 
     public FXGLChoiceBox<String> getSnakeHeadChoices() {
         return snake_head_choices;
+    }
+    public ImageView getBackground() {
+        return background;
     }
 
     @FXML
@@ -78,6 +86,7 @@ public class OptionsController extends MenuController {
         return holder;
     }
 
+
     public OptionsController(MainMenuView view, SnakeModel model) {
         super(view, model);
     }
@@ -90,17 +99,30 @@ public class OptionsController extends MenuController {
 
     @FXML
     void backgroundAction(ActionEvent event) {
-        getModel().setBackgroundPath(getBackgroundChoices().getValue());
+        getModel().setBackgroundPath(
+                getPath(DEFAULT_BACKGROUND_OPTIONS,
+                        getBackgroundChoices().getValue()));
+        for (MenuController control : getView().getScreens().getControllers()){
+            control.setBackground(getModel().getBackgroundPath());
+        }
     }
 
     @FXML
     void snakeBodyAction(ActionEvent event) {
-        getModel().setSnakeBodyPath(getSnakeBodyChoices().getValue());
+        getModel().setSnakeBodyPath(
+                getPath(DEFAULT_SNAKE_BODY_OPTIONS,
+                        getSnakeBodyChoices().getValue()));
     }
 
     @FXML
     void snakeHeadAction(ActionEvent event) {
-        getModel().setSnakeHeadPath(getSnakeHeadChoices().getValue());
+        getModel().setSnakeHeadPath(
+                getPath(DEFAULT_SNAKE_HEAD_OPTIONS,
+                        getSnakeHeadChoices().getValue()));
+    }
+
+    private String getPath(Map<String,String> map, String entry){
+        return map.get(entry);
     }
     @Override
     public void init() {

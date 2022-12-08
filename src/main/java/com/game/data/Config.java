@@ -35,8 +35,7 @@ public static final int DEFAULT_MAX_SAVED_SCORES = 100;
     public static final Map<String, String> DEFAULT_BACKGROUND_OPTIONS
             = Map.of("Jovial","UI-background.png",
             "Snake's Happiness", "back3.jpg",
-            "Green Hell","wp3906260.jpg",
-            "Clouds and Sunshine", "UI-background2.png");
+            "Green Hell","wp3906260.jpg");
     public static final Map<String, String> DEFAULT_SNAKE_HEAD_OPTIONS
             = Map.of("Level Headed","snake-head-right.png",
             "Angry", "angry-snake-head.png");

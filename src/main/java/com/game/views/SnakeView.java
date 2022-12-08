@@ -2,15 +2,17 @@ package com.game.views;
 
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
+import com.almasb.fxgl.texture.Texture;
 import com.game.SnakeFactory;
 import com.game.models.SnakeModel;
 import javafx.geometry.Point2D;
+import javafx.scene.image.Image;
 import javafx.util.Duration;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameTimer;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 import static com.game.data.Config.*;
 import static com.game.enums.TYPES.SNAKE;
 
@@ -71,6 +73,15 @@ public class SnakeView extends View {
         getModel().getLengthProp().addListener(e->{
             fillSnakeBodies();
         });
+
+        getModel().getSnakeHeadPathProp().addListener(e->{
+            System.out.println("I got it");
+            setSnakeHeadImage(texture(getModel().getSnakeHeadPath()).getImage());
+        });
+
+        getModel().getSnakeBodyPathProp().addListener(e->{
+            setBodyPartImages(texture(getModel().getSnakeHeadPath()).getImage());
+        });
         // Test code
        // getModel().setLength(30);
         // Test code
@@ -82,6 +93,34 @@ public class SnakeView extends View {
         return cond;
     }
 
+    public boolean changeImage(Entity entity, Image img){
+        try{
+            Texture tex = (Texture) entity.getViewComponent().getChildren().get(0);
+            tex.setImage(img);
+            return true;
+        }
+        catch(IndexOutOfBoundsException e){
+            System.out.println("Entity "+ entity.getType() + "does no contain" +
+                    " a texture!");
+            return false;
+        }
+    }
+
+    public boolean setBodyPartImages(Image img){
+        for(Entity entity : getBodyParts()){
+            boolean cond = changeImage(entity,
+                    texture(getModel().getSnakeBodyPath()).getImage());
+            if(!cond){
+                System.out.println("Unable to change Snake Body Part Images!");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean setSnakeHeadImage(Image img){
+       return changeImage(getSnake(),img);
+    }
     /**
      * Draws the snake body by using Num as the interval in the history of
      * positions in the BodyPoints array.
@@ -153,7 +192,7 @@ public class SnakeView extends View {
             return false;
         }
         getBodyParts().add(getSnakeFactory().newSnakeBody(
-                new SpawnData(getSnake().getX(),getSnake().getY())));
+                new SpawnData(getSnake().getX(),getSnake().getY()),getModel()));
         return true;
     }
 

@@ -26,6 +26,10 @@ public class ScreenSet {
         return (OptionsController) m_controllers.get(2);
     }
 
+    public List<MenuController> getControllers(){
+        return m_controllers;
+    }
+
     public ScreenSet(@NotNull MainMenuController main_menu,
                      @NotNull HighScoreController high_scores,
                      @NotNull OptionsController options,

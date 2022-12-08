@@ -119,7 +119,6 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
         getSaveLoadService().addHandler(new SaveLoadHandler() {
             @Override
             public void onSave(@NotNull DataFile data) {
-                System.out.println("lol???");
                 // Get bundle from model
                 Bundle bundle = getModel().getHighScores();
                 LinkedList<String> images = new LinkedList<>();
@@ -140,9 +139,12 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
                 LinkedList<String> paths = bundle.get("images");
                 // Set it in the model
                 getModel().setHighScores(bundle);
-                getModel().setBackgroundPath(paths.get(0));
-                getModel().setSnakeHeadPath(paths.get(1));
-                getModel().setSnakeBodyPath(paths.get(2));
+                if(paths.size()==3){
+                    getModel().setBackgroundPath(paths.get(0));
+                    getModel().setSnakeHeadPath(paths.get(1));
+                    getModel().setSnakeBodyPath(paths.get(2));
+                }
+
 
             }
         });
@@ -159,7 +161,6 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
 
         getGameScene().addUI(ui);
     }
-
 
     private void showPlayAgain(){
         getDialogService().showConfirmationBox("Play " +
@@ -190,6 +191,7 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
     }
     @Override
     protected void initGame() {
+
         setSnakeView(new SnakeView(getSnakeFactory(),getModel()));
         setFoodView(new FoodView(getSnakeFactory(),getModel()));
 

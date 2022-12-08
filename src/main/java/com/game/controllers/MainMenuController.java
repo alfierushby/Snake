@@ -42,6 +42,7 @@ public class MainMenuController extends MenuController {
         return holder;
     }
 
+    public ImageView getBackground() {return background;}
     @FXML
     private Button highscores_btn;
     @FXML
