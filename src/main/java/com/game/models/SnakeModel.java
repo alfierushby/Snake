@@ -563,6 +563,7 @@ public class SnakeModel {
         for (Score score : scores){
             if(Objects.equals(score.name(), name) && getScore()>score.score()){
                 scores.remove(score);
+                break;
             } else if(score.score() > getScore()){
                 System.out.println("Score too small to replace current score!");
                 return false;
