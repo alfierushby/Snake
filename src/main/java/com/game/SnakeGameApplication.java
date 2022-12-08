@@ -57,10 +57,7 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
     }
 
     private boolean resetModel(){
-        boolean cond0 = setModel(new SnakeModel(DEFAULT_SNAKE_WIDTH,
-                DEFAULT_SNAKE_HEIGHT,
-                new Rectangle(DEFAULT_GAME_WIDTH, DEFAULT_GAME_HEIGHT)));
-        return cond0;
+        return getSnakeView().resetGame();
     }
 
     private boolean loadData(){
@@ -73,22 +70,24 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
     }
 
     private boolean resetGame(){
-        getGameWorld().getEntitiesCopy().forEach(Entity::removeFromWorld);
+        //getGameWorld().getEntitiesCopy().forEach(Entity::removeFromWorld);
         getEventBus().removeAllEventHandlers();
-        return resetModel() && initModel();
+        return resetModel();
     }
 
     /**
-     * Intialises the semi-complete model with FXGL specific framework. Needed
+     * Initialises the semi-complete model with FXGL specific framework. Needed
      * whenever a game is reset.
-     * @return true if the model was intialised
+     * @return true if the model was initialized
      */
     private boolean initModel(){
         if (getModel()==null){
-            System.out.println("Tried to init an un-reset model!");
-            return false;
+            return setModel(new SnakeModel(DEFAULT_SNAKE_WIDTH,
+                    DEFAULT_SNAKE_HEIGHT,
+                    new Rectangle(DEFAULT_GAME_WIDTH, DEFAULT_GAME_HEIGHT)));
         }
-        return getModel().calcFrameSpeed() && loadData();
+        System.out.println("Tried to initialize an existing model");
+        return false;
     }
 
     Entity m_snake;
@@ -101,7 +100,7 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
 
      @Override
     protected void initSettings(GameSettings settings) {
-         resetModel();
+         initModel();
         settings.setWidth(DEFAULT_GAME_WIDTH);
         settings.setHeight(DEFAULT_GAME_HEIGHT);
         settings.setTitle("The Snake Game");

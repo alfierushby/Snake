@@ -131,6 +131,20 @@ public class SnakeModel {
     }
 
     /**
+     * Resets the length of the snake
+     * @return true if there exists a body point list
+     */
+    public boolean resetLength(){
+        if(getBodyPoints() == null){
+            System.out.println("No body points!");
+            return false;
+        }
+        m_length.set(0);
+        getBodyPoints().clear();
+        return true;
+    }
+
+    /**
      * @param l State of snake, True for game end
      * @return True
      */
@@ -372,6 +386,7 @@ public class SnakeModel {
         return setLength(getLength() + DEFAULT_LENGTH_INCREMENT);
     }
 
+
     /**
      * Sets dimensions of the snake head and game, and then sets up the frame
      * speed of the snake.
@@ -394,9 +409,19 @@ public class SnakeModel {
         setPosition(DEFAULT_START_POSITION);
     }
 
+    public boolean reset(){
+        resetLength();
+        setScore(0);
+        setState(false);
+
+        getVelocity().set(0,getSpeed()); // Default movement
+        setPosition(DEFAULT_START_POSITION);
+        return true;
+    }
+
     /**
      * Adds the player's score to the linked list of scores if it's within the
-     * top 10.
+     * top DEFAULT_MAX_SAVED_SCORES.
      * @return true if the score was within the top 10
      */
     public boolean addHighScore(String name){
@@ -414,7 +439,8 @@ public class SnakeModel {
         scores.add(new Score(name,getScore()));
         scores.sort(null);
         for (Score score : scores){
-            System.out.println("Name : " + score.name() + " Score : " + score.score());
+            System.out.println("Name : " + score.name() + " Score : "
+                    + score.score());
         }
         return true;
     }
