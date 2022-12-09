@@ -1,8 +1,10 @@
 package com.test;
 
+import com.almasb.fxgl.app.ReadOnlyGameSettings;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.test.RunWithFX;
+import com.game.MenuFactory;
 import com.game.SnakeGameApplication;
 import com.game.controllers.FoodController;
 import com.game.models.SnakeModel;
@@ -14,42 +16,42 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 
+import static com.game.data.Config.DEFAULT_GAME_HEIGHT;
+import static com.game.data.Config.DEFAULT_GAME_WIDTH;
 import static com.game.enums.TYPES.FOOD;
 import static org.junit.jupiter.api.Assertions.*;
 
+
 /**
- * Integration testing on snake gameplay
+ * Testing on Snake Game
  */
-@ExtendWith(RunWithFX.class)
+
 class PlayTest {
 
     /**
-     * Launches the game application and sets the level to 'Test' so there's
-     * no obstacles.
+     * Assumes the game application is launched via MySettingsTest, and sets
+     * the level to 'Test' so there's no obstacles.
      * @throws InterruptedException If the thread couldn't sleep
      */
     @BeforeAll
     static void initGameTests() throws InterruptedException {
-        Thread one = new Thread(()->{
-            SnakeGameApplication.main(new String[] {});
-        });
-        one.start();
         Thread.sleep(2000); // Wait for application to start
         Platform.runLater(()->{
-            app = (SnakeGameApplication) FXGL.getApp();
-            app.getModel().setDifficulty("Test");
+            ((SnakeGameApplication) FXGL.getApp()).getModel().setDifficulty(
+                    "Test");
             FXGL.getGameController().startNewGame();
         });
     }
 
     double[] coord = {0,0};
-    static SnakeGameApplication app;
+    SnakeGameApplication app;
     KeyCode expected_context = KeyCode.S; // What direction the snake is moving
 
     /**
      * @return coordinate of snake head
      */
     private double[] getCoord(){
+        app=(SnakeGameApplication) FXGL.getApp();
         Point2D pos = app.getModel().getPosition();
         return new double[] {pos.getX(),pos.getY()};
     }
@@ -101,6 +103,22 @@ class PlayTest {
                 expected_context = key;
             }
         return returnContext(expected_context);
+    }
+    /**
+     * Tests expected settings.
+     * @throws InterruptedException If thread couldn't sleep
+     */
+    @Test
+
+    void testSettings() throws InterruptedException {
+        ReadOnlyGameSettings settings = FXGL.getSettings();
+        assertEquals("The Snake Game",settings.getTitle());
+        assertEquals("v1.0",settings.getVersion());
+        assertEquals(DEFAULT_GAME_WIDTH,settings.getWidth());
+        assertEquals(DEFAULT_GAME_HEIGHT,settings.getHeight());
+        assertTrue(settings.isMainMenuEnabled());
+        assertFalse(settings.isNative());
+        assertTrue(settings.getSceneFactory() instanceof MenuFactory);
     }
 
     /**
@@ -154,6 +172,7 @@ class PlayTest {
         Thread.sleep(100);
         Entity food = FXGL.getGameScene().getGameWorld().getEntitiesByType(FOOD)
                 .get(0);
+        app=(SnakeGameApplication) FXGL.getApp();
         SnakeModel model = app.getModel();
         Point2D pos = model.getPosition();
 

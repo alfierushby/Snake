@@ -22,7 +22,7 @@ import com.almasb.fxgl.test.RunWithFX;
 /**
  * Tests setting instantiation
  */
-@ExtendWith(RunWithFX.class)
+
 public class MySettingsTest {
 
     /**
