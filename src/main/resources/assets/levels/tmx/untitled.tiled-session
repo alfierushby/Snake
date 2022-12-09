@@ -1,6 +1,7 @@
 {
-    "activeFile": "",
+    "activeFile": "level2.tmx",
     "expandedProjectPaths": [
+        "."
     ],
     "fileStates": {
         "": {
@@ -79,13 +80,18 @@
     "map.lastUsedExportFilter": "Tiled map files (*.tmx *.xml)",
     "map.lastUsedFormat": "tmx",
     "openFiles": [
+        "level2.tmx",
+        "level1.tmx",
+        "level0.tmx",
+        "level-1.tmx"
     ],
     "project": "untitled.tiled-project",
     "recentFiles": [
         "level-1.tmx",
         "level0.tmx",
-        "level0.tmj",
-        "level2.tmx"
+        "level1.tmx",
+        "level2.tmx",
+        "level0.tmj"
     ],
     "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)"
 }

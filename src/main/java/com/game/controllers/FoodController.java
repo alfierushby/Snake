@@ -72,6 +72,9 @@ public class FoodController extends Component implements Modeled {
         Random random = new Random();
         getEntity().setOpacity(0);
         getGameTimer().runOnceAfter(()->{
+            if(getEntity()==null){
+                return;
+            }
             getEntity().setOpacity(1);
             Animation<?> animation =  animationBuilder()
                     .interpolator(Interpolators.EXPONENTIAL.EASE_OUT())
