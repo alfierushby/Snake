@@ -14,6 +14,7 @@ import static com.game.enums.DIRECTION.RIGHT;
 /**
  * Controller for the Snake Head element the player moves.
  * Communicates with {@link SnakeModel}, and takes in user input.
+ * @author Alfie Rushby
  */
 public class SnakeController extends Component implements Modeled {
 

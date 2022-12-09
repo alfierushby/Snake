@@ -9,6 +9,7 @@ import java.io.Serializable;
  * @param name Name of the player
  * @param score Score of the player
  * @param difficulty Difficult of the game
+ * @author Alfie Rushby
  */
 public record Score(String name, int score, String difficulty) implements Comparable<Score>,
         Serializable {

@@ -24,6 +24,7 @@ import static com.game.enums.DIRECTION.RIGHT;
 
 /**
  * Controller for the Body elements that follow the snake
+ * @author Alfie Rushby
  */
 public class SnakeBodyController extends Component {
 

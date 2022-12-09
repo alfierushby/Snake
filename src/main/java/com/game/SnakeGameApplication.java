@@ -40,6 +40,7 @@ import static com.game.enums.DIRECTION.*;
 
 /**
  * FXGL Snake Game application, manages the game and user input for the game.
+ * @author Alfie Rushby
  */
 public class SnakeGameApplication extends GameApplication implements Modeled {
 

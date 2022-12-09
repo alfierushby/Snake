@@ -10,6 +10,7 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.fire;
 
 /**
  * Handles the collisions of Food Entities and the Snake player.
+ * @author Alfie Rushby
  */
 public class FoodSnakeHandler extends CollisionHandler {
     /**

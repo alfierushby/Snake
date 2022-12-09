@@ -25,6 +25,7 @@ import static java.util.Map.entry;
 
 /**
  * Snake Factory used to create all the game entities.
+ * @author Alfie Rushby
  */
 public class SnakeFactory implements EntityFactory {
 

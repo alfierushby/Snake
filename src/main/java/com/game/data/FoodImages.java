@@ -6,6 +6,7 @@ import static java.util.Map.entry;
 
 /**
  * Class that contains an index of all the food images.
+ * @author Alfie Rushby-modified
  */
 public class FoodImages {
     /**

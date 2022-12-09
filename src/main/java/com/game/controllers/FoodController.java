@@ -19,6 +19,7 @@ import static com.game.data.Config.DEFAULT_SNAKE_HEIGHT;
 /**
  * Controls the Food Entity created in {@link SnakeFactory}.
  * Created for each new Food Entity.
+ * @author Alfie Rushby
  */
 public class FoodController extends Component implements Modeled {
     /**

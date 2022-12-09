@@ -27,6 +27,7 @@ import static com.game.data.Config.DEFAULT_TRANSITION_LENGTH;
  * It doesn't contain a separate View class, instead uses effects from
  * MainMenuView.
  * Works from high_scores.fxml.
+ * @author Alfie Rushby
  */
 public class HighScoreController extends MenuController {
     /**

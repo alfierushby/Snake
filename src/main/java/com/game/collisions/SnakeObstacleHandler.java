@@ -7,6 +7,7 @@ import com.game.models.SnakeModel;
 
 /**
  * Handles the collisions of the Snake player and Obstacles.
+ * @author Alfie Rushby
  */
 public class SnakeObstacleHandler extends CollisionHandler {
     private final SnakeModel m_model;

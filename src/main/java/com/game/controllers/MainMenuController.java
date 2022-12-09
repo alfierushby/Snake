@@ -30,6 +30,7 @@ import static com.game.data.Config.*;
 /**
  * Controls the Main Menu screen, ran at the game start. Works from
  * main_menu.fxml.
+ * @author Alfie Rushby
  */
 public class MainMenuController extends MenuController {
 

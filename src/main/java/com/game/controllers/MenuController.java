@@ -17,6 +17,7 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.texture;
 /**
  * An abstract class every Menu Controller should extend. Contains basic
  * expected functionality.
+ * @author Alfie Rushby
  */
 public abstract class MenuController implements UIController, Modeled {
 

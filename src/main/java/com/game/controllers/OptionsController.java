@@ -22,6 +22,7 @@ import static com.game.data.Config.*;
 
 /**
  * The controller for the option's menu, works from high_scores.fxml.
+ * @author Alfie Rushby
  */
 public class OptionsController extends MenuController {
 

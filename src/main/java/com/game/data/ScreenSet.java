@@ -13,6 +13,7 @@ import java.util.List;
 
 /**
  * A set of Menu controllers, used by any MenuController.
+ * @author Alfie Rushby
  */
 public class ScreenSet {
 

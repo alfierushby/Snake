@@ -6,6 +6,7 @@ import com.game.models.SnakeModel;
 
 /**
  * Base View to be used by every View class.
+ * @author Alfie Rushby
  */
 public abstract class View implements Modeled {
     /**

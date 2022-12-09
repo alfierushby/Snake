@@ -9,6 +9,7 @@ import javafx.scene.text.Text;
 
 /**
  * Controls the UI in-game, essentially the score in the top left.
+ * @author Alfie Rushby
  */
 public class SnakeUIController implements UIController, Modeled {
 

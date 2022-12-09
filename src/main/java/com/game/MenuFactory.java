@@ -9,6 +9,7 @@ import com.game.views.MainMenuView;
 
 /**
  * Factory used to create the Main Menu on startup.
+ * @author Alfie Rushby
  */
 public class MenuFactory extends SceneFactory implements Modeled {
     /**

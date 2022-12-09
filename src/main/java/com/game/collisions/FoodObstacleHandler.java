@@ -13,6 +13,7 @@ import static com.game.data.Config.*;
 /**
  * Handles the situations where the Food spawns in an obstacle. If so, it
  * moves it to another location.
+ * @author Alfie Rushby
  */
 public class FoodObstacleHandler extends CollisionHandler {
 

@@ -23,6 +23,7 @@ import static com.game.enums.TYPES.SNAKE;
  * 'View' of the Snake Entity and its BodyParts.
  * Inherits Abstract {@link View} that contains a couple basic members and
  * methods.
+ * @author Alfie Rushby-modified
  */
 public class SnakeView extends View {
 

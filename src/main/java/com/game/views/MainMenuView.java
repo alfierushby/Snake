@@ -47,7 +47,9 @@ import static javafx.animation.Animation.INDEFINITE;
 /**
  * The Main Menu View that handles visual effects beyond the fxml, and
  * transitions.
+ * @author Alfie Rushby
  */
+
 public class MainMenuView extends FXGLMenu implements Modeled {
 
     /**

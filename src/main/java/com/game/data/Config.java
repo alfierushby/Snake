@@ -12,6 +12,7 @@ import static com.game.enums.DIRECTION.*;
 
 /**
  * Global Config for game
+ * @author Alfie Rushby
  */
 public class Config {
 public static final DIRECTION DEFAULT_DIRECTION = DOWN;
