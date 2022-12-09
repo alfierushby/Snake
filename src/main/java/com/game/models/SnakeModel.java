@@ -447,7 +447,7 @@ public class SnakeModel {
     }
 
     /**
-     * Note that the path it always calculates from  /assets/textures.
+     * Note that the path it always calculates from /assets/textures.
      * @return Background image path
      */
     public String getBackgroundPath() {

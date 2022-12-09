@@ -9,12 +9,12 @@ import com.game.models.SnakeModel;
  * Handles the collisions of Food Entities and the Snake player.
  */
 public class SnakeBodyHandler extends CollisionHandler {
-    /**
-     * The order of types determines the order of entities in callbacks.
-     */
 
     private final SnakeModel m_model;
 
+    /**
+     * The order of types determines the order of entities in callbacks.
+     */
     public SnakeBodyHandler(SnakeModel model) {
         super( TYPES.SNAKE, TYPES.SNAKE_BODY);
         m_model = model;

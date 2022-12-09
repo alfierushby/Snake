@@ -30,11 +30,18 @@ public class FoodController extends Component implements Modeled {
         return true;
     }
 
+    /**
+     * @param m_anim Animation to be played on the food entity
+     * @return true
+     */
     public boolean setAnim(Animation<?> m_anim) {
         this.m_anim = m_anim;
         return true;
     }
 
+    /**
+     * @return Animation to play on food entity
+     */
     public Animation<?> getAnim() {
         return m_anim;
     }
@@ -82,6 +89,10 @@ public class FoodController extends Component implements Modeled {
 
     }
 
+    /**
+     * Called every frame.
+     * @param tpf time per frame
+     */
     @Override
     public void onUpdate(double tpf) {
         getAnim().onUpdate(tpf);

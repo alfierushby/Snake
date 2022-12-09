@@ -161,12 +161,9 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
     @Override
     protected void initUI(){
 
-        SnakeUIController uiController = new SnakeUIController(getGameScene());
+        SnakeUIController uiController = new SnakeUIController(getModel());
         UI ui = getAssetLoader().loadUI(DEFAULT_GAME_UI,uiController);
 
-        uiController.getLabelScore().textProperty().bind(getModel()
-                .getScoreProp().asString(getModel().getPlayerName() +
-                        "'s Score: %d"));
         getGameScene().addUI(ui);
     }
 

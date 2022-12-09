@@ -10,8 +10,15 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.fire;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.random;
 import static com.game.data.Config.*;
 
+/**
+ * Handles the situations where the Food spawns in an obstacle. If so, it
+ * moves it to another location.
+ */
 public class FoodObstacleHandler extends CollisionHandler {
 
+    /**
+     * The order of types determines the order of entities in callbacks.
+     */
     public FoodObstacleHandler() {
         super(TYPES.FOOD, TYPES.OBSTACLE);
     }

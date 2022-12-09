@@ -27,27 +27,49 @@ import static com.almasb.fxgl.dsl.FXGL.setLevelFromMap;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 import static com.game.data.Config.*;
 
+/**
+ * Controls the Main Menu screen, ran at the game start. Works from
+ * main_menu.fxml.
+ */
 public class MainMenuController extends MenuController {
 
+    /**
+     * @return New Game button to start the snake game
+     */
     public Button getNewgame_btn() {
         return newgame_btn;
     }
 
+    /**
+     * @return High Score button to show the highscores menu
+     */
     public Button getHighscores_btn() {
         return highscores_btn;
     }
 
+    /**
+     * @return Text Title of the main menu
+     */
     public Text getTitle() {
         return title;
     }
 
+    /**
+     * @return Root that contains the menu options
+     */
     @Override
     public Pane getRoot() {return vbox;}
 
+    /**
+     * @return Top-most root below AnchorPane.
+     */
     public Pane getTopRoot() {
         return holder;
     }
 
+    /**
+     * @return Image background of the main menu
+     */
     public ImageView getBackground() {return background;}
     @FXML
     private Button highscores_btn;
@@ -66,6 +88,11 @@ public class MainMenuController extends MenuController {
     @FXML
     private VBox vbox;
 
+    /**
+     * Called when the user wants to start the game, asks for a difficulty
+     * and begins the game. Asks for player name if not saved.
+     * @param event Mouse event
+     */
     @FXML
     void startGame(MouseEvent event) {
         // Ask for name if they haven't given one.
@@ -87,12 +114,22 @@ public class MainMenuController extends MenuController {
 
 
     }
+
+    /**
+     * Switches screen to the Option's Menu.
+     * @param event Mouse event
+     */
     @FXML
     void startOptions(MouseEvent event) {
         OptionsController controller = getView().getScreens().getOptions();
         getView().switchScreen(controller, DEFAULT_TRANSITION_LENGTH);
     }
 
+    /**
+     * Switches screen to the HighScores menu, and populates the Scroll Pane
+     * that contains the high scores. Gives effects depending on position.
+     * @param event Mouse Event
+     */
     @FXML
     void startHighScore(MouseEvent event){
         HighScoreController controller = getView().getScreens().getHighScores();
@@ -130,12 +167,13 @@ public class MainMenuController extends MenuController {
         getView().switchScreen(controller, DEFAULT_TRANSITION_LENGTH);
     }
 
+    /**
+     * Sets up the two main variables, Menu View and Snake Model.
+     * @param view Main Menu View that manages the appearance of the Main Menu
+     * @param model Snake Model of the game
+     */
     public MainMenuController(MainMenuView view, SnakeModel model){
         super(view,model);
     }
 
-    @Override
-    public void init() {
-        super.init();
-    }
 }

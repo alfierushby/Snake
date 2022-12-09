@@ -26,23 +26,43 @@ import static com.game.data.Config.DEFAULT_TRANSITION_LENGTH;
  * Controller for the high-score menu.
  * It doesn't contain a separate View class, instead uses effects from
  * MainMenuView.
+ * Works from high_scores.fxml.
  */
 public class HighScoreController extends MenuController {
+    /**
+     * @return Root of highscore entries
+     */
     @Override
     public Pane getRoot() {return vbox;}
 
+    /**
+     * @return Top-most root below AnchorPane.
+     */
     @Override
     public Pane getTopRoot() {return holder;}
 
+    /**
+     * @return Back button to return to main menu
+     */
     public Button getBack_btn() {
         return back_btn;
     }
 
+    /**
+     * @return Title at top of menu
+     */
     public Text getTitle() {
         return title;
     }
 
+    /**
+     * @return Scroll Pane that holds the high scores
+     */
     public VBox getScrollPaneHolder() {return scrollpane_hold;}
+
+    /**
+     * @return Image Background of the menu
+     */
     public ImageView getBackground() {return background;}
     @FXML
     private Button back_btn;
@@ -62,16 +82,29 @@ public class HighScoreController extends MenuController {
     @FXML
     private AnchorPane root;
 
+    /**
+     * Called when the back button is clicked, and returns them to main menu.
+     * @param event Mouse Event
+     */
     @FXML
     void backMainMenu(MouseEvent event) {
         getView().switchScreen(getView().getScreens().getMainMenu(),
                 DEFAULT_TRANSITION_LENGTH);
     }
 
+    /**
+     * Sets up the basic variables, Menu View and Snake Model.
+     * @param view View of Main Menu
+     * @param model Snake Model for the game
+     */
     public HighScoreController(MainMenuView view, SnakeModel model) {
         super(view,model);
     }
 
+    /**
+     * Called when FXGL has initialised the GUI, and it sets the styling of the
+     * elements beyond the CSS.
+     */
     @Override
     public void init() {
         super.init();
