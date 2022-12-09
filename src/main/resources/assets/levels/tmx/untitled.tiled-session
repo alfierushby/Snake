@@ -38,11 +38,11 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 1.5,
-            "selectedLayer": 1,
+            "scale": 2,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 593.6666666666665,
-                "y": 473.3333333333333
+                "x": 451.25,
+                "y": 421.5
             }
         },
         "level1.tmx#plains": {
@@ -55,15 +55,15 @@
             "scale": 2,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 378.75,
-                "y": 369
+                "x": 501.25,
+                "y": 184
             }
         },
         "level2.tmx#plains": {
             "scaleInDock": 1
         },
         "plains.tsx": {
-            "scaleInDock": 1
+            "scaleInDock": 3
         }
     },
     "last.exportedFilePath": "C:/Users/Jone/Documents/Nottingham Uni Work/dms cw/working/comp2013-coursework/src/main/resources/assets/levels.tmx",

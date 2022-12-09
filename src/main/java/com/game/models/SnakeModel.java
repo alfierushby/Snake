@@ -590,7 +590,7 @@ public class SnakeModel {
                 break;
             } else if(score.score() > getScore()
                     && Objects.equals(score.name(), name)
-                    && getScore()>score.score()){
+                    && Objects.equals(getDifficulty(), score.difficulty())){
                 System.out.println("Score too small to replace current score!");
                 return false;
             }
