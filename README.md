@@ -13,4 +13,8 @@ To run the testing framework:
 
     mvn compile surefire:test -f pom.xml
 
-If you have any errors with testing, make sure you have run Application first.
+If the tests do not run, try:
+
+    mvn deploy -f pom.xml
+
+And surefire should work then.
