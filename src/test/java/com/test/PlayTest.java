@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Testing on Snake Game
  */
 
-class PlayTest {
+public class PlayTest {
 
     /**
      * Assumes the game application is launched via MySettingsTest, and sets
