@@ -1,5 +1,6 @@
 package com.game.data;
 
+import com.almasb.fxgl.core.collection.Array;
 import com.game.enums.DIRECTION;
 import javafx.geometry.Point2D;
 
@@ -22,7 +23,7 @@ public static final int DEFAULT_SNAKE_WIDTH = 25;
 public static final int DEFAULT_SNAKE_HEIGHT = 25;
 public static final int DEFAULT_SCORE_INCREMENT = 1;
 public static final int DEFAULT_LENGTH_INCREMENT = 1;
-public static final Point2D DEFAULT_START_POSITION = new Point2D(100,100);
+public static final Point2D DEFAULT_START_POSITION = new Point2D(150,150);
 public static final String DEFAULT_GAME_UI = "snake_ui.fxml";
 public static final String DEFAULT_MAIN_UI = "main_menu.fxml";
 public static final String DEFAULT_HIGH_SCORES_UI = "high_scores.fxml";
@@ -41,4 +42,13 @@ public static final int DEFAULT_MAX_SAVED_SCORES = 100;
             "Angry", "angry-snake-head.png");
     public static final Map<String, String> DEFAULT_SNAKE_BODY_OPTIONS
             = Map.of("Ball","snake-body.png");
+    public static final Map<String, String> DEFAULT_DIFFICULTY_LEVELS
+            = Map.of("Easy","level0",
+            "Challenging", "level1",
+            "Hard", "level2");
+
+    public static final String DEFAULT_DIFFICULTY_EASY = "Easy";
+    public static final String[] DEFAULT_DIFFICULTY_EXTRA_ORDER = {
+            "Challenging","Hard"};
+
 }

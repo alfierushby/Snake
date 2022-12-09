@@ -33,10 +33,10 @@
                   </Pane>
                   <Pane pickOnBounds="false" prefHeight="404.0" prefWidth="817.0">
                      <children>
-                        <Rectangle arcHeight="25.0" arcWidth="25.0" fill="WHITE" height="345.0" layoutX="184.0" layoutY="37.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" width="441.0" />
-                        <FXGLScrollPane hbarPolicy="NEVER" layoutX="185.0" layoutY="53.0" pannable="true" pickOnBounds="false" prefHeight="329.0" prefWidth="441.0">
+                        <Rectangle arcHeight="25.0" arcWidth="25.0" fill="WHITE" height="345.0" layoutX="86.0" layoutY="37.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" width="650.0" />
+                        <FXGLScrollPane layoutX="96.0" layoutY="53.0" pannable="true" pickOnBounds="false" prefHeight="329.0" prefWidth="626.0">
                            <content>
-                              <VBox fx:id="scrollpane_hold" alignment="TOP_CENTER" nodeOrientation="LEFT_TO_RIGHT" pickOnBounds="false" prefHeight="296.0" prefWidth="441.0" spacing="5.0" />
+                              <VBox fx:id="scrollpane_hold" alignment="TOP_CENTER" nodeOrientation="LEFT_TO_RIGHT" pickOnBounds="false" prefHeight="329.0" prefWidth="624.0" spacing="5.0" />
                            </content>
                         </FXGLScrollPane>
                      </children>

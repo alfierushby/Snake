@@ -6,6 +6,7 @@ module com.game {
     opens assets.ui;
     opens assets.css;
     opens assets.textures.particles;
+    opens assets.levels.tmx;
    // opens Music;
     opens com.game to javafx.fxml;
     exports com.game.enums;

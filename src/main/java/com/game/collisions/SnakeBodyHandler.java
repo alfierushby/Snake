@@ -28,8 +28,8 @@ public class SnakeBodyHandler extends CollisionHandler {
 
     /**
      * When a collision occurs with itself, end the game.
-     * @param body  first entity
-     * @param snake second entity
+     * @param snake  first entity
+     * @param body second entity
      */
     @Override
     protected void onCollisionBegin(Entity snake, Entity body) {

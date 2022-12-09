@@ -63,11 +63,21 @@ public class SnakeFactory implements EntityFactory {
         int rand = new Random().nextInt(16);
         return entityBuilder(data)
                 .type(FOOD)
-                .bbox(new HitBox(BoundingShape.box(25, 25)))
+                .bbox(new HitBox(BoundingShape.box(30, 30)))
                 .collidable()
                 .with(new FoodController(model))
-                .viewWithBBox(texture(getFood().getFoodindex(rand)).getNode())
+                .view(texture(getFood().getFoodindex(rand)).getNode())
                 .buildAndAttach();
+    }
+    @Spawns("obstacle")
+    public Entity newObstacle(SpawnData data){
+        int rand = new Random().nextInt(16);
+        return entityBuilder(data)
+                .type(OBSTACLE)
+                .bbox(new HitBox(BoundingShape.box( data.<Integer>get("width"),
+                        data.<Integer>get("height"))))
+                .collidable()
+                .build();
     }
 
 }

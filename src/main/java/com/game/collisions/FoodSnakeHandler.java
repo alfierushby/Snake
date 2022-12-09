@@ -27,7 +27,6 @@ public class FoodSnakeHandler extends CollisionHandler {
      */
     @Override
     protected void onCollisionBegin(Entity food, Entity snake) {
-        System.out.println("lol?");
         food.removeFromWorld(); // Make transition
 
         fire(new SnakeEvent(SnakeEvent.EAT_FOOD));

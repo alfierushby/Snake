@@ -1,4 +1,6 @@
 package com.game.controllers;
+import com.almasb.fxgl.core.collection.Array;
+import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.ui.FontType;
 import com.almasb.fxgl.ui.UI;
 import com.game.data.Score;
@@ -15,14 +17,15 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Objects;
 import java.util.function.Consumer;
 
 import static com.almasb.fxgl.dsl.FXGL.getDialogService;
+import static com.almasb.fxgl.dsl.FXGL.setLevelFromMap;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
-import static com.game.data.Config.DEFAULT_SAVE_BUNDLE_LIST;
-import static com.game.data.Config.DEFAULT_TRANSITION_LENGTH;
+import static com.game.data.Config.*;
 
 public class MainMenuController extends MenuController {
 
@@ -66,12 +69,23 @@ public class MainMenuController extends MenuController {
     @FXML
     void startGame(MouseEvent event) {
         // Ask for name if they haven't given one.
-        if (Objects.equals(getModel().getPlayerName(), "")) {
-            System.out.println("Name is????");
-            getView().playerNameInput(true);
-        } else{
-            getGameController().startNewGame();
-        }
+        Consumer<Object> result = new Consumer<Object>() {
+            @Override
+            public void accept(Object choice) {
+                getModel().setDifficulty((String) choice);
+                if (Objects.equals(getModel().getPlayerName(), "")) {
+                    getView().playerNameInput(true);
+                } else{
+                    getGameController().startNewGame();
+                }
+            }
+        };
+
+        getDialogService().showChoiceBox("Please pick a difficulty.",result
+               ,DEFAULT_DIFFICULTY_EASY, DEFAULT_DIFFICULTY_EXTRA_ORDER);
+
+
+
     }
     @FXML
     void startOptions(MouseEvent event) {
@@ -91,7 +105,9 @@ public class MainMenuController extends MenuController {
             i++;
             Text txt = new Text();
             txt.setFill(Color.BLACK);
-            txt.setText(String.format("%d | %s : %05d", i,score.name()
+            txt.setText(String.format("%d | %s | %s : %05d", i,
+                    score.difficulty(),
+                    score.name()
                     ,score.score()));
             txt.setFont(Font.font("System", FontWeight.BOLD,28));
             switch (i) {

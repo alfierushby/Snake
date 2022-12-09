@@ -9,8 +9,10 @@ import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.profile.DataFile;
 import com.almasb.fxgl.profile.SaveLoadHandler;
 import com.almasb.fxgl.ui.UI;
+import com.game.collisions.FoodObstacleHandler;
 import com.game.collisions.FoodSnakeHandler;
 import com.game.collisions.SnakeBodyHandler;
+import com.game.collisions.SnakeObstacleHandler;
 import com.game.controllers.SnakeController;
 import com.game.controllers.SnakeUIController;
 import com.game.data.Modeled;
@@ -108,7 +110,7 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
         settings.setMainMenuEnabled(true);
         settings.setNative(false);
         settings.setSceneFactory(new MenuFactory(getModel()));
-    }
+     }
     @Override
     protected void onPreInit() {
          getModel().calcFrameSpeed();
@@ -212,6 +214,10 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
 
     @Override
     protected void initGame() {
+        FXGL.getGameWorld().addEntityFactory(getSnakeFactory());
+        FXGL.setLevelFromMap(
+                "tmx/"+DEFAULT_DIFFICULTY_LEVELS.get(getModel().getDifficulty())
+                        +".tmx");
 
         setSnakeView(new SnakeView(getSnakeFactory(),getModel()));
         setFoodView(new FoodView(getSnakeFactory(),getModel()));
@@ -227,6 +233,9 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
     protected void initPhysics(){
         getPhysicsWorld().addCollisionHandler(new FoodSnakeHandler());
         getPhysicsWorld().addCollisionHandler(new SnakeBodyHandler(getModel()));
+        getPhysicsWorld().addCollisionHandler(new FoodObstacleHandler());
+        getPhysicsWorld().addCollisionHandler(
+                new SnakeObstacleHandler(getModel()));
     }
 
     @Override

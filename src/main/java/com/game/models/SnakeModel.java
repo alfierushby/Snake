@@ -273,6 +273,20 @@ public class SnakeModel {
     }
 
     /**
+     * @param difficulty Difficult of game, either "Easy", "Challenging",
+     *                     or "Hard"
+     * @return true if any of the applicable difficulties.
+     */
+    public boolean setDifficulty(String difficulty) {
+        if(DEFAULT_DIFFICULTY_LEVELS.get(difficulty)==null){
+            System.out.println("Trying to set non-applicable difficulty!");
+            return false;
+        }
+        m_difficulty = difficulty;
+        return true;
+    }
+
+    /**
      * @return String property of snake head path map
      */
     public StringProperty getSnakeHeadPathProp() {
@@ -456,6 +470,12 @@ public class SnakeModel {
         return DEFAULT_SNAKE_BODY_OPTIONS.get(m_snake_body_path.get());
     }
 
+    /**
+     * Is set every new game
+     * @return Difficult of game
+     */
+    public String getDifficulty() { return m_difficulty; }
+
     public StringProperty getPlayerNameProp() {
         return m_player_name;
     }
@@ -481,6 +501,7 @@ public class SnakeModel {
     private int m_food_count = 0;
     private final IntegerProperty m_score;
     private Bundle m_high_scores;
+    private String m_difficulty = "Easy";
     private final StringProperty m_background_path;
     private final StringProperty m_snake_head_path;
     private final StringProperty m_snake_body_path;
@@ -525,6 +546,7 @@ public class SnakeModel {
 
         setSnakeHead("Level Headed");
         setSnakeBody("Ball");
+        setBackground("Jovial");
         setHighScores(new Bundle(DEFAULT_SAVE_BUNDLE_NAME));
         getVelocity().set(0,getSpeed()); // Default movement
         setSnakeWidth(width);
@@ -561,17 +583,21 @@ public class SnakeModel {
             }
         }
         for (Score score : scores){
-            if(Objects.equals(score.name(), name) && getScore()>score.score()){
+            if(Objects.equals(score.name(), name)
+                    && Objects.equals(getDifficulty(), score.difficulty())
+                    && getScore()>score.score()){
                 scores.remove(score);
                 break;
-            } else if(score.score() > getScore()){
+            } else if(score.score() > getScore()
+                    && Objects.equals(score.name(), name)
+                    && getScore()>score.score()){
                 System.out.println("Score too small to replace current score!");
                 return false;
             }
             System.out.println("Name : " + score.name() + " Score : "
                     + score.score());
         }
-        scores.add(new Score(name,getScore()));
+        scores.add(new Score(name,getScore(),getDifficulty()));
         scores.sort(null);
         return true;
     }
