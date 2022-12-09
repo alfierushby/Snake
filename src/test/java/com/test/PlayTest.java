@@ -157,7 +157,7 @@ class PlayTest {
         if(loop == max) {fail("The snake failed to move to Y coordinate in time");}
 
         // Check that the food has been eaten.
-        if(food.isActive()) {
+        if(food.isActive() && model.getScore()==1) {
             fail("The snake failed to eat the food after pass through it");
         }else {
             assertTrue(true);
