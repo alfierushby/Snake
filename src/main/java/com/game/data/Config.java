@@ -45,7 +45,8 @@ public static final int DEFAULT_MAX_SAVED_SCORES = 100;
     public static final Map<String, String> DEFAULT_DIFFICULTY_LEVELS
             = Map.of("Easy","level0",
             "Challenging", "level1",
-            "Hard", "level2");
+            "Hard", "level2",
+            "Test","level-1");
 
     public static final String DEFAULT_DIFFICULTY_EASY = "Easy";
     public static final String[] DEFAULT_DIFFICULTY_EXTRA_ORDER = {

@@ -64,7 +64,7 @@ public class FoodController extends Component implements Modeled {
         Random random = new Random();
         Animation<?> animation =  animationBuilder()
                 .interpolator(Interpolators.EXPONENTIAL.EASE_OUT())
-                .delay(Duration.seconds(.5))
+                .delay(Duration.seconds(1))
                 .duration(Duration.seconds(1))
                 .scale(getEntity())
                 .from(new Point2D(0,0))

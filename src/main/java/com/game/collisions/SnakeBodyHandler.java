@@ -1,15 +1,9 @@
 package com.game.collisions;
 
-import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.physics.CollisionHandler;
-import com.almasb.fxgl.physics.CollisionResult;
-import com.game.Snake;
 import com.game.enums.TYPES;
-import com.game.events.SnakeEvent;
 import com.game.models.SnakeModel;
-
-import static com.almasb.fxgl.dsl.FXGLForKtKt.fire;
 
 /**
  * Handles the collisions of Food Entities and the Snake player.
