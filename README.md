@@ -1,4 +1,4 @@
-git p# Snake Game
+# Snake Game
 Made by Alfie Rushby
 ## About
 This is a Snake Game that contains the follow features:
@@ -6,11 +6,11 @@ This is a Snake Game that contains the follow features:
 - Multiple Levels defined by .tmx files
 - Theming via the Options menu
 ## How to install and run the project
-To run the Application :
+To run the Application:
 
      mvn clean javafx:run -f pom.xml
 
-To deploy, run:git pushgit 
+To deploy, run:
 
     mvn deploy -f pom.xml
 
