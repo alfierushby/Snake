@@ -23,5 +23,4 @@ module com.game {
     requires java.desktop;
     requires com.almasb.fxgl.all;
     requires annotations;
-    requires com.almasb.fxgl.test;
 }

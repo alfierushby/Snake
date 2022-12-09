@@ -3,7 +3,6 @@ package com.test;
 import com.almasb.fxgl.app.ReadOnlyGameSettings;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.test.RunWithFX;
 import com.game.MenuFactory;
 import com.game.SnakeGameApplication;
 import com.game.controllers.FoodController;

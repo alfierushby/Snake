@@ -17,7 +17,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static com.game.data.Config.DEFAULT_GAME_HEIGHT;
 import static com.game.data.Config.DEFAULT_GAME_WIDTH;
 import static org.junit.jupiter.api.Assertions.*;
-import com.almasb.fxgl.test.RunWithFX;
 
 /**
  * Tests setting instantiation
