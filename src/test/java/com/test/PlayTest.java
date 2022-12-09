@@ -35,7 +35,6 @@ class PlayTest {
      */
     @BeforeAll
     static void initGameTests() throws InterruptedException {
-        Thread.sleep(2000); // Wait for application to start
         Platform.runLater(()->{
             ((SnakeGameApplication) FXGL.getApp()).getModel().setDifficulty(
                     "Test");

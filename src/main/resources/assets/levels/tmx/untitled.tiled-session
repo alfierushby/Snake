@@ -7,9 +7,6 @@
             "scaleInDock": 1
         },
         "level-1.tmx": {
-            "expandedObjectLayers": [
-                2
-            ],
             "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
@@ -35,11 +32,8 @@
             "scaleInDock": 1
         },
         "level0.tmx": {
-            "expandedObjectLayers": [
-                2
-            ],
             "scale": 1.5,
-            "selectedLayer": 0,
+            "selectedLayer": -1,
             "viewCenter": {
                 "x": 607.6666666666665,
                 "y": 548.6666666666666

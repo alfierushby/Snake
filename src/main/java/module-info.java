@@ -21,7 +21,6 @@ module com.game {
     requires javafx.fxml;
     requires org.controlsfx.controls;
     requires java.desktop;
-    requires javazoom;
     requires com.almasb.fxgl.all;
     requires annotations;
     requires com.almasb.fxgl.test;
