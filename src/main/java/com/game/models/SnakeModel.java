@@ -18,8 +18,9 @@ import static com.game.enums.DIRECTION.*;
 import static com.game.enums.DIRECTION.RIGHT;
 
 /**
- * Snake Model is an all-in-one MVC model of the Snake's movement that handles
- * The positions of its body  and head, direction, and velocity.
+ * Snake Model is the game's MVC model of the Snake's movement that handles
+ * The positions of its body  and head, direction, and velocity. It also
+ * contains game data.
  * @author Alfie Rushby-modified
  */
 public class SnakeModel {

@@ -8,7 +8,7 @@ import com.game.models.SnakeModel;
  * Base View to be used by every View class.
  * @author Alfie Rushby
  */
-public abstract class View implements Modeled {
+public class View implements Modeled {
     /**
      * @param snakeModel Game's Snake Model
      * @return true
