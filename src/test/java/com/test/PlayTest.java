@@ -16,9 +16,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static com.game.enums.TYPES.FOOD;
 import static org.junit.jupiter.api.Assertions.*;
+
+/**
+ * Integration testing on snake gameplay
+ */
 @ExtendWith(RunWithFX.class)
 class PlayTest {
 
+    /**
+     * Launches the game application and sets the level to 'Test' so there's
+     * no obstacles.
+     * @throws InterruptedException If the thread couldn't sleep
+     */
     @BeforeAll
     static void initGameTests() throws InterruptedException {
         Thread one = new Thread(()->{
@@ -36,16 +45,33 @@ class PlayTest {
     double[] coord = {0,0};
     static SnakeGameApplication app;
     KeyCode expected_context = KeyCode.S; // What direction the snake is moving
+
+    /**
+     * @return coordinate of snake head
+     */
     private double[] getCoord(){
         Point2D pos = app.getModel().getPosition();
         return new double[] {pos.getX(),pos.getY()};
     }
+
+    /**
+     * Apply's a key pressed for 20ms
+     * @param key Key pressed
+     * @return Coordinate after key pressed
+     * @throws InterruptedException If thread couldn't sleep
+     */
     private double[] applyKey(KeyCode key) throws InterruptedException {
         FXGL.getInput().mockKeyPress(key);
         Thread.sleep(20);
         FXGL.getInput().mockKeyRelease(key);
         return getCoord();
     }
+
+    /**
+     * Given a direction, does the snake move in that direction.
+     * @param context Direction of snake
+     * @return true if movement follows context
+     */
     private Boolean returnContext(KeyCode context){
         // Returns expected event on direction of movement
         return switch (context) {
@@ -57,6 +83,13 @@ class PlayTest {
         };
     }
 
+    /**
+     * Compares a movement that shouldn't or shouldn't happen against reality.
+     * @param key Key to press
+     * @param can Whether it should be able to move to that key
+     * @return True if the expected outcome (can) actually happened
+     * @throws InterruptedException if the Thread couldn't sleep
+     */
     private Boolean conditionMovement(KeyCode key, boolean can) throws InterruptedException {
         // Returns based on a movement condition
         // Context is the direction it is moving, and key is the direction we are trying to move
@@ -69,6 +102,12 @@ class PlayTest {
             }
         return returnContext(expected_context);
     }
+
+    /**
+     * Integration test on snake movement. Exhaustively tests all plausible
+     * key inputs, resulting in it moving in a circle.
+     * @throws InterruptedException If thread couldn't sleep
+     */
     @Test
     void keyPressed() throws InterruptedException {
         // Circular snake movement verification. Tests every scenario.
@@ -102,6 +141,11 @@ class PlayTest {
         assertTrue(conditionMovement(KeyCode.S, true));
     }
 
+    /**
+     * Integration test that moves the snake to the first bit of spawned food
+     * and tests if it eats it.
+     * @throws InterruptedException If the thread couldn't sleep
+     */
     @Test
     void foodTest() throws InterruptedException {
         // An integration test for moving to a food piece and eating it

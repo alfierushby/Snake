@@ -1,6 +1,8 @@
 package com.game;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.audio.Audio;
+import com.almasb.fxgl.audio.Music;
 import com.almasb.fxgl.core.serialization.Bundle;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
@@ -20,9 +22,9 @@ import com.game.models.SnakeModel;
 import com.game.views.FoodView;
 import com.game.views.SnakeView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.shape.Rectangle;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
 import java.util.LinkedList;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -30,39 +32,66 @@ import java.util.function.Consumer;
 import static com.almasb.fxgl.dsl.FXGL.getDialogService;
 import static com.almasb.fxgl.dsl.FXGL.getEventBus;
 import static com.almasb.fxgl.dsl.FXGL.getGameController;
+import static com.almasb.fxgl.dsl.FXGL.getSettings;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 import static com.game.data.Config.*;
 import static com.game.data.Config.DEFAULT_GAME_HEIGHT;
 import static com.game.enums.DIRECTION.*;
 
+/**
+ * FXGL Snake Game application, manages the game and user input for the game.
+ */
 public class SnakeGameApplication extends GameApplication implements Modeled {
 
+    /**
+     * @return Snake Factory for creating entities.
+     */
     public SnakeFactory getSnakeFactory() {
         return m_snakeFactory;
     }
+
+    /**
+     * @return Snake Game View for managing the snake and its body parts.
+     */
     public SnakeView getSnakeView() {
         return m_snakeview;
     }
-    public FoodView getFoodView() {return m_foodview;}
+
+    /**
+     * @return Snake Model of the game
+     */
     public SnakeModel getModel() {return m_model;}
 
+    /**
+     * @param snakeview View of the game
+     * @return true
+     */
     public boolean setSnakeView(SnakeView snakeview) {
         m_snakeview = snakeview;
         return true;
     }
+    /**
+     * @param foodview View of the Food.
+     * @return true
+     */
     public boolean setFoodView(FoodView foodview) {
         m_foodview = foodview;
         return true;
     }
-    public boolean setModel(SnakeModel m_model) {
-        this.m_model = m_model;
+
+    /**
+     * @param model Snake model of the game
+     * @return true
+     */
+    public boolean setModel(SnakeModel model) {
+        m_model = model;
         return true;
     }
 
-    private boolean resetModel(){
-        return getSnakeView().resetGame();
-    }
-
+    /**
+     * Loads the save data in the default save location.
+     * @return true if the data was able to load.
+     */
     private boolean loadData(){
         if(getSaveLoadService().saveFileExists(DEFAULT_SAVE_BUNDLE_FILE_NAME)){
             getSaveLoadService().readAndLoadTask(DEFAULT_SAVE_BUNDLE_FILE_NAME)
@@ -72,10 +101,13 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
         return false;
     }
 
+    /**
+     * Resets the game by removing all events and resetting the model.
+     * @return true if the game was reset
+     */
     private boolean resetGame(){
-        //getGameWorld().getEntitiesCopy().forEach(Entity::removeFromWorld);
         getEventBus().removeAllEventHandlers();
-        return resetModel();
+        return getSnakeView().resetGame();
     }
 
     /**
@@ -100,24 +132,41 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
     Bundle saved_data;
 
 
+    /**
+     * Sets the width, name, and makes it so that the Main Menu is displayed
+     * on startup by default.
+     * @param settings Settings of the FXGL game
+     */
      @Override
     protected void initSettings(GameSettings settings) {
          initModel();
         settings.setWidth(DEFAULT_GAME_WIDTH);
         settings.setHeight(DEFAULT_GAME_HEIGHT);
         settings.setTitle("The Snake Game");
-        settings.setVersion("0.1");
+        settings.setVersion("v1.0");
         settings.setMainMenuEnabled(true);
         settings.setNative(false);
         settings.setSceneFactory(new MenuFactory(getModel()));
      }
+
+    /**
+     * Sets up the model's data that requires FXGL physics and from save data,
+     * and adds the handlers for saving and loading, called whenever a load or
+     * save request is made.
+     */
     @Override
     protected void onPreInit() {
          getModel().calcFrameSpeed();
          setupAutoSaving();
+        getSettings().setGlobalMusicVolume(.25);
+         loopBGM("frog.mp3");
          // Save and load the data:
 
         getSaveLoadService().addHandler(new SaveLoadHandler() {
+            /**
+             * Saves the highscores, theme data, and the player's name.
+             * @param data Data that will be saved
+             */
             @Override
             public void onSave(@NotNull DataFile data) {
                 // Get bundle from model
@@ -132,7 +181,11 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
                 // Save the bundle
                 data.putBundle(bundle);
             }
-
+            /**
+             * Attempts to load the highscores, theme data, and the
+             * player's name.
+             * @param data Data that will be loaded
+             */
             @Override
             public void onLoad(@NotNull DataFile data) {
                 // Get the high_scores
@@ -158,6 +211,11 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
         });
         loadData();
     }
+
+    /**
+     * Intiates the Game UI by loading the {@link SnakeUIController},
+     * that being the Snake Score label.
+     */
     @Override
     protected void initUI(){
 
@@ -167,6 +225,11 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
         getGameScene().addUI(ui);
     }
 
+    /**
+     * Sets up auto saving whenever any Option Property (Background, Snake
+     * Body and Head images) is changed, by listening to the model.
+     * @return true if the Snake Model is initialized
+     */
     private boolean setupAutoSaving(){
          if(getModel()==null){
              System.out.println("Model not initialized for auto saving!");
@@ -188,6 +251,10 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
         });
         return true;
     }
+
+    /**
+     * Shows an option to play the game again.
+     */
     private void showPlayAgain(){
         getDialogService().showConfirmationBox("Play " +
                 "Again?", yes -> {
@@ -201,6 +268,10 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
         });
 }
 
+    /**
+     * Called when a game ends, saving the player's score to the high-score
+     * leaderboard.
+     */
     private void endGame(){
         getModel().addHighScore(getModel().getPlayerName());
         getSaveLoadService().saveAndWriteTask(
@@ -209,6 +280,11 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
         showPlayAgain();
     }
 
+    /**
+     * Called when the Snake Game starts (after clicking new game), and it
+     * sets the corresponding level based on selected difficulty, and then adds
+     * a listener that wait for the game to end, showing how much they scored.
+     */
     @Override
     protected void initGame() {
         FXGL.getGameWorld().addEntityFactory(getSnakeFactory());
@@ -226,6 +302,9 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
          }});
     }
 
+    /**
+     * Initiates the collision handlers.
+     */
     @Override
     protected void initPhysics(){
         getPhysicsWorld().addCollisionHandler(new FoodSnakeHandler());
@@ -235,6 +314,9 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
                 new SnakeObstacleHandler(getModel()));
     }
 
+    /**
+     * Handles the input to the snake, defaulting to WASD.
+     */
     @Override
     protected void initInput() {
         Input input = FXGL.getInput();
@@ -272,6 +354,10 @@ public class SnakeGameApplication extends GameApplication implements Modeled {
         }, KeyCode.W);
     }
 
+    /**
+     * Launches the JavaFX application.
+     * @param args Args of main
+     */
     public static void main(String[] args) {
         launch(args);
     }

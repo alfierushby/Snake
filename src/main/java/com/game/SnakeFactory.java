@@ -23,15 +23,27 @@ import static com.game.data.Config.*;
 import static com.game.enums.TYPES.*;
 import static java.util.Map.entry;
 
+/**
+ * Snake Factory used to create all the game entities.
+ */
 public class SnakeFactory implements EntityFactory {
 
 
+    /**
+     * @return The Food Object.
+     */
     public FoodImages getFood() {
         return food;
     }
     private final FoodImages food = new FoodImages();
 
 
+    /**
+     * Creates a Playable Snake Head.
+     * @param data SpawnData
+     * @param model Snake Model of game
+     * @return A Game {@link Entity}
+     */
     @Spawns("snake")
     public Entity newSnake(SpawnData data, SnakeModel model){
         PhysicsComponent physics = new PhysicsComponent();
@@ -45,6 +57,12 @@ public class SnakeFactory implements EntityFactory {
                 .with(new SnakeController(model))                .buildAndAttach();
     }
 
+    /**
+     * Creates a Snake Body Entity.
+     * @param data SpawnData
+     * @param model Snake Model of game
+     * @return A Game {@link Entity}
+     */
     @Spawns("snakebody")
     public Entity newSnakeBody(SpawnData data, SnakeModel model){
         System.out.println(model.getSnakeBodyPath());
@@ -58,6 +76,13 @@ public class SnakeFactory implements EntityFactory {
         body.setPosition(-100,-100);
         return body;
     }
+
+    /**
+     * Creates a Food item to be eaten.
+     * @param data SpawnData
+     * @param model Snake Model of game
+     * @return A Game {@link Entity}
+     */
     @Spawns("food")
     public Entity newFoodItem(SpawnData data,SnakeModel model){
         int rand = new Random().nextInt(16);
@@ -69,6 +94,12 @@ public class SnakeFactory implements EntityFactory {
                 .view(texture(getFood().getFoodindex(rand)).getNode())
                 .buildAndAttach();
     }
+
+    /**
+     * Creates an Obstacle that kills the snake, called via .tmx levels.
+     * @param data SpawnData
+     * @return A Game {@link Entity}
+     */
     @Spawns("obstacle")
     public Entity newObstacle(SpawnData data){
         int rand = new Random().nextInt(16);

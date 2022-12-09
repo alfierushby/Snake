@@ -13,7 +13,6 @@ import com.game.models.SnakeModel;
 import javafx.geometry.Point2D;
 import javafx.util.Duration;
 
-import java.awt.*;
 import java.util.Random;
 
 import static com.almasb.fxgl.dsl.FXGL.*;

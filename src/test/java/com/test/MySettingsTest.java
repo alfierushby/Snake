@@ -19,17 +19,29 @@ import static com.game.data.Config.DEFAULT_GAME_WIDTH;
 import static org.junit.jupiter.api.Assertions.*;
 import com.almasb.fxgl.test.RunWithFX;
 
+/**
+ * Tests setting instantiation
+ */
 @ExtendWith(RunWithFX.class)
 public class MySettingsTest {
 
+    /**
+     * Launches the javafx game.
+     * @throws InterruptedException If thread couldn't sleep
+     */
     @BeforeAll
     static void initGameTests() throws InterruptedException {
         Thread one = new Thread(()->{
             SnakeGameApplication.main(new String[] {});
         });
         one.start();
-        Thread.sleep(5000); // Wait for application to start
+        Thread.sleep(2000); // Wait for application to start
     }
+
+    /**
+     * Tests expected settings.
+     * @throws InterruptedException If thread couldn't sleep
+     */
     @Test
 
     void testSettings() throws InterruptedException {

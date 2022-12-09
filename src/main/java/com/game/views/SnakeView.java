@@ -83,17 +83,31 @@ public class SnakeView extends View {
         createBackdrop();
     }
 
+    /**
+     * Sets the background of the game.
+     * @return true
+     */
     private boolean createBackdrop(){
         getGameScene().setBackgroundRepeat(texture(getModel().getBackgroundPath()).getImage());
         return true;
     }
 
+    /**
+     * Resets the game such that it can be played again.
+     * @return true if the model could reset itself.
+     */
     public boolean resetGame(){
         boolean cond = getModel().reset();
         getBodyParts().clear();
         return cond;
     }
 
+    /**
+     * Sets the viewbox image of an entity.
+     * @param entity Entity to change its image
+     * @param img Image to be set
+     * @return true if the image could be set, or if the viewbox doesn't exist.
+     */
     public boolean changeImage(Entity entity, Image img){
         try{
             Texture tex = (Texture) entity.getViewComponent().getChildren().get(0);
@@ -107,6 +121,11 @@ public class SnakeView extends View {
         }
     }
 
+    /**
+     * Sets all the snake's body part's viewbox image to the input image.
+     * @param img Image that the body parts will use
+     * @return true if they could be set
+     */
     public boolean setBodyPartImages(Image img){
         for(Entity entity : getBodyParts()){
             boolean cond = changeImage(entity,
@@ -119,6 +138,11 @@ public class SnakeView extends View {
         return true;
     }
 
+    /**
+     * Sets the snake's head's image in its viewbox.
+     * @param img Image to set
+     * @return true if the image could be changed
+     */
     public boolean setSnakeHeadImage(Image img){
        return changeImage(getSnake(),img);
     }

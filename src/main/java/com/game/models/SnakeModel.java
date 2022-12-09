@@ -6,8 +6,9 @@ import com.game.data.Score;
 import com.game.enums.DIRECTION;
 import javafx.beans.property.*;
 import javafx.geometry.Point2D;
+import javafx.scene.shape.Rectangle;
 
-import java.awt.*;
+
 import java.util.*;
 import java.util.List;
 
@@ -476,6 +477,9 @@ public class SnakeModel {
      */
     public String getDifficulty() { return m_difficulty; }
 
+    /**
+     * @return Property of the player's name
+     */
     public StringProperty getPlayerNameProp() {
         return m_player_name;
     }
@@ -527,12 +531,13 @@ public class SnakeModel {
 
     /**
      * Sets dimensions of the snake head and game, and then sets up the frame
-     * speed of the snake.
+     * speed of the snake, and instantiates image paths.
      * @param width Width of the Snake Head
      * @param height Height of the Snake Head
      * @param container Container defining game bounds
      */
-    public SnakeModel(double width, double height,Rectangle container) {
+    public SnakeModel(double width, double height, Rectangle container) {
+        // Set final defaults.
         m_length= new SimpleIntegerProperty(0);
         m_score = new SimpleIntegerProperty(0);
         m_l = new SimpleBooleanProperty(false);
@@ -544,6 +549,8 @@ public class SnakeModel {
         m_h = container.getHeight();
         m_bodyPoints = new LinkedList<>();
 
+
+        // Set non-final defaults.
         setSnakeHead("Level Headed");
         setSnakeBody("Ball");
         setBackground("Jovial");
@@ -554,14 +561,18 @@ public class SnakeModel {
         setPosition(DEFAULT_START_POSITION);
     }
 
+    /**
+     * Resets the state of the Snake game, used for new games.
+     * @return true if the reset was successful
+     */
     public boolean reset(){
-        resetLength();
-        setScore(0);
-        setState(false);
+        boolean cond0 = resetLength();
+        boolean cond1 =  setScore(0);
+        boolean cond2 =  setState(false);
 
-        getVelocity().set(0,getSpeed()); // Default movement
-        setPosition(DEFAULT_START_POSITION);
-        return true;
+            getVelocity().set(0,getSpeed()); // Default movement
+        boolean cond3  =  setPosition(DEFAULT_START_POSITION);
+        return cond0 && cond1 && cond2 && cond3;
     }
 
     /**

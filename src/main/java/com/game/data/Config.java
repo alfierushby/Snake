@@ -32,6 +32,7 @@ public static final String DEFAULT_SAVE_BUNDLE_LIST = "scores";
 public static final String DEFAULT_SAVE_BUNDLE_NAME = "highscores";
 public static final String DEFAULT_SAVE_BUNDLE_FILE_NAME = "scores.sav";
 public static final double DEFAULT_TRANSITION_LENGTH = .5;
+public static final double DEFAULT_GRADIENT_TRANSITION_LENGTH = 2;
 public static final int DEFAULT_MAX_SAVED_SCORES = 100;
     public static final Map<String, String> DEFAULT_BACKGROUND_OPTIONS
             = Map.of("Jovial","UI-background.png",

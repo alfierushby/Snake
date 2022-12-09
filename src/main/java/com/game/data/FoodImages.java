@@ -4,11 +4,21 @@ import java.util.Map;
 
 import static java.util.Map.entry;
 
+/**
+ * Class that contains an index of all the food images.
+ */
 public class FoodImages {
+    /**
+     * @return Gets the mapping of food images
+     */
     public Map<Integer, String> getFoodImages() {
         return m_Food;
     }
 
+    /**
+     * @param index Index of a specific food image
+     * @return The food image, or the 0th food image if the index is wrong
+     */
     public String getFoodindex(int index) {
         if(index < 0 || index > getFoodImages().size()){
             System.out.println("Tried to access non-existent index!");
