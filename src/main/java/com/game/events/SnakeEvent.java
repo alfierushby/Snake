@@ -5,6 +5,7 @@ import javafx.event.EventType;
 
 /**
  * Event used when the Snake Eats food.
+ * @author Alfie Rushby
  */
 public class SnakeEvent  extends Event {
     public static final EventType<SnakeEvent> EAT_FOOD =

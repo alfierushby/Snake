@@ -18,18 +18,6 @@
         </repository>
     </distributionManagement>
 
-
-
-    <repositories>
-        <!--Module that includes javazoom-->
-        <repository>
-            <id>repo</id>
-            <url>file://${project.basedir}/repo</url>
-        </repository>
-
-
-    </repositories>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.9.0</junit.version>
@@ -37,12 +25,6 @@
     </properties>
 
     <dependencies>
-        <!--Local repo javazoom dependency-->
-        <dependency>
-            <groupId>com.game</groupId>
-            <artifactId>javazoom</artifactId>
-            <version>1.0</version>
-        </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
@@ -62,24 +44,29 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>${junit.version}</version>
-            <scope>test</scope>
+            <scope>com.test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.version}</version>
-            <scope>test</scope>
+            <scope>com.test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <scope>test</scope>
+            <scope>com.test</scope>
             <version>5.9.0</version>
         </dependency>
         <dependency>
             <groupId>com.github.almasb</groupId>
             <artifactId>fxgl</artifactId>
             <version>17.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.almasb</groupId>
+            <artifactId>fxgl-test</artifactId>
+            <version>11.9</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>

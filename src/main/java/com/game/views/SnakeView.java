@@ -2,15 +2,20 @@ package com.game.views;
 
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
+import com.almasb.fxgl.texture.Texture;
 import com.game.SnakeFactory;
 import com.game.models.SnakeModel;
 import javafx.geometry.Point2D;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameTimer;
+import static com.almasb.fxgl.dsl.FXGL.getGameScene;
+import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 import static com.game.data.Config.*;
 import static com.game.enums.TYPES.SNAKE;
 
@@ -18,6 +23,7 @@ import static com.game.enums.TYPES.SNAKE;
  * 'View' of the Snake Entity and its BodyParts.
  * Inherits Abstract {@link View} that contains a couple basic members and
  * methods.
+ * @author Alfie Rushby-modified
  */
 public class SnakeView extends View {
 
@@ -50,6 +56,8 @@ public class SnakeView extends View {
     Entity m_snake;
     private final List<Entity> m_bodyParts = new LinkedList<>();
 
+
+
     /**
      * Sets the Snake head, and runs the drawBody function at the FrameTime
      * interval calculated by the game's Model.
@@ -73,8 +81,72 @@ public class SnakeView extends View {
         // Test code
        // getModel().setLength(30);
         // Test code
+        createBackdrop();
     }
 
+    /**
+     * Sets the background of the game.
+     * @return true
+     */
+    private boolean createBackdrop(){
+        getGameScene().setBackgroundRepeat(texture(getModel().getBackgroundPath()).getImage());
+        return true;
+    }
+
+    /**
+     * Resets the game such that it can be played again.
+     * @return true if the model could reset itself.
+     */
+    public boolean resetGame(){
+        boolean cond = getModel().reset();
+        getBodyParts().clear();
+        return cond;
+    }
+
+    /**
+     * Sets the viewbox image of an entity.
+     * @param entity Entity to change its image
+     * @param img Image to be set
+     * @return true if the image could be set, or if the viewbox doesn't exist.
+     */
+    public boolean changeImage(Entity entity, Image img){
+        try{
+            Texture tex = (Texture) entity.getViewComponent().getChildren().get(0);
+            tex.setImage(img);
+            return true;
+        }
+        catch(IndexOutOfBoundsException e){
+            System.out.println("Entity "+ entity.getType() + "does no contain" +
+                    " a texture!");
+            return false;
+        }
+    }
+
+    /**
+     * Sets all the snake's body part's viewbox image to the input image.
+     * @param img Image that the body parts will use
+     * @return true if they could be set
+     */
+    public boolean setBodyPartImages(Image img){
+        for(Entity entity : getBodyParts()){
+            boolean cond = changeImage(entity,
+                    texture(getModel().getSnakeBodyPath()).getImage());
+            if(!cond){
+                System.out.println("Unable to change Snake Body Part Images!");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Sets the snake's head's image in its viewbox.
+     * @param img Image to set
+     * @return true if the image could be changed
+     */
+    public boolean setSnakeHeadImage(Image img){
+       return changeImage(getSnake(),img);
+    }
     /**
      * Draws the snake body by using Num as the interval in the history of
      * positions in the BodyPoints array.
@@ -146,7 +218,7 @@ public class SnakeView extends View {
             return false;
         }
         getBodyParts().add(getSnakeFactory().newSnakeBody(
-                new SpawnData(getSnake().getX(),getSnake().getY())));
+                new SpawnData(getSnake().getX(),getSnake().getY()),getModel()));
         return true;
     }
 

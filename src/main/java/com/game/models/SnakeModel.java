@@ -6,8 +6,9 @@ import com.game.data.Score;
 import com.game.enums.DIRECTION;
 import javafx.beans.property.*;
 import javafx.geometry.Point2D;
+import javafx.scene.shape.Rectangle;
 
-import java.awt.*;
+
 import java.util.*;
 import java.util.List;
 
@@ -17,8 +18,10 @@ import static com.game.enums.DIRECTION.*;
 import static com.game.enums.DIRECTION.RIGHT;
 
 /**
- * Snake Model is an all-in-one MVC model of the Snake's movement that handles
- * The positions of its body  and head, direction, and velocity.
+ * Snake Model is the game's MVC model of the Snake's movement that handles
+ * The positions of its body  and head, direction, and velocity. It also
+ * contains game data.
+ * @author Alfie Rushby-modified
  */
 public class SnakeModel {
 
@@ -131,6 +134,20 @@ public class SnakeModel {
     }
 
     /**
+     * Resets the length of the snake
+     * @return true if there exists a body point list
+     */
+    public boolean resetLength(){
+        if(getBodyPoints() == null){
+            System.out.println("No body points!");
+            return false;
+        }
+        m_length.set(0);
+        getBodyPoints().clear();
+        return true;
+    }
+
+    /**
      * @param l State of snake, True for game end
      * @return True
      */
@@ -221,6 +238,76 @@ public class SnakeModel {
         System.out.println("Trying to set wrong data bundle!");
         return false;
 
+    }
+
+    /**
+     * @param background_path Background Path key, used in conjunction with a
+         map, that maps to a path relative to /Assets/Textures.
+     * @return true
+     */
+    public boolean setBackground(String background_path) {
+        m_background_path.set(background_path);
+        return true;
+    }
+
+    /**
+     * @param snake_head_path Background Path key, used in conjunction with a
+        map, that maps to a path relative to /Assets/Textures.
+     * @return true
+     */
+    public boolean setSnakeHead(String snake_head_path) {
+        m_snake_head_path.set(snake_head_path);
+        return true;
+    }
+
+    /**
+     * @param snake_body_path Background Path key, used in conjunction with a
+         map, that maps to a path relative to /Assets/Textures.
+     * @return true
+     */
+    public boolean setSnakeBody(String snake_body_path) {
+        m_snake_body_path.set(snake_body_path);
+        return true;
+    }
+
+    public boolean setPlayerName(String player_name) {
+        m_player_name.set(player_name);
+        return true;
+    }
+
+    /**
+     * @param difficulty Difficult of game, either "Easy", "Challenging",
+     *                     or "Hard"
+     * @return true if any of the applicable difficulties.
+     */
+    public boolean setDifficulty(String difficulty) {
+        if(DEFAULT_DIFFICULTY_LEVELS.get(difficulty)==null){
+            System.out.println("Trying to set non-applicable difficulty!");
+            return false;
+        }
+        m_difficulty = difficulty;
+        return true;
+    }
+
+    /**
+     * @return String property of snake head path map
+     */
+    public StringProperty getSnakeHeadPathProp() {
+        return m_snake_head_path;
+    }
+
+    /**
+     * @return String property of snake body path map
+     */
+    public StringProperty getSnakeBodyPathProp() {
+        return m_snake_body_path;
+    }
+
+    /**
+     * @return String property of background path map
+     */
+    public StringProperty getBackgroundPathProp() {
+        return m_background_path;
     }
 
     /**
@@ -332,6 +419,72 @@ public class SnakeModel {
      */
     public Bundle getHighScores() {return m_high_scores;}
 
+    /**
+     * @return Non-translated Background Key value for mapping in
+     * DEFAULT_BACKGROUND_OPTIONS
+     */
+    public String getBackground() {
+        return m_background_path.get();
+    }
+    /**
+     * @return Non-translated Key value for mapping in
+     * DEFAULT_SNAKE_HEAD_OPTIONS
+     */
+    public String getSnakeHead() {
+        return m_snake_head_path.get();
+    }
+
+    /**
+     * @return Non-translated Key value for mapping in
+     * DEFAULT_SNAKE_BODY_OPTIONS
+     */
+    public String getSnakeBody() {
+        return m_snake_body_path.get();
+    }
+
+    /**
+     * @return Player name specified by user
+     */
+    public String getPlayerName() {
+        return m_player_name.get();
+    }
+
+    /**
+     * Note that the path it always calculates from /assets/textures.
+     * @return Background image path
+     */
+    public String getBackgroundPath() {
+        return DEFAULT_BACKGROUND_OPTIONS.get(m_background_path.get());
+    }
+
+    /**
+     * Note that the path it always calculates from is /assets/textures.
+     * @return  Snake head image path
+     */
+    public String getSnakeHeadPath() {
+        return DEFAULT_SNAKE_HEAD_OPTIONS.get(m_snake_head_path.get());
+    }
+
+    /**
+     * Note that the path it always calculates from  /assets/textures.
+     * @return Snake body image path
+     */
+    public String getSnakeBodyPath() {
+        return DEFAULT_SNAKE_BODY_OPTIONS.get(m_snake_body_path.get());
+    }
+
+    /**
+     * Is set every new game
+     * @return Difficult of game
+     */
+    public String getDifficulty() { return m_difficulty; }
+
+    /**
+     * @return Property of the player's name
+     */
+    public StringProperty getPlayerNameProp() {
+        return m_player_name;
+    }
 
     //Custom Variables
     private final Map<DIRECTION, Integer> m_direction_map
@@ -354,6 +507,11 @@ public class SnakeModel {
     private int m_food_count = 0;
     private final IntegerProperty m_score;
     private Bundle m_high_scores;
+    private String m_difficulty = "Easy";
+    private final StringProperty m_background_path;
+    private final StringProperty m_snake_head_path;
+    private final StringProperty m_snake_body_path;
+    private final StringProperty m_player_name;
 
 
     /**
@@ -372,21 +530,32 @@ public class SnakeModel {
         return setLength(getLength() + DEFAULT_LENGTH_INCREMENT);
     }
 
+
     /**
      * Sets dimensions of the snake head and game, and then sets up the frame
-     * speed of the snake.
+     * speed of the snake, and instantiates image paths.
      * @param width Width of the Snake Head
      * @param height Height of the Snake Head
      * @param container Container defining game bounds
      */
-    public SnakeModel(double width, double height,Rectangle container) {
+    public SnakeModel(double width, double height, Rectangle container) {
+        // Set final defaults.
         m_length= new SimpleIntegerProperty(0);
         m_score = new SimpleIntegerProperty(0);
         m_l = new SimpleBooleanProperty(false);
+        m_background_path = new SimpleStringProperty("");
+        m_snake_head_path = new SimpleStringProperty("");
+        m_snake_body_path = new SimpleStringProperty("");
+        m_player_name = new SimpleStringProperty("");
         m_w = container.getWidth();
         m_h = container.getHeight();
         m_bodyPoints = new LinkedList<>();
 
+
+        // Set non-final defaults.
+        setSnakeHead("Level Headed");
+        setSnakeBody("Ball");
+        setBackground("Jovial");
         setHighScores(new Bundle(DEFAULT_SAVE_BUNDLE_NAME));
         getVelocity().set(0,getSpeed()); // Default movement
         setSnakeWidth(width);
@@ -395,14 +564,29 @@ public class SnakeModel {
     }
 
     /**
+     * Resets the state of the Snake game, used for new games.
+     * @return true if the reset was successful
+     */
+    public boolean reset(){
+        boolean cond0 = resetLength();
+        boolean cond1 =  setScore(0);
+        boolean cond2 =  setState(false);
+
+            getVelocity().set(0,getSpeed()); // Default movement
+        boolean cond3  =  setPosition(DEFAULT_START_POSITION);
+        return cond0 && cond1 && cond2 && cond3;
+    }
+
+    /**
      * Adds the player's score to the linked list of scores if it's within the
-     * top 10.
+     * top DEFAULT_MAX_SAVED_SCORES.
      * @return true if the score was within the top 10
      */
     public boolean addHighScore(String name){
 
         LinkedList<Score> scores =
                 getHighScores().get(DEFAULT_SAVE_BUNDLE_LIST);
+
         if(scores.size()>=DEFAULT_MAX_SAVED_SCORES){
             int to_check = scores.get(DEFAULT_MAX_SAVED_SCORES-1).score();
             if(to_check>getScore()){
@@ -411,11 +595,23 @@ public class SnakeModel {
                 return false;
             }
         }
-        scores.add(new Score(name,getScore()));
-        scores.sort(null);
         for (Score score : scores){
-            System.out.println("Name : " + score.name() + " Score : " + score.score());
+            if(Objects.equals(score.name(), name)
+                    && Objects.equals(getDifficulty(), score.difficulty())
+                    && getScore()>score.score()){
+                scores.remove(score);
+                break;
+            } else if(score.score() > getScore()
+                    && Objects.equals(score.name(), name)
+                    && Objects.equals(getDifficulty(), score.difficulty())){
+                System.out.println("Score too small to replace current score!");
+                return false;
+            }
+            System.out.println("Name : " + score.name() + " Score : "
+                    + score.score());
         }
+        scores.add(new Score(name,getScore(),getDifficulty()));
+        scores.sort(null);
         return true;
     }
 

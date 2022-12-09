@@ -6,7 +6,8 @@ module com.game {
     opens assets.ui;
     opens assets.css;
     opens assets.textures.particles;
-   // opens Music;
+    opens assets.levels.tmx;
+    // opens Music;
     opens com.game to javafx.fxml;
     exports com.game.enums;
     exports com.game.data;
@@ -20,7 +21,6 @@ module com.game {
     requires javafx.fxml;
     requires org.controlsfx.controls;
     requires java.desktop;
-    requires javazoom;
     requires com.almasb.fxgl.all;
     requires annotations;
 }

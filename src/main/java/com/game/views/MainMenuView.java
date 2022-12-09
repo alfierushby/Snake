@@ -12,8 +12,10 @@ import com.almasb.fxgl.ui.UI;
 import com.game.controllers.HighScoreController;
 import com.game.controllers.MainMenuController;
 import com.game.controllers.MenuController;
+import com.game.controllers.OptionsController;
 import com.game.data.ColorSet;
 import com.game.data.FoodImages;
+import com.game.data.Modeled;
 import com.game.data.ScreenSet;
 import com.game.models.SnakeModel;
 import javafx.animation.Interpolator;
@@ -25,9 +27,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.effect.BlendMode;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import org.jetbrains.annotations.NotNull;
@@ -35,24 +35,27 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 
+import static com.almasb.fxgl.dsl.FXGL.getDialogService;
 import static com.almasb.fxgl.dsl.FXGL.texture;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 import static com.game.data.Config.*;
 import static javafx.animation.Animation.INDEFINITE;
 
 
-public class MainMenuView extends FXGLMenu {
+/**
+ * The Main Menu View that handles visual effects beyond the fxml, and
+ * transitions.
+ * @author Alfie Rushby
+ */
 
-    public boolean setSystem(ParticleSystem m_system) {
-        this.m_system = m_system;
-        return true;
-    }
+public class MainMenuView extends FXGLMenu implements Modeled {
 
-    public boolean setEmitter(ParticleEmitter m_emitter) {
-        this.m_emitter = m_emitter;
-        return true;
-    }
+    /**
+     * @param m_screens Data of all the Menus
+     * @return true if it isn't already assigned.
+     */
     public boolean setScreens(ScreenSet m_screens) {
         if(getScreens()==null){
             this.m_screens = m_screens;
@@ -62,41 +65,71 @@ public class MainMenuView extends FXGLMenu {
         return false;
     }
 
+    /**
+     * @return Central Snake Model
+     */
+    @Override
+    public SnakeModel getModel() {
+        return m_model;
+    }
+
+    /**
+     * @return Screen record containing all the Menus
+     */
     public ScreenSet getScreens() {return m_screens;}
+
+    /**
+     * @return System that contains all the particle emitters
+     */
     public ParticleSystem getSystem() {
         return m_system;
     }
 
-    public ParticleEmitter getEmitter() {
-        return m_emitter;
-    }
-
+    /**
+     * @return All the animations that are playing/stopped.
+     */
     public List<Animation<?>> getAnimations() {
         return m_animations;
     }
 
-    public FoodImages food() {
+    /**
+     * @return Food object that maps numbers to food images.
+     */
+    public FoodImages getFood() {
         return m_food;
     }
 
-    ParticleSystem m_system;
-    ParticleEmitter m_emitter;
+    private final ParticleSystem m_system;
+    private ParticleEmitter m_emitter;
     private ScreenSet m_screens;
+    private final SnakeModel m_model;
     private final List<Animation<?>> m_animations = new LinkedList<>();
     private final FoodImages m_food = new FoodImages();
 
+    /**
+     * Sets up every menu to be used, and then transitions main menu with a
+     * smooth animation.
+     * @param type Type of menu, assumed to be MAIN_MENU
+     * @param model Snake Model of the game
+     */
     public MainMenuView(@NotNull MenuType type, SnakeModel model) {
-        super(MenuType.MAIN_MENU);
+        super(type);
+        m_model = model;
+        m_system = new ParticleSystem();
 
         // Setup menus in Main Menu
         HighScoreController high_scores = createHighScoreMenu(model);
         MainMenuController main_menu = createMainMenu(model);
+        OptionsController options = createOptionsMenu(model);
         // Store controllers for use
-        setScreens(new ScreenSet(main_menu, high_scores,getContentRoot()));
+        setScreens(new ScreenSet(main_menu, high_scores,options,
+                getContentRoot()));
         switchScreen(main_menu,DEFAULT_TRANSITION_LENGTH);
-        m_system = new ParticleSystem();
+
+        //Creates particle effect
         initParticles();
 
+        //Transitions Main Menu smoothly in
         main_menu.getTopRoot().getChildren().add(1,m_system.getPane());
         double i =0;
         for (Node node : main_menu.getRoot().getChildren()){
@@ -108,6 +141,12 @@ public class MainMenuView extends FXGLMenu {
         setInfiniteBobble(main_menu.getTitle(),1);
     }
 
+    /**
+     * Switches the Menu with a smooth animation.
+     * @param screen Menu to switch to
+     * @param time Time it takes to switch
+     * @return true if the animation has started
+     */
     public boolean switchScreen(MenuController screen, double time){
         getScreens().hideAll();
         Pane top = screen.getTopRoot();
@@ -124,17 +163,48 @@ public class MainMenuView extends FXGLMenu {
         getAnimations().add(animation);
         return animation.isAnimating();
     }
+
+    /**
+     * Loads the fxml file and makes it invisible, adding it to the parent of
+     * all menus.
+     * @param url .fxml file to load as a Menu
+     * @param controller MenuController that controls the menu
+     * @return true
+     */
     private boolean loadUI(String url, MenuController controller){
         UI ui = getAssetLoader().loadUI(url,controller);
         getContentRoot().getChildren().add(ui.getRoot());
         controller.getTopRoot().setOpacity(0);
         return true;
     }
+
+    /**
+     * Creates the Main Menu.
+     * @param model Snake Model of game
+     * @return Controller of the Main Menu
+     */
     private MainMenuController createMainMenu(SnakeModel model){
         MainMenuController controller= new MainMenuController(this,model);
         loadUI(DEFAULT_MAIN_UI,controller);
         return controller;
     }
+
+    /**
+     * Creates the Options Menu
+     * @param model Snake Model of game
+     * @return Controller of Options Menu
+     */
+    private OptionsController createOptionsMenu(SnakeModel model){
+        OptionsController controller= new OptionsController(this,model);
+        loadUI(DEFAULT_OPTIONS_UI,controller);
+        return controller;
+    }
+
+    /**
+     * Creates the HighScores Menu
+     * @param model Snake Model of game
+     * @return Controller of HighScores Menu
+     */
     private HighScoreController createHighScoreMenu(SnakeModel model){
         HighScoreController controller = new HighScoreController(this,
                 model);
@@ -142,6 +212,10 @@ public class MainMenuView extends FXGLMenu {
         return controller;
     }
 
+    /**
+     * Creates a food throwing particle effect.
+     * @return true
+     */
     private boolean initParticles(){
         Texture t =
                 texture(m_food.getFoodindex(0), 25.0, 25);
@@ -171,6 +245,12 @@ public class MainMenuView extends FXGLMenu {
     }
 
 
+    /**
+     * @param baseColor Colour property that will be modified in the animation
+     * @param c1 Colour of the baseColor at the start of the animation
+     * @param c2 Colour of the baseColor at the end of the animation
+     * @return TimeLine of the animation
+     */
     private Timeline createColorTimeLine(ObjectProperty<Color> baseColor,
                                        Color c1, Color c2){
         KeyValue keyValue1 = new KeyValue(baseColor, c1
@@ -178,13 +258,41 @@ public class MainMenuView extends FXGLMenu {
         KeyValue keyValue2 = new KeyValue(baseColor, c2
                 , Interpolator.EASE_BOTH);
         KeyFrame keyFrame1 = new KeyFrame(Duration.ZERO, keyValue1);
-        KeyFrame keyFrame2 = new KeyFrame(Duration.seconds(2), keyValue2);
+        KeyFrame keyFrame2 = new KeyFrame(
+                Duration.seconds(DEFAULT_GRADIENT_TRANSITION_LENGTH), keyValue2);
         Timeline timeline = new Timeline(keyFrame1, keyFrame2);
         timeline.setAutoReverse(true);
         timeline.setCycleCount(INDEFINITE);
         return timeline;
     }
 
+    /**
+     * Asks the player for their name.
+     * @param start_new_game Determines if a new game should be started after
+     *                       user input.
+     */
+    public void playerNameInput(boolean start_new_game){
+        Consumer<String> result = new Consumer<String>() {
+            @Override
+            public void accept(String name) {
+                getModel().setPlayerName(name);
+                if(start_new_game){
+                    getGameController().startNewGame();
+                }
+            }
+        };
+        getDialogService().showInputBox("Please enter your name to save"
+                        + " on the leaderboard." ,
+                result);
+    }
+
+    /**
+     * Sets the styling of both ends of the gradient on the node, and adds a
+     * listener to both base colours, such that whenever they change, the css
+     * gradient colour ends change.
+     * @param node Node to initialise a gradient on.
+     * @return A {@link ColorSet} to be used in animating
+     */
     private ColorSet doubleGradientListener(Node node){
         ObjectProperty<Color> baseColour = new SimpleObjectProperty<>();
         ObjectProperty<Color> baseColour1 = new SimpleObjectProperty<>();
@@ -207,6 +315,14 @@ public class MainMenuView extends FXGLMenu {
        return new ColorSet(baseColour, baseColour1);
     }
 
+    /**
+     * Creates an infinite animation of moving a gradient from one end of a node
+     * to its other end.
+     * @param node Node to animate on
+     * @param base Colour at the base of the gradient
+     * @param end Colour at the end of the gradient
+     * @return true
+     */
     public boolean animateGradient(Node node, Color base, Color end){
         ColorSet colours = doubleGradientListener(node);
 
@@ -262,4 +378,5 @@ public class MainMenuView extends FXGLMenu {
             animation.onUpdate(tpf);
         }
     }
+
 }

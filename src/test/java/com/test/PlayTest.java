@@ -1,120 +1,199 @@
 package com.test;
 
-import com.game.Food;
-import com.game.MySnake;
-import com.game.Play;
+import com.almasb.fxgl.app.ReadOnlyGameSettings;
+import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.entity.Entity;
+import com.game.MenuFactory;
+import com.game.SnakeGameApplication;
+import com.game.controllers.FoodController;
+import com.game.models.SnakeModel;
+import javafx.application.Platform;
+import javafx.geometry.Point2D;
+import javafx.scene.input.KeyCode;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-import javax.swing.*;
-import java.awt.event.KeyEvent;
 
+import static com.game.data.Config.DEFAULT_GAME_HEIGHT;
+import static com.game.data.Config.DEFAULT_GAME_WIDTH;
+import static com.game.enums.TYPES.FOOD;
 import static org.junit.jupiter.api.Assertions.*;
 
+
+/**
+ * Testing on Snake Game
+ */
+
 class PlayTest {
-    static Play m_play = new Play(); // Static test object used by all tests
-    static MySnake m_snake = m_play.getMySnake();
-    int[] coord = {0,0};
-    int expected_context = KeyEvent.VK_UP; // What direction the snake is moving
-    private int[] getCoord(){
-        return new int[] {m_snake.getX(),m_snake.getY()};
+
+    /**
+     * Assumes the game application is launched via MySettingsTest, and sets
+     * the level to 'Test' so there's no obstacles.
+     * @throws InterruptedException If the thread couldn't sleep
+     */
+    @BeforeAll
+    static void initGameTests() throws InterruptedException {
+        Platform.runLater(()->{
+            ((SnakeGameApplication) FXGL.getApp()).getModel().setDifficulty(
+                    "Test");
+            FXGL.getGameController().startNewGame();
+        });
     }
-    private int[] applyKey(int key){
-        m_play.getjFrame().getKeyListeners()[0].keyPressed(new KeyEvent(m_play.getjFrame(), KeyEvent.KEY_PRESSED, System.currentTimeMillis(), 0,  key,'Z'));
+
+    double[] coord = {0,0};
+    SnakeGameApplication app;
+    KeyCode expected_context = KeyCode.S; // What direction the snake is moving
+
+    /**
+     * @return coordinate of snake head
+     */
+    private double[] getCoord(){
+        app=(SnakeGameApplication) FXGL.getApp();
+        Point2D pos = app.getModel().getPosition();
+        return new double[] {pos.getX(),pos.getY()};
+    }
+
+    /**
+     * Apply's a key pressed for 20ms
+     * @param key Key pressed
+     * @return Coordinate after key pressed
+     * @throws InterruptedException If thread couldn't sleep
+     */
+    private double[] applyKey(KeyCode key) throws InterruptedException {
+        FXGL.getInput().mockKeyPress(key);
+        Thread.sleep(20);
+        FXGL.getInput().mockKeyRelease(key);
         return getCoord();
     }
-    private Boolean returnContext(int context){
+
+    /**
+     * Given a direction, does the snake move in that direction.
+     * @param context Direction of snake
+     * @return true if movement follows context
+     */
+    private Boolean returnContext(KeyCode context){
         // Returns expected event on direction of movement
         return switch (context) {
-            case KeyEvent.VK_UP -> getCoord()[1] < coord[1];
-            case KeyEvent.VK_DOWN -> getCoord()[1] > coord[1];
-            case KeyEvent.VK_LEFT -> getCoord()[0] < coord[0];
-            case KeyEvent.VK_RIGHT -> getCoord()[0] > coord[0];
+            case W -> getCoord()[1] < coord[1];
+            case S -> getCoord()[1] > coord[1];
+            case A -> getCoord()[0] < coord[0];
+            case D -> getCoord()[0] > coord[0];
             default -> false;
         };
     }
 
-    private Boolean conditionMovement(int key, boolean can) throws InterruptedException {
+    /**
+     * Compares a movement that shouldn't or shouldn't happen against reality.
+     * @param key Key to press
+     * @param can Whether it should be able to move to that key
+     * @return True if the expected outcome (can) actually happened
+     * @throws InterruptedException if the Thread couldn't sleep
+     */
+    private Boolean conditionMovement(KeyCode key, boolean can) throws InterruptedException {
         // Returns based on a movement condition
         // Context is the direction it is moving, and key is the direction we are trying to move
         // Can is whether we expect it to change
         coord = applyKey(key);
         Thread.sleep(100);
-        if (can){
-            // If we expect it to work, we expect it to move in Key's direction
-            expected_context = key;
-            return returnContext(key);
-        } else{
-            // Else, we expect it to move in the context's direction
-            return returnContext(expected_context);
-        }
+        if (can) {
+                // If we expect it to work, we expect it to move in Key's direction
+                expected_context = key;
+            }
+        return returnContext(expected_context);
+    }
+    /**
+     * Tests expected settings.
+     * @throws InterruptedException If thread couldn't sleep
+     */
+    @Test
+
+    void testSettings() throws InterruptedException {
+        ReadOnlyGameSettings settings = FXGL.getSettings();
+        assertEquals("The Snake Game",settings.getTitle());
+        assertEquals("v1.0",settings.getVersion());
+        assertEquals(DEFAULT_GAME_WIDTH,settings.getWidth());
+        assertEquals(DEFAULT_GAME_HEIGHT,settings.getHeight());
+        assertTrue(settings.isMainMenuEnabled());
+        assertFalse(settings.isNative());
+        assertTrue(settings.getSceneFactory() instanceof MenuFactory);
     }
 
-
-    @BeforeAll
-    static void setUp() {
-        m_play.loadFrame();
-    }
-
-
+    /**
+     * Integration test on snake movement. Exhaustively tests all plausible
+     * key inputs, resulting in it moving in a circle.
+     * @throws InterruptedException If thread couldn't sleep
+     */
     @Test
     void keyPressed() throws InterruptedException {
         // Circular snake movement verification. Tests every scenario.
-
-        JFrame frame = m_play.getjFrame();
+        Thread.sleep(100);
         // Test up movement
-        assertTrue(conditionMovement(KeyEvent.VK_UP,true)); // Coordinates start from top left, so 0 is top.
+        assertTrue(conditionMovement(KeyCode.S, true)); // Coordinates start
+        // from top left, so 0 is top.
 
-        // Test it cannot move back whilst moving up
-        assertTrue(conditionMovement(KeyEvent.VK_DOWN,false));
+        // Test it cannot move back whilst moving down
+        assertTrue(conditionMovement(KeyCode.W, false));
 
         //Test it can go left
-        assertTrue(conditionMovement(KeyEvent.VK_LEFT,true));
+        assertTrue(conditionMovement(KeyCode.A, true));
 
         //Test it can't go right
-        assertTrue(conditionMovement(KeyEvent.VK_RIGHT,false));
-
-        //Test it can go down
-        assertTrue(conditionMovement(KeyEvent.VK_DOWN,true));
-
-        //Test it can't go up
-        assertTrue(conditionMovement(KeyEvent.VK_UP,false));
-
-        //Test it can go right
-        assertTrue(conditionMovement(KeyEvent.VK_RIGHT,true));
-
-        //Test it can't go left
-        assertTrue(conditionMovement(KeyEvent.VK_LEFT,false));
+        assertTrue(conditionMovement(KeyCode.D, false));
 
         //Test it can go up
-        assertTrue(conditionMovement(KeyEvent.VK_UP,true));
+        assertTrue(conditionMovement(KeyCode.W, true));
 
+        //Test it can't go up
+        assertTrue(conditionMovement(KeyCode.W, false));
+
+        //Test it can go right
+        assertTrue(conditionMovement(KeyCode.D, true));
+
+        //Test it can't go left
+        assertTrue(conditionMovement(KeyCode.A, false));
+
+        //Test it can go down
+        assertTrue(conditionMovement(KeyCode.S, true));
     }
 
+    /**
+     * Integration test that moves the snake to the first bit of spawned food
+     * and tests if it eats it.
+     * @throws InterruptedException If the thread couldn't sleep
+     */
     @Test
     void foodTest() throws InterruptedException {
         // An integration test for moving to a food piece and eating it
         // Made to be extensible with major codebase changes
         // First version won't be split up, so reused code will be prominent
+        Thread.sleep(100);
+        Entity food = FXGL.getGameScene().getGameWorld().getEntitiesByType(FOOD)
+                .get(0);
+        app=(SnakeGameApplication) FXGL.getApp();
+        SnakeModel model = app.getModel();
+        Point2D pos = model.getPosition();
 
-        Food food = m_play.getFood();
-        int direction, food_x = food.getX(), food_y = food.getY();
-        int speed = m_snake.getSpeed_XY(), frame_time= m_play.getFrame_time();
-        int max=500, loop=0;
-        coord = new int[]{m_snake.getX() - food_x, m_snake.getY() - food_y};
+        KeyCode direction;
+        double food_x = food.getX(), food_y = food.getY();
+        double speed = model.getSpeed();
+        int frame_time= model.getFrameTime();
+        int max=1000, loop=0;
+        coord = new double[]{pos.getX() - food_x, pos.getY() - food_y};
 
         // When difference is negative, move right or down, else otherwise
         // Set x direction to move, as we assume we are moving up
         if(coord[0]<0){
-            direction = KeyEvent.VK_RIGHT;
+            direction = KeyCode.D;
         } else {
-            direction = KeyEvent.VK_LEFT;
+            direction = KeyCode.A;
         }
         applyKey(direction);
 
         // Wait until the snake has reached +-5 of the target X coordinate
-        while( ( m_snake.getX()<(food_x-speed) || m_snake.getX()>(food_x+speed) )
-        && loop < max){
+        while( ( model.getPosition().getX()<(food_x-speed) ||
+                model.getPosition().getX()>(food_x+speed) )
+                && loop < max){
             Thread.sleep(frame_time);
             loop++;
         }
@@ -122,15 +201,16 @@ class PlayTest {
 
         // Set y direction to move
         if(coord[1]<0){
-            direction = KeyEvent.VK_DOWN;
+            direction = KeyCode.S;
         } else {
-            direction = KeyEvent.VK_UP;
+            direction = KeyCode.W;
         }
         loop = 0;
         applyKey(direction);
 
         // Wait until the snake has reached +-5 of the target Y coordinate
-        while( ( m_snake.getY()<(food_y-speed) || m_snake.getY()>(food_y+speed) )
+        while( ( model.getPosition().getY()<(food_y-speed)
+                || model.getPosition().getY()>(food_y+speed) )
                 && loop < max){
             Thread.sleep(frame_time);
             loop++;
@@ -138,19 +218,10 @@ class PlayTest {
         if(loop == max) {fail("The snake failed to move to Y coordinate in time");}
 
         // Check that the food has been eaten.
-        if(!food.getState()) {
-            assertTrue(true);
-        }else {
+        if(food.isActive() && model.getScore()==1) {
             fail("The snake failed to eat the food after pass through it");
+        }else {
+            assertTrue(true);
         }
     }
-
-    @Test
-    void paint() {
-    }
-
-    @Test
-    void drawScore() {
-    }
-
 }

@@ -10,6 +10,7 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 /**
  * View for Food entities that handles updating the 'View' of the Food items,
  * involving destroying and spawning.
+ * @author Alfie Rushby
  */
 public class FoodView extends View{
 

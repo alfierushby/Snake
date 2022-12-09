@@ -1,0 +1,91 @@
+{
+    "activeFile": "",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "": {
+            "scaleInDock": 1
+        },
+        "level-1.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 607.6666666666665,
+                "y": 548.6666666666666
+            }
+        },
+        "level-1.tmx#plains": {
+            "scaleInDock": 1
+        },
+        "level0.tmj": {
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 1.5,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 607.6666666666665,
+                "y": 548.6666666666666
+            }
+        },
+        "level0.tmj#plains": {
+            "scaleInDock": 1
+        },
+        "level0.tmx": {
+            "scale": 1.5,
+            "selectedLayer": -1,
+            "viewCenter": {
+                "x": 607.6666666666665,
+                "y": 548.6666666666666
+            }
+        },
+        "level0.tmx#plains": {
+            "scaleInDock": 1
+        },
+        "level1.tmx": {
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 2,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 451.25,
+                "y": 421.5
+            }
+        },
+        "level1.tmx#plains": {
+            "scaleInDock": 1
+        },
+        "level2.tmx": {
+            "expandedObjectLayers": [
+                2
+            ],
+            "scale": 2,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 582.25,
+                "y": 339
+            }
+        },
+        "level2.tmx#plains": {
+            "scaleInDock": 1
+        },
+        "plains.tsx": {
+            "scaleInDock": 3
+        }
+    },
+    "last.exportedFilePath": "C:/Users/Jone/Documents/Nottingham Uni Work/dms cw/working/comp2013-coursework/src/main/resources/assets/levels.tmx",
+    "last.externalTilesetPath": "C:/Users/Jone/Documents/Nottingham Uni Work/dms cw/working/comp2013-coursework/src/main/resources/assets/levels/tmx",
+    "map.lastUsedExportFilter": "Tiled map files (*.tmx *.xml)",
+    "map.lastUsedFormat": "tmx",
+    "openFiles": [
+    ],
+    "project": "untitled.tiled-project",
+    "recentFiles": [
+        "level-1.tmx",
+        "level0.tmx",
+        "level0.tmj",
+        "level2.tmx"
+    ],
+    "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)"
+}
