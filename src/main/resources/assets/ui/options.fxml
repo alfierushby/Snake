@@ -18,7 +18,7 @@
       <Pane fx:id="holder" pickOnBounds="false" prefHeight="600.0" prefWidth="800.0">
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="600.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="800.0" />
-            <ImageView fx:id="background" fitHeight="600.0" fitWidth="800.0">
+            <ImageView fx:id="background" fitHeight="600.0" fitWidth="810.0">
                <image>
                   <Image url="/assets/textures/UI-background.png" />
                </image></ImageView>
@@ -26,7 +26,7 @@
                <children>
                   <Pane pickOnBounds="false" prefHeight="120.0" prefWidth="802.0">
                      <children>
-                        <Text id="title" fx:id="title" fill="WHITE" layoutX="305.0" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Options" wrappingWidth="228.6666259765625">
+                        <Text id="title" fx:id="title" fill="WHITE" layoutX="295.0" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Options" wrappingWidth="248.6666259765625">
                            <font>
                               <Font size="64.0" />
                            </font>
@@ -42,7 +42,7 @@
                                  <children>
                                     <HBox alignment="TOP_CENTER" prefHeight="33.0" prefWidth="441.0" spacing="5.0">
                                        <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Background" textAlignment="CENTER" wrappingWidth="153.13671875">
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Background" textAlignment="CENTER" wrappingWidth="163.13671875">
                                              <font>
                                                 <Font size="27.0" />
                                              </font>
@@ -52,7 +52,7 @@
                                     </HBox>
                                     <HBox alignment="TOP_CENTER" prefHeight="33.0" prefWidth="441.0" spacing="5.0">
                                        <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Snake Head" textAlignment="CENTER" wrappingWidth="153.13671875">
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Snake Head" textAlignment="CENTER" wrappingWidth="163.13671875">
                                              <font>
                                                 <Font size="27.0" />
                                              </font>
@@ -62,7 +62,7 @@
                                     </HBox>
                                     <HBox alignment="TOP_CENTER" prefHeight="33.0" prefWidth="441.0" spacing="5.0">
                                        <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Snake Body" textAlignment="CENTER" wrappingWidth="153.13671875">
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Snake Body" textAlignment="CENTER" wrappingWidth="163.13671875">
                                              <font>
                                                 <Font size="27.0" />
                                              </font>

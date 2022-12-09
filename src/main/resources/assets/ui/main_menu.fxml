@@ -13,7 +13,7 @@
    <children>
       <Pane fx:id="holder" pickOnBounds="false" prefWidth="800.0">
          <children>
-            <ImageView fx:id="background" disable="true" fitHeight="600.0" fitWidth="800.0">
+            <ImageView fx:id="background" disable="true" fitHeight="600.0" fitWidth="810.0">
                <image>
                   <Image url="/assets/textures/UI-background.png" />
                </image>
@@ -22,7 +22,7 @@
                <children>
                   <Pane pickOnBounds="false" prefHeight="120.0" prefWidth="802.0">
                      <children>
-                        <Text id="title" fx:id="title" fill="WHITE" layoutX="176.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The Snake Game" wrappingWidth="475.6666259765625">
+                        <Text id="title" fx:id="title" fill="WHITE" layoutX="156.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The Snake Game" wrappingWidth="515.6666259765625">
                            <font>
                               <Font size="64.0" />
                            </font>

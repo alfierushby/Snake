@@ -70,16 +70,21 @@ public class FoodController extends Component implements Modeled {
     @Override
     public void onAdded() {
         Random random = new Random();
-        Animation<?> animation =  animationBuilder()
-                .interpolator(Interpolators.EXPONENTIAL.EASE_OUT())
-                .delay(Duration.seconds(1))
-                .duration(Duration.seconds(1))
-                .scale(getEntity())
-                .from(new Point2D(0,0))
-                .to(new Point2D(1,1))
-                .build();
-        animation.start();
-        setAnim(animation);
+        getEntity().setOpacity(0);
+        getGameTimer().runOnceAfter(()->{
+            getEntity().setOpacity(1);
+            Animation<?> animation =  animationBuilder()
+                    .interpolator(Interpolators.EXPONENTIAL.EASE_OUT())
+                    .delay(Duration.seconds(.5))
+                    .duration(Duration.seconds(1))
+                    .scale(getEntity())
+                    .from(new Point2D(0,0))
+                    .to(new Point2D(1,1))
+                    .build();
+            animation.start();
+            setAnim(animation);
+        }, Duration.millis(250));
+
         Point2D pos = new Point2D(
                 random(DEFAULT_SNAKE_WIDTH,
                         DEFAULT_GAME_WIDTH-DEFAULT_SNAKE_WIDTH),
@@ -96,6 +101,10 @@ public class FoodController extends Component implements Modeled {
      */
     @Override
     public void onUpdate(double tpf) {
+        if(getAnim()==null){
+            return;
+        }
+
         getAnim().onUpdate(tpf);
     }
 
