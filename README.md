@@ -1,5 +1,9 @@
 # Snake Game
+
+![Alt Text](./frontpage.gif)
+
 Made by Alfie Rushby
+
 ## About
 This is a Snake Game that contains the follow features:
 - A High-score system 
